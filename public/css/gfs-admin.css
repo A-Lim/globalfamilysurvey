@@ -1,0 +1,9 @@
+.icon-danger { color: #dc3545!important; }
+.form-btn { display: inline-block; margin-bottom: 0; }
+.link-btn { display: inline-block; }
+.select2 { width: 100% !important; }
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    margin-top: 2.5px;
+    margin-bottom: 2.5px;
+}
+.has-error .select2-selection { border-color: #dd4b39; }
