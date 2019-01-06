@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use DataTables;
 use App\Question;
 use App\Answer;
 use Illuminate\Http\Request;
@@ -13,27 +14,27 @@ class QuestionsController extends Controller {
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    * Display a listing of the resource.
+    *
+    * @return \Illuminate\Http\Response
+    */
     public function index() {
         $this->authorize('view', Question::class);
         $questions = Question::orderBy('sequence', 'asc')
-                        // ->filter(request(['search']))
-                        ->with('survey')
-                        ->withCount('answers')
-                        ->get();
-                        // ->paginate(10);
+        // ->filter(request(['search']))
+        ->with('survey')
+        ->withCount('answers')
+        ->get();
+        // ->paginate(10);
         return view('questions.index', compact('questions'));
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    * Display the specified resource.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
     public function show(Question $question) {
         $this->authorize('view', Question::class);
         $grouped_answers = $this->groupData($question);
@@ -73,16 +74,49 @@ class QuestionsController extends Controller {
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    * Remove the specified resource from storage.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
     public function destroy(Question $question) {
         $this->authorize('delete', Question::class);
         $this->deleteAllLinked($question);
         session()->flash('success', 'Question successfully deleted');
         return back();
+    }
+
+    public function datatable() {
+        // $query = Question::orderBy('sequence', 'asc')
+        //             ->with('survey')
+        //             ->withCount('answers');
+        return Datatables::of($this->datatable_query())
+        ->addIndexColumn()
+        ->editColumn('title', function ($question) {
+            return str_limit(strip_tags($question->title), 40);
+        })
+        ->editColumn('survey_type', function ($question) {
+            return ucwords($question->survey_type);
+        })
+        ->addColumn('action', function($user) {
+            $html = '';
+            if (auth()->user()->can('view', Question::class)) {
+                $html .= view_button('questions', $user->id).' ';
+            }
+            if (auth()->user()->can('delete', Question::class)) {
+                $html .= delete_button('questions', $user->id);
+            }
+            return $html;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+    }
+
+    protected function datatable_query() {
+        return Question::join('surveys', 'questions.survey_id', '=', 'surveys.id')
+            ->orderBy('questions.sequence', 'asc')
+            ->select('questions.*', 'surveys.type as survey_type')
+            ->withCount('answers');
     }
 
     protected function deleteAllLinked(Question $question) {

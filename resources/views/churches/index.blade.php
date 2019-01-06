@@ -23,45 +23,34 @@
                 <table id="datatable" class="table table-bordered" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Church Name</th>
                             <th>Denomination</th>
                             <th>Country</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach ($churches as $church)
-                            <tr>
-                                <td> {{ $church->name }} </td>
-                                <td> {{ $church->denomination }} </td>
-                                <td> {{ $church->country }} </td>
-                                <td>
-                                    @can('update', App\Church::class)
-                                        <a class="link-btn" href="/churches/{{ $church->id }}/edit" title="Edit">
-                                            <button type="button" class="btn btn-primary">
-                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                            </button>
-                                        </a>&nbsp;
-                                    @endcan
-                                    @can('delete', App\Church::class)
-                                        <form action="/churches/{{ $church->id }}" method="post" class="form-btn">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete church?')">
-                                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                            </button>
-                                        </form>
-                                    @endcan
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
                 </table>
-                <div class="pull-right">
-                    {{ $churches->links() }}
-                </div>
             </div>
         </div>
     </section>
     <!-- /.content -->
 @endsection
+
+@push('scripts')
+    <script>
+    $('#datatable').DataTable({
+        processing: true,
+        serverSide: true,
+        bLengthChange: false,
+        ajax: '/churches/datatable',
+        columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+            {data: 'name'},
+            {data: 'denomination'},
+            {data: 'country'},
+            {data: 'action', sortable: false},
+        ],
+    });
+    </script>
+@endpush

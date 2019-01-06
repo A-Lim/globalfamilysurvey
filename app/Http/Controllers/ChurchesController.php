@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DataTables;
 use App\Church;
 use App\Http\Requests\ChurchRequest;
 use Illuminate\Http\Request;
@@ -23,8 +24,7 @@ class ChurchesController extends Controller {
      */
     public function index() {
         $this->authorize('view', Church::class);
-        $churches = Church::paginate(10);
-        return view('churches.index', compact('churches'));
+        return view('churches.index');
     }
 
     /**
@@ -89,5 +89,22 @@ class ChurchesController extends Controller {
         $church->delete();
         session()->flash('success', 'Church successfully deleted');
         return back();
+    }
+
+    public function datatable() {
+        return Datatables::of(Church::select('*'))
+        ->addIndexColumn()
+        ->addColumn('action', function($user) {
+            $html = '';
+            if (auth()->user()->can('update', Church::class)) {
+                $html .= edit_button('churches', $user->id).' ';
+            }
+            if (auth()->user()->can('delete', Church::class)) {
+                $html .= delete_button('churches', $user->id);
+            }
+            return $html;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
     }
 }

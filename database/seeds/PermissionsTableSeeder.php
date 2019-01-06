@@ -20,7 +20,7 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'delete_user', 'label' => 'Delete User', 'created_at' => $now, 'updated_at' => $now],
             ['name' => 'view_churches', 'label' => 'View Churches', 'created_at' => $now, 'updated_at' => $now],
             ['name' => 'create_church', 'label' => 'Create Church', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'update_church', 'label' => 'Update Users', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'update_church', 'label' => 'Update Church', 'created_at' => $now, 'updated_at' => $now],
             ['name' => 'delete_church', 'label' => 'Delete Church', 'created_at' => $now, 'updated_at' => $now],
             ['name' => 'view_surveys', 'label' => 'View Surveys', 'created_at' => $now, 'updated_at' => $now],
             ['name' => 'delete_survey', 'label' => 'Delete Survey', 'created_at' => $now, 'updated_at' => $now],

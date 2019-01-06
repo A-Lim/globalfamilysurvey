@@ -5,6 +5,7 @@
     <title>@yield('title', 'Global Family Survey')</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
 
@@ -37,9 +38,11 @@
 
     <!-- jQuery -->
     <script type="text/javascript" src="/plugins/jQuery/jquery-3.2.1.min.js"></script>
-    {{-- <!-- DataTables -->
-    <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/plugins/datatables/dataTables.bootstrap.min.js"></script> --}}
+    <!-- DataTables -->
+    <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+
+    {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
 
 </head>
 <body class="hold-transition skin-purple sidebar-mini">
@@ -47,13 +50,13 @@
         @include('components.header')
         @include('components.sidemenu')
 
-        <div class="content-wrapper">
+        <div id="app" class="content-wrapper">
             @yield('content')
         </div>
 
         @include('components.footer')
     </div>
-
+    {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
     {{-- <!-- jQuery -->
     <script type="text/javascript" src="/plugins/jQuery/jquery-3.2.1.min.js"></script> --}}
     <!-- bootstrap -->

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DataTables;
 use App\User;
 use App\Survey;
 use Illuminate\Http\Request;
@@ -22,12 +23,12 @@ class UsersController extends Controller {
      */
     public function index() {
         $this->authorize('view', User::class);
-        $users = User::latest()
-                    ->permitted()
-                    ->with(['roles', 'church'])
-                    ->whereNotIn('id', [auth()->user()->id])
-                    ->paginate(10);
-        return view('users.index', compact('users'));
+        // $users = User::latest()
+        //             ->permitted()
+        //             ->with(['roles', 'church'])
+        //             ->whereNotIn('id', [auth()->user()->id])
+        //             ->paginate(10);
+        return view('users.index');
     }
 
     /**
@@ -100,5 +101,30 @@ class UsersController extends Controller {
         $user->delete();
         session()->flash('success', 'User successfully deleted');
         return back();
+    }
+
+    public function datatable() {
+        return Datatables::of($this->datatable_query())
+        ->addIndexColumn()
+        ->addColumn('action', function($user) {
+            $html = '';
+            if (auth()->user()->can('update', User::class)) {
+                $html .= edit_button('users', $user->id).' ';
+            }
+            if (auth()->user()->can('delete', User::class)) {
+                $html .= delete_button('users', $user->id);
+            }
+            return $html;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+    }
+
+    protected function datatable_query() {
+        return User::latest('users.created_at')->permitted()->join('churches', 'churches.id', '=', 'users.church_id')
+            ->join('role_user', 'role_user.user_id', '=', 'users.id')
+            ->join('roles', 'roles.id', '=', 'role_user.role_id')
+            ->whereNotIn('users.id', [auth()->user()->id])
+            ->select('users.id', 'users.name', 'users.email', 'roles.label as role', 'churches.name as church');
     }
 }

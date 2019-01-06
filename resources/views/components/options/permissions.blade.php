@@ -1,3 +1,6 @@
+
+{{-- {{ dd($permissions->toArray()) }} --}}
+
 @foreach ($permissions as $permission)
     <div class="col-md-3">
         <div class="checkbox">

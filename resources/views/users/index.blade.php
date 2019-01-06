@@ -23,6 +23,7 @@
                 <table id="datatable" class="table table-bordered" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>User</th>
                             <th>Email</th>
                             <th>Role</th>
@@ -30,7 +31,7 @@
                             <th class="col-action">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    {{-- <tbody>
                         @foreach ($users as $user)
                             <tr>
                                 <td> {{ $user->name }} </td>
@@ -58,13 +59,32 @@
                                 </td>
                             </tr>
                         @endforeach
-                    </tbody>
+                    </tbody> --}}
                 </table>
-                <div class="pull-right">
+                {{-- <div class="pull-right">
                     {{ $users->links() }}
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
     <!-- /.content -->
 @endsection
+
+@push('scripts')
+    <script>
+    $('#datatable').DataTable({
+        processing: true,
+        serverSide: true,
+        bLengthChange: false,
+        ajax: '/users/datatable',
+        columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+            {data: 'name'},
+            {data: 'email'},
+            {data: 'role'},
+            {data: 'church'},
+            {data: 'action', sortable: false},
+        ],
+    });
+    </script>
+@endpush

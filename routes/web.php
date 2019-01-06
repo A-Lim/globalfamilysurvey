@@ -29,6 +29,7 @@ Route::get('dashboard/members-report', 'DashboardController@members_report');
 // Route::get('roles/{role}', 'RolesController@edit');
 // Route::patch('roles/{role}', 'RolesController@update');
 // Route::delete('roles/{role}', 'RolesController@destroy');
+Route::get('roles/datatable', 'RolesController@datatable');
 Route::resource('roles', 'RolesController')->except(['show']);
 
 // Settings
@@ -38,6 +39,7 @@ Route::patch('settings', 'SettingsController@update');
 
 // Users
 // https://laracasts.com/discuss/channels/laravel/laravel-policy-on-user-model?page=1
+Route::get('users/datatable', 'UsersController@datatable');
 Route::resource('users', 'UsersController')->except(['show']);
 // Route::get('users', 'UsersController@index');
 // Route::get('users/create', 'UsersController@create');
@@ -55,11 +57,13 @@ Route::get('surveys/{survey}', 'SurveysController@show');
 Route::delete('surveys/{survey}', 'SurveysController@destroy');
 
 // Questions
+Route::get('questions/datatable', 'QuestionsController@datatable');
 Route::get('questions', 'QuestionsController@index');
 Route::get('questions/{question}', 'QuestionsController@show');
 Route::delete('questions/{question}', 'QuestionsController@destroy');
 
 // Churches
+Route::get('churches/datatable', 'ChurchesController@datatable');
 Route::resource('churches', 'ChurchesController')->except(['show']);
 
 // Reports
@@ -71,6 +75,7 @@ Route::resource('categories', 'CategoriesController')->except(['show']);
 // Api
 Route::post('api/leaders', 'ApiController@leaders');
 Route::post('api/members', 'ApiController@members');
+Route::post('api/test', 'ApiController@registrations');
 
 // Route::get('results/leaders', 'ResultsController@leaders');
 Route::get('results/members', 'ResultsController@members');

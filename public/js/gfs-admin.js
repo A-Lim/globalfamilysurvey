@@ -1,8 +1,8 @@
 $('.alert').fadeOut(4000);
 $(document).ready(function() {
-    if ($('#datatable').length) {
-        $('#datatable').DataTable();
-    }
+    // if ($('#datatable').length) {
+    //     $('#datatable').DataTable();
+    // }
 });
 
 $('.select2').select2();
@@ -11,14 +11,20 @@ $('.select2.hasTags').select2({
 });
 
 $('select').on('select2:select', function (evt) {
-  var element = evt.params.data.element;
-  var $element = $(element);
+    var element = evt.params.data.element;
+    var $element = $(element);
 
-  $element.detach();
-  $(this).append($element);
-  $(this).trigger("change");
+    $element.detach();
+    $(this).append($element);
+    $(this).trigger("change");
 });
 
+function setTooltip(button, message) {
+    $(button).attr('data-original-title', message).tooltip('show');
+    setTimeout(function() {
+        $(button).tooltip('hide');
+    }, 500);
+}
 
 function generatePieChart(id, type, labels, values, palette) {
     new Chart(document.getElementById(id), {

@@ -52,4 +52,11 @@ class ApiController extends Controller {
 
         return response()->json(['status' => 'success'], 200);
     }
+
+    public function registrations(Request $request) {
+        // dd("test");
+        // dd($request->getContent());
+        // dd(json_decode($request->getContent(), true));
+        
+    }
 }

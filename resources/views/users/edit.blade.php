@@ -121,15 +121,28 @@
                         </div>
 
                         <label>Survey Links</label>
+                        {{-- <input id="foo" value="https://github.com/zenorocha/clipboard.js.git">
+
+                        <!-- Trigger -->
+                        <button class="copy-btn" data-clipboard-target="#foo">
+                            <img src="assets/clippy.svg" alt="Copy to clipboard">
+                        </button> --}}
+
                         @foreach ($surveys as $survey)
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                @php
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    @php
                                     $url = $survey_base_url->value.$survey->id.'?church='.$church->uuid;
-                                @endphp
-                                <div><i class="fa fa-link"></i>  <a target="_blank" href="{{ $url }}">{{ $survey->title }}</a></div>
+                                    @endphp
+                                    <div><i class="fa fa-link"></i>  <a target="_blank" href="{{ $url }}">{{ $survey->title }}</a></div>
+                                    <div class="input-group">
+                                        <input id="link-{{ $survey->id }}" type="text" class="form-control" value="{{ $url }}" readonly>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="copy-btn btn btn-primary" data-clipboard-target="#link-{{ $survey->id }}"><i class="fa fa-copy"></i>&nbsp;</button>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
                         @endforeach
                     </div>
                 </div>
@@ -138,3 +151,19 @@
     </section>
     <!-- /.content -->
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('/plugins/clipboard/clipboard.min.js') }}"></script>
+    <script type="text/javascript">
+    $( document ).ready(function() {
+        $('.copy-btn').tooltip({
+            trigger: 'click',
+            placement: 'bottom'
+        });
+        var clipboard = new ClipboardJS('.copy-btn');
+        clipboard.on('success', function(e) {
+            setTooltip(e.trigger, 'Copied!');
+        });
+    });
+    </script>
+@endpush

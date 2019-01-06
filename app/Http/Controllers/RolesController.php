@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DataTables;
 use App\Role;
 use App\Permission;
 use Illuminate\Http\Request;
@@ -25,9 +26,8 @@ class RolesController extends Controller
      */
     public function index() {
         $this->authorize('view', Role::class);
-        $roles = Role::with('permissions')->get();
         $permissions = Permission::all();
-        return view('roles.index', compact('roles', 'permissions'));
+        return view('roles.index', compact('permissions'));
     }
 
     /**
@@ -90,5 +90,34 @@ class RolesController extends Controller
         $role->delete();
         session()->flash('success', 'Role successfully deleted');
         return back();
+    }
+
+    public function datatable() {
+        return Datatables::of(Role::with('permissions'))
+        ->addIndexColumn()
+        ->addColumn('access', function($role) {
+            $html = '';
+            if ($role->name == 'super_admin') {
+                return '<span class="label label-success">full</span>';
+            } else {
+                foreach ($role->permissions as $permission) {
+                    $html .= '<span class="label label-'.tag_type_for_permisson($permission->name).'">'.$permission->label.'</span> ';
+                }
+            }
+            return $html;
+        })
+        ->addColumn('action', function($role) {
+            $html = '';
+            if (auth()->user()->can('update', Role::class)) {
+                $html .= edit_button('roles', $role->id).' ';
+            }
+
+            if (auth()->user()->can('delete', Role::class)) {
+                $html .= delete_button('roles', $role->id);
+            }
+            return $html;
+        })
+        ->rawColumns(['access', 'action'])
+        ->make(true);
     }
 }

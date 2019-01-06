@@ -16,12 +16,12 @@
                 <ul class="treeview-menu">
                     <li class="{{ request()->is('dashboard') ? 'active' : '' }}">
                         <a href="/dashboard">
-                            <i class="fa fa-square text-aqua"></i> <span> Comparison Report</span>
+                            <span> Comparison Report</span>
                         </a>
                     </li>
                     <li class="{{ request()->is('dashboard/members-report') ? 'active' : '' }}">
                         <a href="/dashboard/members-report">
-                            <i class="fa fa-circle text-aqua"></i> <span> Church Report</span>
+                            <span> Church Report</span>
                         </a>
                     </li>
                 </ul>

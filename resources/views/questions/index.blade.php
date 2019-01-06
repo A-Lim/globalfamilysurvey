@@ -17,13 +17,14 @@
                 <table id="datatable" class="table table-bordered" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Title</th>
                             <th>Survey Type</th>
                             <th>No. of Answers</th>
                             <th class="col-action">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    {{-- <tbody>
                         @foreach ($questions as $question)
                             <tr>
                                 <td> {{ str_limit(strip_tags($question->title), 40) }} </td>
@@ -49,7 +50,7 @@
                                 </td>
                             </tr>
                         @endforeach
-                    </tbody>
+                    </tbody> --}}
                 </table>
                 {{-- <div class="pull-right">
                     {{ $questions->links() }}
@@ -60,7 +61,24 @@
     <!-- /.content -->
 @endsection
 
-@prepend('scripts')
+{{-- @prepend('scripts')
     <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/plugins/datatables/dataTables.bootstrap.min.js"></script>
-@endprepend
+@endprepend --}}
+@push('scripts')
+    <script>
+    $('#datatable').DataTable({
+        processing: true,
+        serverSide: true,
+        bLengthChange: false,
+        ajax: '/questions/datatable',
+        columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+            {data: 'title'},
+            {data: 'survey_type', name: 'surveys.type'},
+            {data: 'answers_count', searchable: false, sortable: false },
+            {data: 'action', sortable: false},
+        ],
+    });
+    </script>
+@endpush
