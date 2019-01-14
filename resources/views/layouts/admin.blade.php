@@ -15,7 +15,7 @@
 
     <!-- AdminLTE Skins. Choose a skin from the css/skins
     folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="{{ asset('/adminlte/css/skins/skin-purple.min.css') }}">
+    <link rel="stylesheet" href="{{ env('DOMAIN') }}/adminlte/css/skins/skin-purple.min.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -25,13 +25,13 @@
     <![endif]-->
 
     <!-- select 2 -->
-    <link rel="stylesheet" href="{{ asset('/plugins/select2/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ env('DOMAIN') }}/plugins/select2/select2.min.css">
     <!-- DataTable -->
-    <link rel="stylesheet" href="{{ asset('/plugins/datatables/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ env('DOMAIN') }}/plugins/datatables/dataTables.bootstrap.css">
     <!-- Admin LTE -->
-    <link rel="stylesheet" href="{{ asset('/adminlte/css/AdminLTE.min.css') }}">
+    <link rel="stylesheet" href="{{ env('DOMAIN') }}/adminlte/css/AdminLTE.min.css">
     <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('/css/gfs-admin.css') }}">
+    <link rel="stylesheet" href="{{ env('DOMAIN') }}/css/gfs-admin.css">
 
     <!-- Google Font -->
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> -->
@@ -39,8 +39,8 @@
     <!-- jQuery -->
     <script type="text/javascript" src="/plugins/jQuery/jquery-3.2.1.min.js"></script>
     <!-- DataTables -->
-    <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ env('DOMAIN') }}'/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ env('DOMAIN') }}'/plugins/datatables/dataTables.bootstrap.min.js"></script>
 
     {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
 
@@ -60,13 +60,13 @@
     {{-- <!-- jQuery -->
     <script type="text/javascript" src="/plugins/jQuery/jquery-3.2.1.min.js"></script> --}}
     <!-- bootstrap -->
-    <script type="text/javascript" src="{{ asset('/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ env('DOMAIN') }}/bootstrap/js/bootstrap.min.js"></script>
     <!-- select2 -->
-    <script src="{{ asset('/plugins/select2/select2.full.min.js') }}"></script>
+    <script src="{{ env('DOMAIN') }}/plugins/select2/select2.full.min.js"></script>
     <!-- AdminLTE -->
-    <script type="text/javascript" src="{{ asset('/adminlte/js/adminlte.min.js') }}"></script>
+    <script type="text/javascript" src="{{ env('DOMAIN') }}/adminlte/js/adminlte.min.js{{ env('DOMAIN') }}"></script>
     <!-- gfs -->
-    <script type="text/javascript" src="{{ asset('/js/gfs-admin.js') }}"></script>
+    <script type="text/javascript" src="{{ env('DOMAIN') }}/js/gfs-admin.js"></script>
     <!-- dynamically added scripts -->
     @stack('scripts')
 </body>
