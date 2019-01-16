@@ -80,4 +80,8 @@ Route::post('api/test', 'ApiController@registrations');
 // Route::get('results/leaders', 'ResultsController@leaders');
 Route::get('results/members', 'ResultsController@members');
 
-Route::get('api/webook/receiver', 'ApiController@receiver');
+Route::post('api/webooks/receiver', 'ApiController@receiver');
+
+
+// Webhook
+Route::resource('webhooks', 'WebhooksController');
