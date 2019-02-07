@@ -64,7 +64,7 @@ class WebhookRequest extends FormRequest
                     'event_type' => request('event_type'),
                     'object_type' => request('object_type'),
                     'object_ids' => [request('survey_id')],
-                    'subscription_url' => url('surveys/'.request('survey_id').'/listener'),
+                    'subscription_url' => url('api/surveys/'.request('survey_id').'/listener'),
                 ]
             ]);
             return ['status' => true, 'content' => $response->getBody()->getContents()];
