@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSubmissionsTable extends Migration
+class CreateWebhooksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,12 @@ class CreateSubmissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('submissions', function (Blueprint $table) {
+        Schema::create('webhooks', function (Blueprint $table) {
             $table->string('id')->primary();
+            $table->string('name');
+            $table->string('type');
             $table->string('survey_id');
-            $table->string('church_id');
-            $table->integer('total_time');
-            $table->text('href');
-            $table->text('analyze_url');
-            $table->string('ip_address');
-            $table->string('response_status');
+            $table->text('subscription_url');
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ class CreateSubmissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('submissions');
+        Schema::dropIfExists('webhooks');
     }
 }

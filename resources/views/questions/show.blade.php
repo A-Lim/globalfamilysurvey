@@ -29,8 +29,8 @@
 
                 <div class="row">
                     <div class="form-group col-md-7">
-                        <label for="id">Typeform ID</label>
-                        <input type="text" class="form-control" name="id" placeholder="Typeform ID" value="{{ $question->id }}" disabled>
+                        <label for="id">ID</label>
+                        <input type="text" class="form-control" name="id" placeholder="ID" value="{{ $question->id }}" disabled>
                     </div>
                 </div>
 

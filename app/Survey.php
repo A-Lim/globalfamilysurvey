@@ -11,6 +11,14 @@ class Survey extends Model {
     public $incrementing = false;
     public $timestamps = false;
 
+    const TYPE_LEADER = 'leader';
+    const TYPE_MEMBER = 'member';
+
+    const TYPES = [
+        self::TYPE_LEADER,
+        self::TYPE_MEMBER
+    ];
+
     public function questions() {
         return $this->hasMany(Question::class);
     }
@@ -19,12 +27,19 @@ class Survey extends Model {
         return $this->hasMany(Survey::class);
     }
 
+    public function webhook() {
+        return $this->belongsTo(Webhook::class);
+    }
+
     // retrieve raw JSON and save it into database
-    public static function saveFromJson($json, $type) {
+    public static function saveFromJson($name, $type, $json) {
         self::firstOrCreate([
-            'id'    => $json->form_response->definition->id,
-            'title' => $json->form_response->definition->title,
-            'type'  => $type
+            'id'    => $json->id,
+            'title' => $name,
+            'type'  => $type,
+            'preview_url' => $json->preview,
+            'language' => $json->language,
+            'analyze_url' => $json->analyze_url,
         ]);
     }
 }

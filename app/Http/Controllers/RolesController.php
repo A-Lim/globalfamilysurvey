@@ -100,6 +100,9 @@ class RolesController extends Controller
             if ($role->name == 'super_admin') {
                 return '<span class="label label-success">full</span>';
             } else {
+                if ($role->permissions->count() == 0)
+                    return '<span class="badge">No permissions assigned</span>';
+
                 foreach ($role->permissions as $permission) {
                     $html .= '<span class="label label-'.tag_type_for_permisson($permission->name).'">'.$permission->label.'</span> ';
                 }
@@ -108,6 +111,9 @@ class RolesController extends Controller
         })
         ->addColumn('action', function($role) {
             $html = '';
+            if ($role->name == 'super_admin')
+                return;
+
             if (auth()->user()->can('update', Role::class)) {
                 $html .= edit_button('roles', $role->id).' ';
             }

@@ -15,15 +15,15 @@ class RolePolicy
     }
 
     public function create(User $user){
-        return $user->can('create_role');
+        return $user->can('create_roles');
     }
 
     public function update(User $user){
-        return $user->can('update_role');
+        return $user->can('update_roles');
     }
 
     public function delete(User $user){
-        return $user->can('delete_role');
+        return $user->can('delete_roles');
     }
 
     public function before($user, $ability) {

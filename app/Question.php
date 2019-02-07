@@ -43,39 +43,36 @@ class Question extends Model {
   }
 
     public static function saveFromJson($json) {
-        $questions_json = $json->form_response->definition->fields;
-        $sequence = 1;
-        $questions_array =  array_map(function($obj) use (&$sequence, $json) {
-            $sequence++;
-            return [
-                'id' => $obj->id,
-                'survey_id' => $json->form_response->definition->id,
-                'title' => $obj->title,
-                'type'  => $obj->type,
-                'type_label' => ucfirst(str_replace('_', ' ', $obj->type)),
-                'choices'   => $obj->type == 'multiple_choice' ? serialize((array) $obj->choices) : null,
-                'sequence' => $sequence
-            ];
-
-        }, $questions_json);
-
-        self::insertOrUpdate($questions_array);
-    }
-
-    protected static function insertOrUpdate(array $rows) {
-        $table = \DB::getTablePrefix().with(new self)->getTable();
-        $first = reset($rows);
-
-        $columns = implode( ',', array_map( function( $value ) { return "$value"; } , array_keys($first) ));
-
-        $values = implode( ',', array_map( function( $row ) {
-                        return '('.implode( ',', array_map( function( $value ) { return '"'.str_replace('"', '""', $value).'"'; } , $row ) ).')';
-                    } , $rows ));
-
-        $updates = implode( ',', array_map( function( $value ) { return "$value = VALUES($value)"; } , array_keys($first) ) );
-
-        $sql = "INSERT INTO {$table}({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
-
-        return \DB::statement( $sql );
+        $survey_id = $json->id;
+        $data = [];
+        $page_num = 0;
+        foreach ($json->pages as $page) {
+            $page_num++;
+            foreach ($page->questions as $question_obj)
+            if ($question = self::where('id', $question_obj->id)->first()) {
+                $question->update([
+                    'survey_id' => $survey_id,
+                    'page' => $page_num,
+                    'type' => $question_obj->family,
+                    'subtype' => $question_obj->subtype,
+                    'href' => $question_obj->href,
+                    'title' => $question_obj->headings[0]->heading,
+                    'sequence' => $question_obj->position
+                ]);
+            } else {
+                $data[] = [
+                    'id' => $question_obj->id,
+                    'survey_id' => $survey_id,
+                    'page' => $page_num,
+                    'type' => $question_obj->family,
+                    'subtype' => $question_obj->subtype,
+                    'href' => $question_obj->href,
+                    'title' => $question_obj->headings[0]->heading,
+                    'sequence' => $question_obj->position
+                ];
+            }
+            Option::saveFromJson($question_obj->id, @$question_obj->answers->choices);
+        }
+        Question::insert($data);
     }
 }

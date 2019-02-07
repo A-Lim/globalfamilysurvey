@@ -53,6 +53,11 @@ Route::resource('users', 'UsersController')->except(['show']);
 
 // Surveys
 Route::get('surveys', 'SurveysController@index');
+
+Route::get('surveys/retrieve', 'SurveysController@retrieve');
+Route::post('surveys/retrieve', 'SurveysController@get_survey_list');
+Route::post('surveys', 'SurveysController@create_update_survey');
+
 Route::get('surveys/{survey}', 'SurveysController@show');
 Route::delete('surveys/{survey}', 'SurveysController@destroy');
 
@@ -73,14 +78,15 @@ Route::resource('reports', 'ReportsController')->except(['show']);
 Route::resource('categories', 'CategoriesController')->except(['show']);
 
 // Api
-Route::post('api/leaders', 'ApiController@leaders');
-Route::post('api/members', 'ApiController@members');
-Route::post('api/test', 'ApiController@registrations');
+// Route::post('api/leaders', 'ApiController@leaders');
+// Route::post('api/members', 'ApiController@members');
+// Route::post('api/test', 'ApiController@registrations');
 
 // Route::get('results/leaders', 'ResultsController@leaders');
-Route::get('results/members', 'ResultsController@members');
+// Route::get('results/members', 'ResultsController@members');
 
-Route::post('api/webooks/receiver', 'ApiController@receiver');
+// Route::post('api/webooks/receiver', 'ApiController@receiver');
+
 
 
 // Webhook

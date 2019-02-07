@@ -3,9 +3,9 @@
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1>Surveys</h1>
+        <h1>Webhooks</h1>
         <ol class="breadcrumb">
-            <li><a class="active"><i class="fa fa-list-ul"></i> Surveys</a></li>
+            <li><a class="active"><i class="fa fa-broadcast-tower"></i> Webhooks</a></li>
         </ol>
     </section>
 
@@ -14,49 +14,51 @@
         @include('components.status')
         <div class="box box-primary">
             <div class="box-body">
-                @can('retrieve', App\Survey::class)
+                {{-- @can('retrieve', App\Survey::class) --}}
                     <div class="box-header with-border">
-                        <a href="/surveys/retrieve" class="btn btn-primary pull-right">Retrieve Survey</a>
+                        <a href="/webhooks/create" class="btn btn-primary pull-right">Create Webhook</a>
                     </div>
-                @endcan
+                {{-- @endcan --}}
                 <table id="datatable" class="table table-bordered" cellspacing="0">
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>No. of Questions</th>
+                            <th>Survey Name</th>
+                            <th>Type</th>
                             <th class="col-action">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($surveys as $survey)
+                        @foreach ($webhooks as $webhook)
                             <tr>
-                                <td> {{ str_limit($survey->title, 50) }} </td>
-                                <td> {{ $survey->questions_count }} </td>
+                                <td> {{ str_limit($webhook->name, 50) }} </td>
+                                <td> {{ $webhook->survey->name }} </td>
+                                <td> {{ $webhook->type }} </td>
                                 <td>
-                                    @can('view', App\Survey::class)
-                                        <a class="link-btn" href="/surveys/{{ $survey->id }}" title="View">
+                                    {{-- @can('view', App\Survey::class) --}}
+                                        <a class="link-btn" href="/webhooks/{{ $webhook->id }}" title="View">
                                             <button type="button" class="btn btn-primary">
                                                 <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
                                             </button>
                                         </a>
-                                    @endcan
+                                    {{-- @endcan --}}
 
-                                    @can('delete', App\Role::class)
-                                        <form action="/surveys/{{ $survey->id }}" method="post" class="form-btn">
+                                    {{-- @can('delete', App\Role::class) --}}
+                                        <form action="/webhooks/{{ $webhook->id }}" method="post" class="form-btn">
                                             @csrf
                                             @method('delete')
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete survey? This will delete all questions and results linked to this survey.')">
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete webhook?')">
                                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                             </button>
                                         </form>
-                                    @endcan
+                                    {{-- @endcan --}}
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
                 <div class="pull-right">
-                    {{ $surveys->links() }}
+                    {{ $webhooks->links() }}
                 </div>
             </div>
         </div>

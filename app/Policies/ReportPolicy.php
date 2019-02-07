@@ -15,15 +15,15 @@ class ReportPolicy
     }
 
     public function create(User $user){
-        return $user->can('create_report');
+        return $user->can('create_reports');
     }
 
     public function update(User $user){
-        return $user->can('update_report');
+        return $user->can('update_reports');
     }
 
     public function delete(User $user){
-        return $user->can('delete_report');
+        return $user->can('delete_reports');
     }
 
     public function before($user, $ability) {

@@ -14,15 +14,15 @@ class ChurchPolicy {
     }
 
     public function create(User $user) {
-        return $user->can('create_church');
+        return $user->can('create_churches');
     }
 
     public function update(User $user) {
-        return $user->can('update_church');
+        return $user->can('update_churches');
     }
 
     public function delete(User $user) {
-        return $user->can('delete_church');
+        return $user->can('delete_churches');
     }
 
     public function before($user, $ability) {

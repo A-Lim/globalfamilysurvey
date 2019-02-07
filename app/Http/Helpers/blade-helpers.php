@@ -49,6 +49,7 @@ function tag_type_for_permisson($permission_name) {
             return "info";
             break;
 
+        case str_contains($permission_name, 'retrieve'):
         case str_contains($permission_name, 'create'):
             return "primary";
             break;

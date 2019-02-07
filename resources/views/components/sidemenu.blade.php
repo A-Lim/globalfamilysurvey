@@ -26,6 +26,16 @@
                     </li>
                 </ul>
             </li>
+
+            {{-- @can('view', App\User::class) --}}
+                <li class="{{ request()->is('webhooks*') ? 'active' : '' }}">
+                    <a href="/webhooks">
+                        <i class="fa fa-broadcast-tower"></i> <span>Webhooks</span>
+                    </a>
+                </li>
+            {{-- @endcan --}}
+
+
             @can('view', App\Role::class)
                 <li class="{{ request()->is('roles*') || request()->is('settings*') ? 'active menu-open' : '' }} treeview">
                     <a href="#">

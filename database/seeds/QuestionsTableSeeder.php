@@ -12,8 +12,8 @@ class QuestionsTableSeeder extends Seeder
      * @return void
      */
     public function run() {
-        $this->leader_seed_questions();
-        $this->member_seed_questions();
+        // $this->leader_seed_questions();
+        // $this->member_seed_questions();
     }
 
     public function leader_seed_questions() {

@@ -15,7 +15,7 @@ class QuestionPolicy
     }
 
     public function delete(User $user) {
-        return $user->can('delete_question');
+        return $user->can('delete_questions');
     }
 
     public function before($user, $ability) {

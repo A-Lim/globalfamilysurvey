@@ -14,8 +14,12 @@ class SurveyPolicy
         return $user->can('view_surveys');
     }
 
+    public function retrieve(User $user) {
+        return $user->can('retrieve_surveys');
+    }
+
     public function delete(User $user) {
-        return $user->can('delete_survey');
+        return $user->can('delete_surveys');
     }
 
     public function before($user, $ability) {

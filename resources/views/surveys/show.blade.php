@@ -37,6 +37,7 @@
                                 <tr>
                                     <th class="">Title</th>
                                     <th class="">No. of Answers</th>
+                                    <th class="">Page</th>
                                     <th class="">Sequence</th>
                                     <th class="col-action">Actions</th>
                                 </tr>
@@ -46,6 +47,7 @@
                                     <tr>
                                         <td> {{ str_limit($question->title, 50) }} </td>
                                         <td> {{ $question->answers_count }} </td>
+                                        <td> {{ $question->page }} </td>
                                         <td> {{ $question->sequence }} </td>
                                         <td>
                                             <a class="link-btn" href="/questions/{{ $question->id }}" title="View">

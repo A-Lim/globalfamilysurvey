@@ -13,7 +13,9 @@ class SettingsTableSeeder extends Seeder
     public function run()
     {
         $settings = [
-            ['name' => 'Survey Base URL', 'key' => 'survey_base_url', 'value' => 'https://betterfamily.typeform.com/to/', 'validation' => 'url']
+            ['name' => 'Survey Base URL', 'type' => 'text', 'key' => 'survey_base_url', 'value' => 'https://betterfamily.typeform.com/to/', 'validation' => 'url'],
+            ['name' => 'Survey Monkey API Key', 'type' => 'textarea', 'key' => 'api_key', 'value' => '', 'validation' => 'string'],
+            ['name' => 'Survey Monkey Token', 'type' => 'textarea', 'key' => 'token', 'value' => '', 'validation' => 'string']
         ];
         Setting::insert($settings);
     }

@@ -14,7 +14,7 @@ class UserPolicy
     }
 
     public function create(User $user) {
-        return $user->can('create_user');
+        return $user->can('create_users');
     }
 
     public function update(User $user, User $userEdit)  {
@@ -22,11 +22,11 @@ class UserPolicy
         if ($user->id === $userEdit->id) {
             return true;
         }
-        return $user->can('update_user');
+        return $user->can('update_users');
     }
 
     public function delete(User $user, User $userDelete) {
-        return $user->can('delete_user');
+        return $user->can('delete_users');
     }
 
     public function before($user, $ability) {

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Survey;
 
 class CreateSurveysTable extends Migration
 {
@@ -15,8 +16,11 @@ class CreateSurveysTable extends Migration
     {
         Schema::create('surveys', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('type');
+            $table->enum('type', Survey::TYPES);
             $table->string('title');
+            $table->text('preview_url');
+            $table->string('language');
+            $table->text('analyze_url');
         });
     }
 
