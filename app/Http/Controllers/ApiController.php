@@ -21,7 +21,7 @@ class ApiController extends Controller {
 
         $submission = Submission::create([
             'id' => $result->id,
-            'survey_id' => $result->survey_id,
+            'survey_id' => $survey->id,
             'church_id' => 1,
             'href' => $result->href,
             'total_time' => $result->total_time,

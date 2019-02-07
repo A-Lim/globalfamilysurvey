@@ -70,7 +70,8 @@ class WebhookRequest extends FormRequest
             return ['status' => true, 'content' => $response->getBody()->getContents()];
         } catch (\Exception $exception) {
             $error = json_decode($exception->getResponse()->getBody()->getContents())->error;
-            return ['status' => false, 'content' => 'Status Code ('.$error->http_status_code.'): '.$error->message];
+            $contents = json_decode($exception->getResponse()->getBody());
+            return ['status' => false, 'message' => 'Status Code ('.$error->http_status_code.'): '.$error->message, 'content' => $contents];
         }
     }
 }

@@ -45,12 +45,12 @@ class WebhooksController extends Controller
             return redirect('surveys/retrieve')->with('error', 'Please set up your Survey Monkey Api Key and Token in the settings page.');
 
         $result = $request->save($token);
-        
+
         if ($result['status']) {
             session()->flash('success', 'Webhook successfully created.');
             return back()->with(['result' => $result['content']]);
         } else {
-            return back()->with('error', $result['content']);
+            return back()->with(['result' => $result['content'], 'error' => $result['message']]);
         }
     }
 

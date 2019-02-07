@@ -20,7 +20,7 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label>Results</label>
-                                <textarea class="form-control" rows=20>{{ json_encode(json_decode(Session::get('result')), JSON_PRETTY_PRINT) }}</textarea>
+                                <textarea class="form-control" rows=20>{{ json_encode(Session::get('result'), JSON_PRETTY_PRINT) }}</textarea>
                             </div>
                         </div>
                     </div>
