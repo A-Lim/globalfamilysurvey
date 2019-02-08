@@ -14,6 +14,11 @@ class ApiController extends Controller {
     public function listener(Request $request, Survey $survey) {
         $result = json_decode($request->getContent());
 
+        // if has resource, means coming from webhook creation
+        if (isset($result->resources))
+            return response()->json(['status' => 'success'], 200);
+
+
         // prevent same submission twice
         $submission = Submission::find($result->id);
         if ($submission)

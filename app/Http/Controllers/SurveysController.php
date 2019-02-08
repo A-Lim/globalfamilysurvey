@@ -99,15 +99,4 @@ class SurveysController extends Controller {
         return $response->getBody()->getContents();
     }
 
-
-
-
-
-
-
-
-
-
-
-
 }
