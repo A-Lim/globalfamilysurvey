@@ -19,7 +19,8 @@ class ApiController extends Controller {
             // prevent same submission twice
             $submission = Submission::find($result->id);
             if ($submission)
-                return response()->json(['status' => 'error', 'message' => 'Submission already exists.'], 200);
+                return response()->json(['status' => 'error', 'message' => 'Submission already exists.'], 200)
+                    ->withHeaders(['Content-Type' => 'application/json']);
 
             $submission = Submission::create([
                 'id' => $result->id,
@@ -50,6 +51,7 @@ class ApiController extends Controller {
             Answer::insert($data);
         }
 
-        return response()->json(['status' => 'success'], 200);
+        return response()->json(['status' => 'success'], 200)
+                ->withHeaders(['Content-Type' => 'application/json']);
     }
 }
