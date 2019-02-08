@@ -14,31 +14,24 @@ class ApiController extends Controller {
     public function listener(Request $request, Survey $survey) {
         $result = json_decode($request->getContent());
 
-        Log::info(print_r($result, true));
-
-        // if has resource, means coming from webhook creation
-        if (isset($result->resources))
-            return response()->json(['status' => 'success'], 200);
-
-
-        // prevent same submission twice
-        $submission = Submission::find($result->id);
-        if ($submission)
-            return response()->json(['status' => 'error', 'message' => 'Submission already exists.'], 200);
-
-        $submission = Submission::create([
-            'id' => $result->id,
-            'survey_id' => $survey->id,
-            'church_id' => 1,
-            'href' => $result->href,
-            'total_time' => $result->total_time,
-            'ip_address' => $result->ip_address,
-            'analyze_url' => $result->analyze_url,
-            'response_status' => $result->response_status
-        ]);
-
         $data = [];
         if (isset($result->pages)) {
+            // prevent same submission twice
+            $submission = Submission::find($result->id);
+            if ($submission)
+                return response()->json(['status' => 'error', 'message' => 'Submission already exists.'], 200);
+
+            $submission = Submission::create([
+                'id' => $result->id,
+                'survey_id' => $survey->id,
+                'church_id' => 1,
+                'href' => $result->href,
+                'total_time' => $result->total_time,
+                'ip_address' => $result->ip_address,
+                'analyze_url' => $result->analyze_url,
+                'response_status' => $result->response_status
+            ]);
+
             foreach ($result->pages as $pages) {
                 foreach($pages->questions as $question) {
                     foreach ($question->answers as $answer) {
@@ -54,8 +47,8 @@ class ApiController extends Controller {
                     }
                 }
             }
+            Answer::insert($data);
         }
-        Answer::insert($data);
 
         return response()->json(['status' => 'success'], 200);
     }
