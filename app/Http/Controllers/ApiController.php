@@ -14,6 +14,8 @@ class ApiController extends Controller {
     public function listener(Request $request, Survey $survey) {
         $result = json_decode($request->getContent());
 
+        Log::info(print_r($result, true));
+
         // if has resource, means coming from webhook creation
         if (isset($result->resources))
             return response()->json(['status' => 'success'], 200);
