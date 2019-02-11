@@ -54,7 +54,7 @@ class WebhookRequest extends FormRequest
     protected function create_webhook_request($token) {
         $client = new Client();
         try {
-            $response = $client->post('https://api.surveymonkey.net/v3/webhooks', [
+            $response = $client->post(Webhook::URL_WEBHOOK, [
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'Authorization' => 'Bearer '.$token
@@ -64,9 +64,23 @@ class WebhookRequest extends FormRequest
                     'event_type' => request('event_type'),
                     'object_type' => request('object_type'),
                     'object_ids' => [request('survey_id')],
-                    'subscription_url' => url('api/surveys/'.request('survey_id').'/listener'),
+                    'subscription_url' => url('api/surveys/'.request('survey_id').'/subscription'),
                 ]
             ]);
+
+            $contents = $response->getBody()->getContents();
+            $json = json_decode($contents);
+
+            // if there is no error
+            if (!isset($json->error)) {
+                Webhook::create([
+                    'name' => request('name'),
+                    'type' => request('type'),
+                    'survey_id' => request('survey_id'),
+                    'subscription_url' => url('api/surveys/'.request('survey_id').'/subscription'),
+                ]);
+            }
+
             return ['status' => true, 'content' => $response->getBody()->getContents()];
         } catch (\Exception $exception) {
             $error = json_decode($exception->getResponse()->getBody()->getContents())->error;

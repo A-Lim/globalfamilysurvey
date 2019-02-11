@@ -17,7 +17,7 @@ class ApiController extends Controller {
         return response(null, 200);
     }
 
-    public function listener(Request $request, Survey $survey) {
+    public function subscription(Request $request, Survey $survey) {
         $result = json_decode($request->getContent());
 
         $data = [];
