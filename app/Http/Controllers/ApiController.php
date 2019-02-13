@@ -29,6 +29,7 @@ class ApiController extends Controller {
     protected function retrieve_response(Survey $survey, $respondent_id) {
         $token = Setting::where('name', 'Survey Monkey Token')->first()->value;
         if ($token == '') {
+            dd("No token");
             // do logging here
             return;
         }
@@ -48,7 +49,7 @@ class ApiController extends Controller {
 
             $validation = $this->validation_json($result);
             if ($validation['status'] == 'error') {
-                // do logging here
+                dd($validation['message']);
                 return;
             }
 
@@ -56,7 +57,7 @@ class ApiController extends Controller {
         } catch (ClientException $exception) {
             $error = json_decode($exception->getResponse()->getBody()->getContents())->error;
             $contents = json_decode($exception->getResponse()->getBody());
-            // do logging here
+            dd($contents);
         }
     }
 

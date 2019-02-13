@@ -39,14 +39,13 @@
                                     <span class="text-danger">{{ $errors->first('name') }}</span>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="form-group {{ $errors->has('survey_id') ? ' has-error' : '' }} col-md-12">
                                     <label for="survey_id">Survey ID</label>
                                     <select name="survey_id" class="form-control">
                                         <option value="">Select Survey</option>
                                         @foreach ($surveys as $survey)
-                                            <option value="{{ $survey->id }}" {{ old('survey_id', $webhook->survey_id) ? 'selected' : '' }}>{{ $survey->title }} [{{ ucwords($survey->type) }}]</option>
+                                            <option value="{{ $survey->id }}" {{ old('survey_id', $webhook->survey_id) == $survey->id ? 'selected' : '' }}>{{ $survey->title }} [{{ ucwords($survey->type) }}]</option>
                                         @endforeach
                                     </select>
                                     <span class="text-danger">{{ $errors->first('survey_id') }}</span>
