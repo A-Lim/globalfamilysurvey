@@ -16,8 +16,9 @@ class CreateWebhooksTable extends Migration
         Schema::create('webhooks', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('name');
-            $table->string('type');
+            $table->string('event_type');
             $table->string('survey_id');
+            $table->string('object_type');
             $table->text('subscription_url');
             $table->timestamps();
         });

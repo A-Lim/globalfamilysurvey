@@ -22,6 +22,7 @@ class CreateSubmissionsTable extends Migration
             $table->text('analyze_url');
             $table->string('ip_address');
             $table->string('response_status');
+            $table->string('language');
             $table->timestamps();
         });
     }

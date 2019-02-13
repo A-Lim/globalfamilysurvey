@@ -27,13 +27,13 @@
                 </ul>
             </li>
 
-            {{-- @can('view', App\User::class) --}}
+            @can('view', App\Webhook::class)
                 <li class="{{ request()->is('webhooks*') ? 'active' : '' }}">
                     <a href="/webhooks">
                         <i class="fa fa-broadcast-tower"></i> <span>Webhooks</span>
                     </a>
                 </li>
-            {{-- @endcan --}}
+            @endcan
 
 
             @can('view', App\Role::class)

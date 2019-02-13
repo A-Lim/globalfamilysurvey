@@ -19,6 +19,3 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('surveys/{survey}/subscription', 'ApiController@subscription');
 Route::get('surveys/{survey}/subscription', 'ApiController@verify_subscription_url');
-// Route::get('surveys/{survey}/listener', 'ApiController@listener');
-
-// Route::get('api/listener', 'ApiController@listener');

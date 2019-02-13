@@ -20,6 +20,7 @@ class AuthServiceProvider extends ServiceProvider
         \App\Question::class => \App\Policies\QuestionPolicy::class,
         \App\Role::class => \App\Policies\RolePolicy::class,
         \App\Report::class => \App\Policies\ReportPolicy::class,
+        \App\Webhook::class => \App\Policies\WebhookPolicy::class,
         // share policy between report and category (cause they are basically linked to report)
         \App\Category::class => \App\Policies\ReportPolicy::class,
         \App\Setting::class => \App\Policies\SettingPolicy::class,

@@ -53,6 +53,6 @@ class Webhook extends Model
     ];
 
     public function survey() {
-        return $this->hasOne(Survey::class);
+        return $this->belongsTo(Survey::class);
     }
 }

@@ -24,7 +24,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Survey Name</th>
-                            <th>Type</th>
+                            <th>Event Type</th>
                             <th class="col-action">Actions</th>
                         </tr>
                     </thead>
@@ -32,26 +32,26 @@
                         @foreach ($webhooks as $webhook)
                             <tr>
                                 <td> {{ str_limit($webhook->name, 50) }} </td>
-                                <td> {{ $webhook->survey->name }} </td>
-                                <td> {{ $webhook->type }} </td>
+                                <td> {{ $webhook->survey->title }} </td>
+                                <td> {{ ucwords(str_replace('_', ' ', $webhook->event_type)) }} </td>
                                 <td>
-                                    {{-- @can('view', App\Survey::class) --}}
-                                        <a class="link-btn" href="/webhooks/{{ $webhook->id }}" title="View">
+                                    @can('update', $webhook)
+                                        <a class="link-btn" href="/webhooks/{{ $webhook->id }}/edit" title="View">
                                             <button type="button" class="btn btn-primary">
                                                 <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
                                             </button>
                                         </a>
-                                    {{-- @endcan --}}
+                                    @endcan
 
-                                    {{-- @can('delete', App\Role::class) --}}
+                                    @can('delete', $webhook)
                                         <form action="/webhooks/{{ $webhook->id }}" method="post" class="form-btn">
                                             @csrf
                                             @method('delete')
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete webhook?')">
+                                            <button type="submit" class="btn btn-danger" title="delete" onclick="return confirm('Are you sure you want to delete webhook?')">
                                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                             </button>
                                         </form>
-                                    {{-- @endcan --}}
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach

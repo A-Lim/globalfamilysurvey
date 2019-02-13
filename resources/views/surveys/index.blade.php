@@ -30,7 +30,7 @@
                     <tbody>
                         @foreach ($surveys as $survey)
                             <tr>
-                                <td> <strong>[{{ ucwords($survey->type) }}]</strong> {{ str_limit($survey->title, 50) }}</td>
+                                <td> <strong>[{{ ucwords($survey->type) }}]</strong> {{ $survey->title }}</td>
                                 <td> {{ $survey->questions_count }} </td>
                                 <td>
                                     @can('view', App\Survey::class)
