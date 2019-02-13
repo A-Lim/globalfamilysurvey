@@ -25,6 +25,7 @@ class Webhook extends Model
 
     const TYPE_SURVEY = 'survey';
 
+    const URL_SURVEY_MONKEY = 'https://api.surveymonkey.net/v3';
     const URL_WEBHOOK = 'https://api.surveymonkey.net/v3/webhooks';
 
     const EVENTS = [

@@ -1,14 +1,17 @@
 <?php
-
 namespace App\Http\Controllers;
 
-// use DB;
-// use App\Question;
+use App\Setting;
 use App\Church;
 use App\Answer;
 use App\Survey;
 use App\Submission;
+use App\Webhook;
+
 use Illuminate\Http\Request;
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 class ApiController extends Controller {
     // if survey does not exists, return 404 not found
@@ -19,20 +22,45 @@ class ApiController extends Controller {
 
     public function subscription(Request $request, Survey $survey) {
         $result = json_decode($request->getContent());
-
-        $validation = $this->validation_json($result);
-        if ($validation['status'] == 'error') {
-            return response()->json(['status' => 'error', 'message' => $validation['message']], 422)
-                    ->withHeaders(['Content-Type' => 'application/json']);
-            exit();
-        }
-
-        $this->parse_and_save($survey, $result);
-
-        return response()->json(['status' => 'success'], 200)
-                ->withHeaders(['Content-Type' => 'application/json']);
+        $respondent_id = $result->resources->respondent_id;
+        $this->retrieve_response($survey, $respondent_id);
     }
 
+    protected function retrieve_response(Survey $survey, $respondent_id) {
+        $token = Setting::where('name', 'Survey Monkey Token')->first()->value;
+        if ($token == '') {
+            // do logging here
+            return;
+        }
+
+        $client = new Client();
+        try {
+            $get_survey_response_url = Webhook::URL_SURVEY_MONKEY.'/surveys/'.$survey->id.'/responses/'.$respondent_id.'/details';
+            $response = $client->get($get_survey_response_url, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer '.$token
+                ]
+            ]);
+
+            $contents = $response->getBody()->getContents();
+            $result = json_decode($contents);
+
+            $validation = $this->validation_json($result);
+            if ($validation['status'] == 'error') {
+                // do logging here
+                return;
+            }
+
+            $this->parse_and_save($survey, $result);
+        } catch (ClientException $exception) {
+            $error = json_decode($exception->getResponse()->getBody()->getContents())->error;
+            $contents = json_decode($exception->getResponse()->getBody());
+            // do logging here
+        }
+    }
+
+    // do logging
     protected function validation_json($result) {
         $submission = Submission::find($result->id);
         if ($submission)
@@ -78,7 +106,7 @@ class ApiController extends Controller {
                         $data[] = [
                             'submission_id' => $submission->id,
                             'question_id' => $question->id,
-                            'type' => 'choice',
+                            'type' => $type,
                             'choice_id' => @$answer->other_id,
                             'row_id' => @$answer->row_id,
                             'text' => @$answer->text
