@@ -18,6 +18,7 @@ class CreateSurveysTable extends Migration
             $table->string('id')->primary();
             $table->enum('type', Survey::TYPES);
             $table->string('title');
+            $table->text('url');
             $table->text('preview_url');
             $table->string('language');
             $table->text('analyze_url');

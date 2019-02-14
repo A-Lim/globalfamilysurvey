@@ -26,6 +26,7 @@ class UpdateSurveyRequest extends FormRequest
     public function rules() {
         return [
             'name' => 'required|string',
+            'url' => 'required|string',
             'survey_id' => 'required',
             'type' => 'required|string|in:'.implode(',', Survey::TYPES)
         ];
@@ -34,7 +35,7 @@ class UpdateSurveyRequest extends FormRequest
     public function save($content) {
         DB::beginTransaction();
         $json = json_decode($content);
-        Survey::saveFromJson(request('name'), request('type'), $json);
+        Survey::saveFromJson(request('name'), request('type'), request('url'), $json);
         Question::saveFromJson($json);
         DB::commit();
     }

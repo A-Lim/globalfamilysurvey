@@ -53,6 +53,13 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="form-group {{ $errors->has('survey_id') ? ' has-error' : '' }} col-md-12">
+                                    <label for="url">Survey Url</label>
+                                    <input type="text" name="url" class="form-control" placeholder="Survey ID" value="{{ old('url') }}"/>
+                                    <span class="text-danger">{{ $errors->first('url') }}</span>
+                                </div>
+                            </div>
+                            <div class="row">
                                             <div class="form-group {{ $errors->has('type') ? ' has-error' : '' }} col-md-12">
                                                 <label for="type">Type</label>
                                                 <select class="form-control" name="type">

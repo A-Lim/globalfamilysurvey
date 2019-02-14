@@ -20,13 +20,7 @@ class QuestionsController extends Controller {
     */
     public function index() {
         $this->authorize('view', Question::class);
-        $questions = Question::orderBy('sequence', 'asc')
-        // ->filter(request(['search']))
-        ->with('survey')
-        ->withCount('answers')
-        ->get();
-        // ->paginate(10);
-        return view('questions.index', compact('questions'));
+        return view('questions.index');
     }
 
     /**
@@ -87,33 +81,31 @@ class QuestionsController extends Controller {
     }
 
     public function datatable() {
-        // $query = Question::orderBy('sequence', 'asc')
-        //             ->with('survey')
-        //             ->withCount('answers');
         return Datatables::of($this->datatable_query())
-        ->addIndexColumn()
-        ->editColumn('title', function ($question) {
-            return str_limit(strip_tags($question->title), 40);
-        })
-        ->editColumn('survey_type', function ($question) {
-            return ucwords($question->survey_type);
-        })
-        ->addColumn('action', function($user) {
-            $html = '';
-            if (auth()->user()->can('view', Question::class)) {
-                $html .= view_button('questions', $user->id).' ';
-            }
-            if (auth()->user()->can('delete', Question::class)) {
-                $html .= delete_button('questions', $user->id);
-            }
-            return $html;
-        })
-        ->rawColumns(['action'])
-        ->make(true);
+            ->addIndexColumn()
+            ->editColumn('title', function ($question) {
+                return str_limit(strip_tags($question->title), 40);
+            })
+            ->editColumn('survey_type', function ($question) {
+                return ucwords($question->survey_type);
+            })
+            ->addColumn('action', function($user) {
+                $html = '';
+                if (auth()->user()->can('view', Question::class)) {
+                    $html .= view_button('questions', $user->id).' ';
+                }
+                if (auth()->user()->can('delete', Question::class)) {
+                    $html .= delete_button('questions', $user->id);
+                }
+                return $html;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     protected function datatable_query() {
         return Question::join('surveys', 'questions.survey_id', '=', 'surveys.id')
+            ->orderBy('surveys.id', 'asc')
             ->orderBy('questions.sequence', 'asc')
             ->select('questions.*', 'surveys.type as survey_type')
             ->withCount('answers');

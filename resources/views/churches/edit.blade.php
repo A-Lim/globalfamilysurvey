@@ -63,8 +63,7 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 @php
-                                    $url = $survey_base_url->value.$survey->id.'?church='.$church->uuid;
-                                    // $link = htmlspecialchars("<a href=".$url.">".$survey->title."</a>", ENT_QUOTES);
+                                    $url = $survey->url.'?church='.$church->uuid;
                                 @endphp
                                 <div><i class="fa fa-link"></i> <a target="_blank" href="{{ $url }}">{{ $survey->title }}</a></div>
                             </div>

@@ -32,11 +32,12 @@ class Survey extends Model {
     }
 
     // retrieve raw JSON and save it into database
-    public static function saveFromJson($name, $type, $json) {
+    public static function saveFromJson($name, $type, $url, $json) {
         self::firstOrCreate([
             'id'    => $json->id,
             'title' => $name,
             'type'  => $type,
+            'url' => $url,
             'preview_url' => $json->preview,
             'language' => $json->language,
             'analyze_url' => $json->analyze_url,

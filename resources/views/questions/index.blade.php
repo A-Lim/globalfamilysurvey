@@ -79,6 +79,7 @@
             {data: 'answers_count', searchable: false, sortable: false },
             {data: 'action', sortable: false},
         ],
+        "order": [[ 2, "desc" ]]
     });
     </script>
 @endpush
