@@ -60,6 +60,14 @@ class ApiController extends Controller {
         }
     }
 
+    public function test(Request $request, Survey $survey) {
+        $result = $request->getContent();
+        $json = json_decode($result);
+        $validation = $this->validation_json($json);
+        $survey = Survey::find('166722093');
+        $this->parse_and_save($survey, $json);
+    }
+
     // do logging
     protected function validation_json($result) {
         $submission = Submission::find($result->id);
@@ -68,7 +76,7 @@ class ApiController extends Controller {
             return ['status' => 'error', 'message' => 'Submission already exists.'];
         }
 
-        if (@$result->custom_variables->ch) {
+        if (!isset($result->custom_variables->ch)) {
             log_error('retrieve-response', 'Custom variable missing.');
             return ['status' => 'error', 'message' => 'Custom variable missing.'];
         }
@@ -91,7 +99,7 @@ class ApiController extends Controller {
         $submission = Submission::create([
             'id' => $result->id,
             'survey_id' => $survey->id,
-            'church_id' => $result->custom_variables->church,
+            'church_id' => $result->custom_variables->ch,
             'href' => $result->href,
             'total_time' => $result->total_time,
             'ip_address' => $result->ip_address,
