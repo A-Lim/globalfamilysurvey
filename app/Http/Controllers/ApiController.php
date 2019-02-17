@@ -63,18 +63,26 @@ class ApiController extends Controller {
     // do logging
     protected function validation_json($result) {
         $submission = Submission::find($result->id);
-        if ($submission)
+        if ($submission) {
             log_error('retrieve-response', 'Submission already exists.');
-            // return ['status' => 'error', 'message' => 'Submission already exists.'];
+            return ['status' => 'error', 'message' => 'Submission already exists.'];
+        }
 
-        $church = Church::where('uuid', $result->custom_variables->church)->first();
-        if (!$church)
+        if (@$result->custom_variables->ch) {
+            log_error('retrieve-response', 'Custom variable missing.');
+            return ['status' => 'error', 'message' => 'Custom variable missing.'];
+        }
+
+        $church = Church::where('uuid', $result->custom_variables->ch)->first();
+        if (!$church) {
             log_error('retrieve-response', 'Invalid church.');
-            // return ['status' => 'error', 'message' => 'Invalid church uuid.'];
+            return ['status' => 'error', 'message' => 'Invalid church uuid.'];
+        }
 
-        if (!isset($result->pages))
+        if (!isset($result->pages)) {
             log_error('retrieve-response', 'Invalid json format.');
-            // return ['status' => 'error', 'message' => 'Invalid json format.'];
+            return ['status' => 'error', 'message' => 'Invalid json format.'];
+        }
 
         return true;
     }

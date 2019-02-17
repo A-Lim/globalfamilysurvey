@@ -63,9 +63,9 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 @php
-                                    $url = $survey->url.'?church='.$church->uuid;
+                                    $url = $survey->url.'?ch='.$church->uuid;
                                 @endphp
-                                <div><i class="fa fa-link"></i> <a target="_blank" href="{{ $url }}">{{ $survey->title }} [{{ $survey->type }}]</a></div>
+                                <div><i class="fa fa-link"></i> <a target="_blank" href="{{ $url }}">{{ $survey->title }} [{{ ucwords($survey->type) }}]</a></div>
                             </div>
                         </div>
                         @endforeach
