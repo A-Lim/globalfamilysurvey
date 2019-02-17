@@ -2,9 +2,9 @@
 
 use App\ErrorLog;
 
-function log_error($module, $action, $url, $exception) {
-    // ErrorLog::create([
-    //     'url' => $url,
-    //     'error' => get_class($exception)
-    // ]);
+function log_error($action, $error) {
+    ErrorLog::create([
+        'action' => $url,
+        'error' => $error,
+    ]);
 }

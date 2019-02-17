@@ -65,7 +65,7 @@
                                 @php
                                     $url = $survey->url.'?church='.$church->uuid;
                                 @endphp
-                                <div><i class="fa fa-link"></i> <a target="_blank" href="{{ $url }}">{{ $survey->title }}</a></div>
+                                <div><i class="fa fa-link"></i> <a target="_blank" href="{{ $url }}">{{ $survey->title }} [{{ $survey->type }}]</a></div>
                             </div>
                         </div>
                         @endforeach

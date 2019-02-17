@@ -29,7 +29,7 @@ class ApiController extends Controller {
     public function retrieve_response(Survey $survey, $respondent_id) {
         $token = Setting::where('name', 'Survey Monkey Token')->first()->value;
         if ($token == '') {
-            // log_error($url, 'No token');
+            log_error('retrieve-response', 'No token.');
             return;
         }
 
@@ -53,6 +53,7 @@ class ApiController extends Controller {
 
             $this->parse_and_save($survey, $result);
         } catch (ClientException $exception) {
+            log_error('retrieve-response', 'ClientException: '.$exception->getResponse()->getBody()->getContents());
             // $error = json_decode($exception->getResponse()->getBody()->getContents())->error;
             // $contents = json_decode($exception->getResponse()->getBody());
             // log_error($url, $exception->getResponse()->getBody());
@@ -63,14 +64,17 @@ class ApiController extends Controller {
     protected function validation_json($result) {
         $submission = Submission::find($result->id);
         if ($submission)
-            return ['status' => 'error', 'message' => 'Submission already exists.'];
+            log_error('retrieve-response', 'Submission already exists.');
+            // return ['status' => 'error', 'message' => 'Submission already exists.'];
 
         $church = Church::where('uuid', $result->custom_variables->church)->first();
         if (!$church)
-            return ['status' => 'error', 'message' => 'Invalid church uuid.'];
+            log_error('retrieve-response', 'Invalid church.');
+            // return ['status' => 'error', 'message' => 'Invalid church uuid.'];
 
         if (!isset($result->pages))
-            return ['status' => 'error', 'message' => 'Invalid json format.'];
+            log_error('retrieve-response', 'Invalid json format.');
+            // return ['status' => 'error', 'message' => 'Invalid json format.'];
 
         return true;
     }
