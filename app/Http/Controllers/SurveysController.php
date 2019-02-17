@@ -83,8 +83,10 @@ class SurveysController extends Controller {
         DB::transaction(function() use ($survey) {
             $ids = DB::table('questions')->where(['survey_id' => $survey->id])->pluck('id')->toArray();
             DB::table('surveys')->where(['id' => $survey->id])->delete();
-            DB::table('questions')->where(['survey_id' => $survey->id])->delete();
+            DB::table('questions')->where('survey_id', $survey->id)->delete();
             DB::table('answers')->whereIn('question_id', $ids)->delete();
+            DB::table('options')->whereIn('question_id', $ids)->delete();
+            DB::table('submissions')->where('survey_id', $survey->id)->delete();
         });
     }
 

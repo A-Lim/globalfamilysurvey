@@ -123,7 +123,7 @@ class ApiController extends Controller {
                     } else {
                         $type = isset($answer->other_id) ? 'other' : 'text';
                         $data[] = [
-                            'submission_id' => $submission->id,
+                            'submission_id' => $result->id,
                             'question_id' => $question->id,
                             'type' => $type,
                             'option_id' => @$answer->other_id,

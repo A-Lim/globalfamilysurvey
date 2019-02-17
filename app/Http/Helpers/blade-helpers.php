@@ -67,14 +67,7 @@ function tag_type_for_permisson($permission_name) {
     }
 }
 
-function splitWords($text, $noOfWords) {
-    $words = str_word_count($text, 1);
-    $pieces = [];
-    foreach(array_chunk($words, $noOfWords) as $array){
-        $pieces[] = implode(' ', $array);
-    }
-    return $pieces;
-}
+
 
 // function row_template($name, $count, $total) {
 //     $percentage = round($count / $total * 100, 2);

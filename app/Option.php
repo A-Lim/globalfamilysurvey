@@ -15,6 +15,7 @@ class Option extends Model
     }
 
     public static function saveFromJson($question_id, $choices_json = null) {
+        // dd($choices_json);
         $data = [];
         if ($choices_json == null)
             return;
@@ -36,6 +37,26 @@ class Option extends Model
                     'position' => $choice->position
                 ];
             }
+        }
+        Option::insert($data);
+    }
+
+    public static function saveOtherFromJson($question_id, $other = null) {
+        if ($option = self::where('id', $other->id)->first()) {
+            $option->update([
+                'question_id' => $question_id,
+                'text' => $other->text,
+                'visible' => $other->visible,
+                'position' => $other->position
+            ]);
+        } else {
+            $data[] = [
+                'id' => $other->id,
+                'question_id' => $question_id,
+                'text' => $other->text,
+                'visible' => $other->visible,
+                'position' => $other->position
+            ];
         }
         Option::insert($data);
     }

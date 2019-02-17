@@ -81,7 +81,7 @@ class QuestionsController extends Controller {
             // $keys = $question->type == 'matrix' ? explode(' ', $option->text) : $option->text;
             // dd($keys);
             $data['type'] = $question->type;
-            $data['keys'][] = $option->text;
+            $data['keys'][] = splitWords($option->text, 3);
             $data['values'][] = $answers->filter(function ($value, $key) use ($option) {
                 return $value->option_id == $option->id;
             })->count();

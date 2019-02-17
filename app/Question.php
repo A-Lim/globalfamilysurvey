@@ -72,6 +72,9 @@ class Question extends Model {
                     ];
                 }
                 Option::saveFromJson($question_obj->id, @$question_obj->answers->choices);
+                if (isset($question_obj->answers->other)) {
+                    Option::saveOtherFromJson($question_obj->id, $question_obj->answers->other);
+                }
             }
         }
         Question::insert($data);
