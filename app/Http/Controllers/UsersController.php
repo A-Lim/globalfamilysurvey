@@ -23,11 +23,6 @@ class UsersController extends Controller {
      */
     public function index() {
         $this->authorize('view', User::class);
-        // $users = User::latest()
-        //             ->permitted()
-        //             ->with(['roles', 'church'])
-        //             ->whereNotIn('id', [auth()->user()->id])
-        //             ->paginate(10);
         return view('users.index');
     }
 

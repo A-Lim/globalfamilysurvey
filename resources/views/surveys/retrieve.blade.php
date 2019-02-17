@@ -23,7 +23,7 @@
                             <div class="row">
                                 <div class="form-group col-md-12">
                                     <label>Results</label>
-                                    <textarea class="form-control" rows=20>{{ json_encode(json_decode(Session::get('result')), JSON_PRETTY_PRINT) }}</textarea>
+                                    <textarea class="form-control" rows=20>{{ json_encode(Session::get('content'), JSON_PRETTY_PRINT) }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -60,17 +60,17 @@
                                 </div>
                             </div>
                             <div class="row">
-                                            <div class="form-group {{ $errors->has('type') ? ' has-error' : '' }} col-md-12">
-                                                <label for="type">Type</label>
-                                                <select class="form-control" name="type">
-                                                    <option value="">Select Type</option>
-                                                    @foreach (\App\Survey::TYPES as $type)
-                                                        <option value="{{ $type }}" {{ old('type') == $type ? 'selected' : '' }}>{{ ucwords($type) }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <span class="text-danger">{{ $errors->first('type') }}</span>
-                                            </div>
-                                        </div>
+                                <div class="form-group {{ $errors->has('type') ? ' has-error' : '' }} col-md-12">
+                                    <label for="type">Type</label>
+                                    <select class="form-control" name="type">
+                                        <option value="">Select Type</option>
+                                        @foreach (\App\Survey::TYPES as $type)
+                                            <option value="{{ $type }}" {{ old('type') == $type ? 'selected' : '' }}>{{ ucwords($type) }}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger">{{ $errors->first('type') }}</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary pull-right">Retrieve</button>

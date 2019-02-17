@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests\Webhooks;
 
+use App\ErrorLog;
 use App\Webhook;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateRequest extends FormRequest
@@ -29,9 +31,10 @@ class CreateRequest extends FormRequest
     }
 
     public function create_webhook($token) {
+        $url = Webhook::URL_WEBHOOK;
         $client = new Client();
         try {
-            $response = $client->post(Webhook::URL_WEBHOOK, [
+            $response = $client->post($url, [
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'Authorization' => 'Bearer '.$token
@@ -42,7 +45,6 @@ class CreateRequest extends FormRequest
                     'object_type' => request('object_type'),
                     'object_ids' => [request('survey_id')],
                     'subscription_url' => url('api/surveys/'.request('survey_id').'/subscription'),
-                    // 'subscription_url' => 'http://dev.globalfamilychallenge.com/api/surveys/'.request('survey_id').'/subscription',
                 ]
             ]);
 
@@ -60,7 +62,6 @@ class CreateRequest extends FormRequest
                     'subscription_url' => url('api/surveys/'.request('survey_id').'/subscription'),
                 ]);
             }
-
             return ['status' => true, 'content' => $json];
         } catch (ClientException $exception) {
             $error = json_decode($exception->getResponse()->getBody()->getContents())->error;
@@ -68,4 +69,6 @@ class CreateRequest extends FormRequest
             return ['status' => false, 'message' => 'Status Code ('.$error->http_status_code.'): '.$error->message, 'content' => $contents];
         }
     }
+
+
 }

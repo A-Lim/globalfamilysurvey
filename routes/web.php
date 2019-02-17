@@ -62,6 +62,7 @@ Route::get('surveys/{survey}', 'SurveysController@show');
 Route::delete('surveys/{survey}', 'SurveysController@destroy');
 
 // Questions
+Route::get('questions/{question}/data', 'QuestionsController@data');
 Route::get('questions/datatable', 'QuestionsController@datatable');
 Route::get('questions', 'QuestionsController@index');
 Route::get('questions/{question}', 'QuestionsController@show');
@@ -72,7 +73,9 @@ Route::get('churches/datatable', 'ChurchesController@datatable');
 Route::resource('churches', 'ChurchesController')->except(['show']);
 
 // Reports
+Route::get('reports/{report}/data', 'ReportsController@data');
 Route::resource('reports', 'ReportsController')->except(['show']);
+
 
 // Categories
 Route::resource('categories', 'CategoriesController')->except(['show']);

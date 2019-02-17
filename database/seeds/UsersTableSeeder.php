@@ -1,6 +1,7 @@
 <?php
 
 use App\User;
+use Webpatser\Uuid\Uuid;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder

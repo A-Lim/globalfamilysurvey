@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use DB;
 use App\Church;
+use Webpatser\Uuid\Uuid;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ChurchRequest extends FormRequest {

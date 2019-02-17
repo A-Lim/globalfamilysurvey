@@ -31,41 +31,27 @@ class QuestionsController extends Controller {
     */
     public function show(Question $question) {
         $this->authorize('view', Question::class);
-        $grouped_answers = $this->groupData($question);
-        return view('questions.show', compact('question', 'grouped_answers'));
+        // $grouped_answers = $this->groupData($question);
+        return view('questions.show', compact('question'));
     }
 
-    private function groupData($question) {
-        // initialize empty array
-        $data = $values = [];
-        $hasBoolean = false;
 
-        $answers = Answer::permitted()->where('question_id', $question->id)->get();
 
-        // $values = $question->answers->pluck('value')->toArray();
-        // // dd($values);
-        // $data = array_count_values($values);
-        // //
-        // dd($data);
-
-        // group all answer values
-        foreach ($question->answers as $answer) {
-            foreach ($answer->value as $value) {
-                $hasBoolean = is_bool($value);
-                array_push($values, $value);
-            }
-        }
-
-        // array_count_values only work for integer and string
-        // if array has boolean, do manual counting
-        if ($hasBoolean) {
-            $data['yes'] = count(array_filter($values));
-            $data['no'] = count($values) - $data['yes'];
-        } else {
-            $data = array_count_values($values);
-        }
-        return $data;
-    }
+    // private function groupData(Question $question) {
+    //     $options = \App\Option::where('question_id', $question->id)->get();
+    //     $answers = Answer::permitted()->where('answers.question_id', $question->id)
+    //                 ->join('options', 'options.id', 'answers.option_id')
+    //                 ->get();
+    //
+    //     $data = [];
+    //     foreach ($options as $option) {
+    //         $data[$option->text] = $answers->filter(function ($value, $key) use ($option) {
+    //             return $value->option_id == $option->id;
+    //         })->count();
+    //     }
+    //     // dd($options);
+    //     return $data;
+    // }
 
     /**
     * Remove the specified resource from storage.
@@ -78,6 +64,29 @@ class QuestionsController extends Controller {
         $this->deleteAllLinked($question);
         session()->flash('success', 'Question successfully deleted');
         return back();
+    }
+
+    public function data(Question $question) {
+        $options = \App\Option::where('question_id', $question->id)->get();
+        $answers = Answer::permitted()->where('answers.question_id', $question->id)
+                    ->join('options', 'options.id', 'answers.option_id')
+                    ->select('answers.option_id')
+                    ->get();
+
+        $data = [];
+
+
+
+        foreach ($options as $option) {
+            // $keys = $question->type == 'matrix' ? explode(' ', $option->text) : $option->text;
+            // dd($keys);
+            $data['type'] = $question->type;
+            $data['keys'][] = $option->text;
+            $data['values'][] = $answers->filter(function ($value, $key) use ($option) {
+                return $value->option_id == $option->id;
+            })->count();
+        }
+        return $data;
     }
 
     public function datatable() {

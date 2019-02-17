@@ -21,7 +21,10 @@
         "phpunit/phpunit": "^7.0"
     },
     "autoload": {
-        "files": ["app/Http/Helpers/blade-helpers.php"],
+        "files": [
+            "app/Http/Helpers/blade-helpers.php",
+            "app/Http/Helpers/utils.php"
+        ],
         "classmap": [
             "database/seeds",
             "database/factories"

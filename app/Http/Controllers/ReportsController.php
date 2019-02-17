@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Question;
 use App\Report;
+use App\Answer;
+use App\Submission;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReportRequest;
 
@@ -91,5 +93,40 @@ class ReportsController extends Controller
         $report->delete();
         session()->flash('success', 'Report successfully deleted');
         return back();
+    }
+
+    public function data(Report $report) {
+        if (!auth()->check())
+            abort(404);
+
+        return response()->json([
+            'leader_data' => $this->group_data($report->leader_question),
+            'member_data' => $this->group_data($report->member_question)
+        ], 200);
+    }
+
+    public function group_data(Question $question) {
+        $options = \App\Option::where('question_id', $question->id)->get();
+        $answers = Answer::permitted()->where('answers.question_id', $question->id)
+                    ->join('options', 'options.id', 'answers.option_id')
+                    ->select('answers.option_id')
+                    ->get();
+
+        // dd($question->survey_id);
+        $count = Submission::where('survey_id', $question->survey_id)->whereHas('answers', function($query) use ($question) {
+            $query->where('question_id', $question->id);
+        })->count();
+
+        $data = [];
+        $total = $answers->count();
+        foreach ($options as $option) {
+            $data['type'] = $question->type;
+            $data['total'] = $count;
+            $data['keys'][] = $option->text;
+            $data['values'][] = $answers->filter(function ($value, $key) use ($option) {
+                return $value->option_id == $option->id;
+            })->count();
+        }
+        return $data;
     }
 }

@@ -26,11 +26,10 @@ class ApiController extends Controller {
         $this->retrieve_response($survey, $respondent_id);
     }
 
-    protected function retrieve_response(Survey $survey, $respondent_id) {
+    public function retrieve_response(Survey $survey, $respondent_id) {
         $token = Setting::where('name', 'Survey Monkey Token')->first()->value;
         if ($token == '') {
-            dd("No token");
-            // do logging here
+            // log_error($url, 'No token');
             return;
         }
 
@@ -49,15 +48,14 @@ class ApiController extends Controller {
 
             $validation = $this->validation_json($result);
             if ($validation['status'] == 'error') {
-                dd($validation['message']);
                 return;
             }
 
             $this->parse_and_save($survey, $result);
         } catch (ClientException $exception) {
-            $error = json_decode($exception->getResponse()->getBody()->getContents())->error;
-            $contents = json_decode($exception->getResponse()->getBody());
-            dd($contents);
+            // $error = json_decode($exception->getResponse()->getBody()->getContents())->error;
+            // $contents = json_decode($exception->getResponse()->getBody());
+            // log_error($url, $exception->getResponse()->getBody());
         }
     }
 
@@ -95,10 +93,10 @@ class ApiController extends Controller {
                 foreach ($question->answers as $answer) {
                     if (isset($answer->choice_id)) {
                         $data[] = [
-                            'submission_id' => $submission->id,
+                            'submission_id' => $result->id,
                             'question_id' => $question->id,
                             'type' => 'choice',
-                            'choice_id' => @$answer->choice_id,
+                            'option_id' => @$answer->choice_id,
                             'row_id' => @$answer->row_id,
                             'text' => @$answer->text
                         ];
@@ -108,7 +106,7 @@ class ApiController extends Controller {
                             'submission_id' => $submission->id,
                             'question_id' => $question->id,
                             'type' => $type,
-                            'choice_id' => @$answer->other_id,
+                            'option_id' => @$answer->other_id,
                             'row_id' => @$answer->row_id,
                             'text' => @$answer->text
                         ];

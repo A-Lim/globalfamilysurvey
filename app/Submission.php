@@ -31,7 +31,7 @@ class Submission extends Model
         // question id that contains church code
         $question_id = '';
         // hidden field church code
-        $church_code = $json->form_response->hidden->church;
+        $church_code = $json->form_response->hidden->ch;
         // check if church code is correct and already in database
         // if not do not save to database
         $church = Church::where('uuid', $church_code)->firstOrFail();

@@ -57,34 +57,27 @@
 @prepend('scripts')
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 @endprepend
-
+{{-- {{ dd($grouped_answers) }} --}}
 @push('scripts')
     <script>
-    new Chart(document.getElementById("bar-chart"), {
-        type: 'bar',
-        data: {
-            labels: {!! json_encode(array_keys($grouped_answers)) !!},
-            datasets: [{
-                label: "Responses",
-                backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850", "#f50057", "#ffeb3b", "#ff9800", "#607d8b", "#808080"],
-                data: {!! json_encode(array_flatten($grouped_answers)) !!}
-            }]
-        },
-        options: {
-            legend: { display: false },
-            title: {
-                display: true,
-                text: '{{ $question->type == "legal" ? "Terms and condition?" : $question->title }}'
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        fixedStepSize: 1
-                    }
-                }]
-            }
+        $(document).ready(function() {
+            retrieve_data();
+        });
+
+        function retrieve_data() {
+            $.ajax({
+                headers: {
+                    Accept: "application/json",
+                },
+                dataType: 'json',
+                url: "/questions/{{ $question->id }}/data",
+            }).done(function(data) {
+                var chart_id = "bar-chart";
+                var chart_type = 'bar';
+                var keys = data.keys;
+                var values = data.values;
+                generateBarChart(chart_id, chart_type, keys, values, color_palettes);
+            });
         }
-    });
     </script>
 @endpush

@@ -34,9 +34,8 @@ class UpdateSurveyRequest extends FormRequest
 
     public function save($content) {
         DB::beginTransaction();
-        $json = json_decode($content);
-        Survey::saveFromJson(request('name'), request('type'), request('url'), $json);
-        Question::saveFromJson($json);
+        Survey::saveFromJson(request('name'), request('type'), request('url'), $content);
+        Question::saveFromJson($content);
         DB::commit();
     }
 

@@ -20,7 +20,8 @@
         @endif
         @include('components.status')
         <!-- Small boxes (Stat box) -->
-        <div class="row">
+        @if (auth()->user()->hasRole('super_admin'))
+            <div class="row">
             <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-aqua">
@@ -39,7 +40,7 @@
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3>{{ $data['churches_count'] }}</h3>
-                        <p>Churches involved</p>
+                        <p>Churches Registered</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
@@ -75,6 +76,7 @@
             </div> --}}
             <!-- ./col -->
         </div>
+        @endif
 
         @foreach ($reports as $report)
             <div class="box box-primary">
@@ -87,7 +89,7 @@
                         <div class="col-md-6">
                             <canvas id="report-leader-{{ $report->id }}"></canvas>
                             <h4>{{ $report->leader_question->title }}</h4>
-                            <table class="table table-bordered" style="font-size: 14px;">
+                            <table id="table-leader-{{ $report->id }}" class="table table-bordered" style="font-size: 14px;">
                                 <thead>
                                     <tr>
                                         <th style="width: 50%;">Label</th>
@@ -96,13 +98,13 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $leader_values = $report->leader_question->answers->pluck('value')->toArray();
-                                        $member_values = $report->member_question->answers->pluck('value')->toArray();
-                                        $leader_chart_data = chart_data($leader_values);
-                                        $member_chart_data = chart_data($member_values);
-                                        $index = 0;
+                                        // $leader_values = $report->leader_question->answers->pluck('value')->toArray();
+                                        // $member_values = $report->member_question->answers->pluck('value')->toArray();
+                                        // $leader_chart_data = chart_data($leader_values);
+                                        // $member_chart_data = chart_data($member_values);
+                                        // $index = 0;
                                     @endphp
-                                    @foreach ($leader_chart_data['percentage'] as $key => $percentage)
+                                    {{-- @foreach ($leader_chart_data['percentage'] as $key => $percentage)
                                         <tr>
                                             <td>{{ ucwords($key) }}</td>
                                             <td style="width: 70%;">
@@ -113,14 +115,14 @@
                                             <td style="width: 30%;"><span class="badge" style="background-color:{{ get_color_palettes(1)[$index] }}">{{ round($percentage, 2) }}%</span></td>
                                         </tr>
                                     @php $index++; @endphp
-                                    @endforeach
+                                    @endforeach --}}
                                 </tbody>
                             </table>
                         </div>
                         <div class="col-md-6">
                             <canvas id="report-member-{{ $report->id }}"></canvas>
                             <h4>{{ $report->member_question->title }}</h4>
-                            <table class="table table-bordered" style="font-size: 14px;">
+                            <table id="table-member-{{ $report->id }}" class="table table-bordered" style="font-size: 14px;">
                                 <thead>
                                     <tr>
                                         <th style="width: 50%;">Label</th>
@@ -128,26 +130,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $leader_values = $report->leader_question->answers->pluck('value')->toArray();
-                                        $member_values = $report->member_question->answers->pluck('value')->toArray();
-                                        $leader_chart_data = chart_data($leader_values);
-                                        $member_chart_data = chart_data($member_values);
-                                        $index = 0;
-                                    @endphp
-
-                                    @foreach ($member_chart_data['percentage'] as $key => $percentage)
-                                    <tr>
-                                        <td>{{ ucwords($key) }}</td>
-                                        <td style="width: 70%;">
-                                            <div class="progress progress-xs">
-                                                <div class="progress-bar" style="width: {{ round($percentage, 2) }}%; background-color:{{ get_color_palettes(2)[$index] }}"></div>
-                                            </div>
-                                        </td>
-                                        <td style="width: 30%;"><span class="badge" style="background-color:{{ get_color_palettes(2)[$index] }}">{{ round($percentage, 2) }}%</span></td>
-                                    </tr>
-                                    @php $index++; @endphp
-                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -165,63 +147,60 @@
 
     @push('scripts')
         <script>
-            var delay = 2;
-            setTimeout("load_report();", delay * 1000);
-            function load_report() {
-                @foreach ($reports as $report)
-                    @php
-                        $leader_values = $report->leader_question->answers->pluck('value')->toArray();
-                        $member_values = $report->member_question->answers->pluck('value')->toArray();
+            $(document).ready(function() {
+                load_reports();
+            });
 
-                        $leader_chart_data = chart_data($leader_values);
-                        $member_chart_data = chart_data($member_values);
-                    @endphp
-                        var leader_labels = {!! $leader_chart_data['labels'] !!};
-                        var leader_values = {!! $leader_chart_data['values'] !!};
-                        var member_labels = {!! $member_chart_data['labels'] !!};
-                        var member_values = {!! $member_chart_data['values'] !!};
-
-                        // leader's chart
-                        new Chart(document.getElementById("report-leader-{{ $report->id }}"), {
-                            type: 'bar',
-                            data: {
-                                labels: leader_labels,
-                                datasets: [{
-                                    label: "Responses",
-                                    backgroundColor: {!! json_encode(get_color_palettes(1)) !!},
-                                    data: leader_values
-                                }]
+            function load_reports() {
+                var report_ids = {!! json_encode($reports->pluck('id')->toArray()) !!};
+                for (var x = 0; x < report_ids.length; x++) {
+                    // https://stackoverflow.com/questions/750486/javascript-closure-inside-loops-simple-practical-example
+                    // immediately invoked function expression
+                    (function(report_id) {
+                        $.ajax({
+                            headers: {
+                                Accept: "application/json",
                             },
-                            options: {
-                                legend: { display: false },
-                                title: {
-                                    display: false,
-                                },
-                                // scaleSetting is found in js file
-                                scales: scaleSetting
-                            }
+                            dataType: 'json',
+                            url: "/reports/" + report_id + "/data",
+                        }).done(function(data) {
+                            load_charts(report_id, data);
+                            load_percentage_table(report_id, data);
                         });
+                    })(report_ids[x]);
+                }
+            }
 
-                        // member's chart
-                        new Chart(document.getElementById("report-member-{{ $report->id }}"), {
-                            type: 'bar',
-                            data: {
-                                labels: member_labels,
-                                datasets: [{
-                                    label: "Responses",
-                                    backgroundColor: {!! json_encode(get_color_palettes(2)) !!},
-                                    data: member_values
-                                }]
-                            },
-                            options: {
-                                legend: { display: false },
-                                title: {
-                                    display: false,
-                                },
-                                scales: scaleSetting
-                            }
-                        });
-                @endforeach
+            function load_charts(id, data) {
+                var l_chart_id = "report-leader-" + id;
+                var m_chart_id = "report-member-" + id;
+
+                generateBarChart(l_chart_id, 'bar', data.leader_data.keys, data.leader_data.values, color_palettes);
+                generateBarChart(m_chart_id, 'bar', data.member_data.keys, data.member_data.values, other_color_palettes);
+            }
+
+            function load_percentage_table(report_id, data) {
+                var leader_question_type = data.leader_data.type;
+                var member_question_type = data.member_data.type;
+                var leader_html = '', member_html = '';
+
+                for (var x = 0; x < data.leader_data.values.length; x++) {
+                    var text = data.leader_data.keys[x];
+                    var percentage = data.leader_data.total == 0 ? 0 : ((data.leader_data.values[x] / data.leader_data.total) * 100);
+                    var color = color_palettes[x];
+                    leader_html += row_template(text, percentage, color);
+                }
+
+                for (var x = 0; x < data.member_data.values.length; x++) {
+                    var text = data.member_data.keys[x];
+                    var percentage = data.member_data.total == 0 ? 0 : ((data.member_data.values[x] / data.member_data.total) * 100);
+                    var color = other_color_palettes[x];
+                    member_html += row_template(text, percentage, color);
+                }
+                // alert('#table-leader-'+report_id);
+
+                $('#table-leader-'+report_id).append(leader_html);
+                $('#table-member-'+report_id).append(member_html);
             }
         </script>
     @endpush

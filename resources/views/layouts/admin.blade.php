@@ -45,7 +45,7 @@
     {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
 
 </head>
-<body class="hold-transition skin-purple sidebar-mini">
+<body class="hold-transition skin-purple sidebar-mini {{ request()->is('dashboard*') ? 'sidebar-collapse' : '' }}">
     <div class="wrapper">
         @include('components.header')
         @include('components.sidemenu')

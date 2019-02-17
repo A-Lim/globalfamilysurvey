@@ -10,6 +10,10 @@ class Option extends Model
     public $incrementing = false;
     public $timestamps = false;
 
+    public function question() {
+        return $this->belongsTo(Question::class);
+    }
+
     public static function saveFromJson($question_id, $choices_json = null) {
         $data = [];
         if ($choices_json == null)

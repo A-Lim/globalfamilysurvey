@@ -25,22 +25,22 @@
             @php $i = 0; @endphp
             <div class="row">
                 @foreach ($category->questions as $question)
-                    <div class="col-lg-3 col-md-12 col-xs-12">
+                    <div class="{{ $question->type != 'matrix' ? 'col-lg-6 col-md-6' : 'col-lg-8 col-md-8' }} col-xs-12">
                         <div class="box">
                             <div class="box-header">
                                 <h3 class="box-title">{{ $question->title }}</h3>
                             </div>
                             <div class="box-body">
-                                {!! get_report_body($question ) !!}
+                                <canvas id="question-{{ $question->id }}" height="150"></canvas>
                             </div>
                         </div>
                     </div>
-                    @php $i++; @endphp
+                    {{-- @php $i++; @endphp --}}
                     {{-- if there is 4 col in one row already, open a new row --}}
-                    @if ($i % 4 == 0)
+                    {{-- @if ($i % 4 == 0)
                         </div>
                         <div class="row">
-                    @endif
+                    @endif --}}
                 @endforeach
             </div>
         @endforeach
@@ -53,52 +53,89 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     @endprepend
 
-    @php
-        $questions = [];
-        $exclude = ['Z7Qf3TBhFyzu', 'mh5iJ7YeCPGr', 'iXNVXrRRhjjH', 'mgU53hRD8kek', 'OkWq9Kh6x8SJ', 'lsxEB9b0Psz6',
-                    'owI7AqSydQpK', 'KqLHWxTiKXXx', 'IatoKUsfy9KU', 'pdQdVDTLcd6p', 'JO2oxdd9vPaa', 'f9gkhmF0cgAx',
-                    'XI91zKHIlUfo', 'pj919CvbWdO6'];
-        // retrieve all questions
-        foreach ($categories as $category) {
-            foreach ($category->questions as $question) {
-                // exclude certain questions that we do not want to display as chart
-                if (!in_array($question->id, $exclude)) {
-                    array_push($questions, $question);
-                }
-            }
-        }
-    @endphp
+    {{-- @php
+        // $questions = [];
+        // $exclude = ['Z7Qf3TBhFyzu', 'mh5iJ7YeCPGr', 'iXNVXrRRhjjH', 'mgU53hRD8kek', 'OkWq9Kh6x8SJ', 'lsxEB9b0Psz6',
+        //             'owI7AqSydQpK', 'KqLHWxTiKXXx', 'IatoKUsfy9KU', 'pdQdVDTLcd6p', 'JO2oxdd9vPaa', 'f9gkhmF0cgAx',
+        //             'XI91zKHIlUfo', 'pj919CvbWdO6'];
+        // // retrieve all questions
+        // foreach ($categories as $category) {
+        //     foreach ($category->questions as $question) {
+        //         // exclude certain questions that we do not want to display as chart
+        //         if (!in_array($question->id, $exclude)) {
+        //             array_push($questions, $question);
+        //         }
+        //     }
+        // }
+    @endphp --}}
 
     @push('scripts')
         <script>
-            var delay = 2;
-            setTimeout("load_charts();", delay * 1000);
+            $(document).ready(function() {
+                // chart_plugin_setting();
+                load_reports();
+            });
 
-            function load_charts() {
-                @foreach ($questions as $question)
-                @php
-                    $answers = $question->answers->pluck('value')->toArray();
-                    $report_data = chart_data($answers);
-                @endphp
-                    var id = "{!! $question->id !!}";
-                    var labels = {!! $report_data['labels'] !!};
-                    var values = {!! $report_data['values'] !!};
-                    var chartType = "{!! get_chart_type($question) !!}";
-                    var palette = {!! json_encode(get_color_palettes(1)) !!};
+            function load_reports() {
+                var question_ids = {!! json_encode($question_ids) !!};
+                for (var x = 0; x < question_ids.length; x++) {
+                    (function(question_id) {
+                        $.ajax({
+                            headers: {
+                                Accept: "application/json",
+                            },
+                            dataType: 'json',
+                            url: "/questions/" + question_id + "/data",
+                        }).done(function(data) {
+                            var chart_id = "question-" + question_id;
+                            var chart_type = 'bar';
+                            var keys = data.keys;
+                            var values = data.values;
 
-                    switch (chartType) {
-                        case 'pie':
-                            generatePieChart(id, chartType, labels, values, palette);
-                            break;
+                            if (data.type == 'matrix') {
+                                generateBarChart(chart_id, chart_type, keys, values, color_palettes);
+                            } else {
+                                generatePieChart(chart_id, 'pie', keys, values, other_color_palettes);
+                            }
 
-                        case 'bar':
-                            generateBarChart(id, chartType, labels, values, palette);
-                            break;
+                            // if (data.keys.length > 4) {
 
-                        default:
-                            break;
-                    }
-                @endforeach
+                            // } else {
+
+                            // }
+                        });
+                    })(question_ids[x]);
+                    // $.ajax({
+                    //     headers: {
+                    //         Accept: "application/json",
+                    //     },
+                    //     dataType: 'json',
+                    //     url: "/questions/{{ $question->id }}/data",
+                    // }).done(function(data) {
+                    //     var chart_id = "question-" + {{ $question->id }};
+                    //     var chart_type = 'bar';
+                    //     var keys = data.keys;
+                    //     var values = data.values;
+                    //     generateBarChart(chart_id, chart_type, keys, values, color_palettes);
+                    // });
+                }
+
+                // for (var x = 0; x < report_ids.length; x++) {
+                //     // https://stackoverflow.com/questions/750486/javascript-closure-inside-loops-simple-practical-example
+                //     // immediately invoked function expression
+                //     (function(report_id) {
+                //         $.ajax({
+                //             headers: {
+                //                 Accept: "application/json",
+                //             },
+                //             dataType: 'json',
+                //             url: "/reports/" + report_id + "/data",
+                //         }).done(function(data) {
+                //             load_charts(report_id, data);
+                //             load_percentage_table(report_id, data);
+                //         });
+                //     })(report_ids[x]);
+                // }
             }
         </script>
     @endpush
