@@ -53,13 +53,9 @@ class Answer extends Model {
             });
             break;
 
-            case 'church pastor':
+            case 'church_pastor':
             $query->whereHas('submission', function ($query) use ($church) {
-                $query->whereHas('church', function ($query) use ($church) {
-                    $query->where([
-                        'id' => $church->id
-                    ]);
-                });
+                $query->where('church_id', $church->id);
             });
             break;
 

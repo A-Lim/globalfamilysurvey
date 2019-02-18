@@ -61,14 +61,14 @@ class SurveysController extends Controller {
     }
 
     public function show(Survey $survey) {
-        $this->authorize('view', Survey::class);
+        $questions = Question::where('survey_id', $survey->id)
+                        ->orderBy('page', 'asc')
+                        ->orderBy('sequence', 'asc')
+                        ->paginate(10);
+
         return view('surveys.show', [
             'survey' => $survey,
-            'questions' => Question::where(['survey_id' => $survey->id])
-                            ->withCount('answers')
-                            ->orderBy('page', 'asc')
-                            ->orderBy('sequence', 'asc')
-                            ->paginate(10)
+            'questions' => $questions
         ]);
     }
 

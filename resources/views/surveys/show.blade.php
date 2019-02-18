@@ -36,7 +36,7 @@
                             <thead>
                                 <tr>
                                     <th class="">Title</th>
-                                    <th class="">No. of Answers</th>
+                                    <th class="">Type</th>
                                     <th class="">Page</th>
                                     <th class="">Sequence</th>
                                     <th class="col-action">Actions</th>
@@ -46,7 +46,7 @@
                                 @foreach ($questions as $question)
                                     <tr>
                                         <td> {{ str_limit($question->title, 50) }} </td>
-                                        <td> {{ $question->answers_count }} </td>
+                                        <td> {{ ucwords(str_replace('_', ' ', $question->type)) }} </td>
                                         <td> {{ $question->page }} </td>
                                         <td> {{ $question->sequence }} </td>
                                         <td>

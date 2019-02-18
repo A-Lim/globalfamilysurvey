@@ -81,12 +81,6 @@ class ApiController extends Controller {
             return ['status' => 'error', 'message' => 'Custom variable missing.'];
         }
 
-        $church = Church::where('uuid', $result->custom_variables->ch)->first();
-        if (!$church) {
-            log_error('retrieve-response', 'Invalid church.');
-            return ['status' => 'error', 'message' => 'Invalid church uuid.'];
-        }
-
         if (!isset($result->pages)) {
             log_error('retrieve-response', 'Invalid json format.');
             return ['status' => 'error', 'message' => 'Invalid json format.'];
@@ -96,10 +90,16 @@ class ApiController extends Controller {
     }
 
     protected function parse_and_save(Survey $survey, $result) {
+        $church = Church::where('uuid', $result->custom_variables->ch)->first();
+        if (!$church) {
+            log_error('retrieve-response', 'Invalid church.');
+            return ['status' => 'error', 'message' => 'Invalid church uuid.'];
+        }
+
         $submission = Submission::create([
             'id' => $result->id,
             'survey_id' => $survey->id,
-            'church_id' => $result->custom_variables->ch,
+            'church_id' => $church->id,
             'href' => $result->href,
             'total_time' => $result->total_time,
             'ip_address' => $result->ip_address,

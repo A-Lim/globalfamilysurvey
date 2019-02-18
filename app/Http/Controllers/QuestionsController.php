@@ -73,9 +73,12 @@ class QuestionsController extends Controller {
                     ->select('answers.option_id')
                     ->get();
 
+        // $answers = Answer::permitted()->get();
+        // $answers = Answer::first()->submission_id;
+        // dd($answers);
+
+
         $data = [];
-
-
 
         foreach ($options as $option) {
             // $keys = $question->type == 'matrix' ? explode(' ', $option->text) : $option->text;

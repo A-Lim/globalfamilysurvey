@@ -82,7 +82,6 @@ class UserRequest extends FormRequest {
             'password' => Hash::make($password),
         ]);
         $user->assignRoleById(request('role'));
-
         Mail::to($user)->send(new WelcomeMail($user, $password));
     }
 

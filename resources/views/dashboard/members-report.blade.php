@@ -72,7 +72,6 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
-                // chart_plugin_setting();
                 load_reports();
             });
 
@@ -97,45 +96,9 @@
                             } else {
                                 generatePieChart(chart_id, 'pie', keys, values, other_color_palettes);
                             }
-
-                            // if (data.keys.length > 4) {
-
-                            // } else {
-
-                            // }
                         });
                     })(question_ids[x]);
-                    // $.ajax({
-                    //     headers: {
-                    //         Accept: "application/json",
-                    //     },
-                    //     dataType: 'json',
-                    //     url: "/questions/{{ $question->id }}/data",
-                    // }).done(function(data) {
-                    //     var chart_id = "question-" + {{ $question->id }};
-                    //     var chart_type = 'bar';
-                    //     var keys = data.keys;
-                    //     var values = data.values;
-                    //     generateBarChart(chart_id, chart_type, keys, values, color_palettes);
-                    // });
                 }
-
-                // for (var x = 0; x < report_ids.length; x++) {
-                //     // https://stackoverflow.com/questions/750486/javascript-closure-inside-loops-simple-practical-example
-                //     // immediately invoked function expression
-                //     (function(report_id) {
-                //         $.ajax({
-                //             headers: {
-                //                 Accept: "application/json",
-                //             },
-                //             dataType: 'json',
-                //             url: "/reports/" + report_id + "/data",
-                //         }).done(function(data) {
-                //             load_charts(report_id, data);
-                //             load_percentage_table(report_id, data);
-                //         });
-                //     })(report_ids[x]);
-                // }
             }
         </script>
     @endpush
