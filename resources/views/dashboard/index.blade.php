@@ -186,14 +186,14 @@
 
                 for (var x = 0; x < data.leader_data.values.length; x++) {
                     var text = data.leader_data.keys[x];
-                    var percentage = data.leader_data.total == 0 ? 0 : ((data.leader_data.values[x] / data.leader_data.total) * 100);
+                    var percentage = data.leader_data.total == 0 ? 0 : number_format(((data.leader_data.values[x] / data.leader_data.total) * 100), '.');
                     var color = color_palettes[x];
                     leader_html += row_template(text, percentage, color);
                 }
 
                 for (var x = 0; x < data.member_data.values.length; x++) {
                     var text = data.member_data.keys[x];
-                    var percentage = data.member_data.total == 0 ? 0 : ((data.member_data.values[x] / data.member_data.total) * 100);
+                    var percentage = data.member_data.total == 0 ? 0 : number_format(((data.member_data.values[x] / data.member_data.total) * 100), '.');
                     var color = other_color_palettes[x];
                     member_html += row_template(text, percentage, color);
                 }
