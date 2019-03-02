@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
             QuestionsTableSeeder::class,
             SettingsTableSeeder::class,
             LevelsTableSeeder::class,
+            'CountriesSeeder'
         ]);
+
+        $this->command->info('Seeded the countries!');
     }
 }

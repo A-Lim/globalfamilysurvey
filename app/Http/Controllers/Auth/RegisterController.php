@@ -3,17 +3,24 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Survey;
+use App\Country;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
 
 class RegisterController extends Controller {
 
-    public function index() {
-        return view('auth.register');
+    public function __construct() {
+        // $this->middleware('guest');
     }
 
-    public function register() {
+    public function index() {
+        $countries = Country::select('id', 'name')->get();
+        return view('auth.register', compact('countries'));
+    }
 
+    public function register(RegisterRequest $request) {
+        dd("OK");
     }
 
     // public function registration() {
