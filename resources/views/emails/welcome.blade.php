@@ -12,7 +12,7 @@ Your church can access the links for the survey as follows:
 
 @component('mail::panel', ['url' => ''])
 @foreach ($surveys as $survey)
-    <a href="{{ $survey_base_url->value.$survey->id.'?church='.$church->uuid }}">{{ $survey->title }}</a><br />
+    <a href="{{ $survey->url.'?ch='.$church->uuid; }}">{{ $survey->title }} [{{ $survey->type }}]</a><br />
 @endforeach
 @endcomponent
 

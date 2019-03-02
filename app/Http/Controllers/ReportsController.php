@@ -106,7 +106,9 @@ class ReportsController extends Controller
     }
 
     public function group_data(Question $question) {
-        $options = \App\Option::where('question_id', $question->id)->get();
+        $options = \App\Option::where('question_id', $question->id)
+                        ->orderBy('position', 'asc')
+                        ->get();
         $answers = Answer::permitted()->where('answers.question_id', $question->id)
                     ->join('options', 'options.id', 'answers.option_id')
                     ->select('answers.option_id')

@@ -25,7 +25,8 @@ class UsersTableSeeder extends Seeder
             'email' => 'alexiuslim1994@gmail.com',
             'level_id' => 1,
             'church_id' => $church->id,
-            'password' => Hash::make('123456789')
+            'password' => Hash::make('123456789'),
+            'verified' => true,
         ]);
     }
 }

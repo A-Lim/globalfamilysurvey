@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use DataTables;
 use App\User;
 use App\Survey;
+use App\Church;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\Users\RegisterRequest;
 
 class UsersController extends Controller {
 
     public function __construct() {
-        $this->middleware('auth');
+        $this->middleware('auth', ['except' => ['registration', 'register']]);
     }
 
     /**
@@ -98,9 +101,26 @@ class UsersController extends Controller {
         return back();
     }
 
+    // public function registration() {
+    //     $churches = Church::all();
+    //     return view('users.register', compact('churches'));
+    // }
+    //
+    // public function register(RegisterRequest $request) {
+    //     $request->save();
+    //     session()->flash('success', 'Registration submitted. You will be notified when registration is approved.');
+    //     return back();
+    // }
+
     public function datatable() {
         return Datatables::of($this->datatable_query())
         ->addIndexColumn()
+        ->addColumn('verified', function ($user) {
+            if ($user->verified)
+                return '<span class="label label-success">Verified</span>';
+
+            return '<span class="label label-danger">Unverified</span>';
+        })
         ->addColumn('action', function($user) {
             $html = '';
             if (auth()->user()->can('update', User::class)) {
@@ -111,7 +131,7 @@ class UsersController extends Controller {
             }
             return $html;
         })
-        ->rawColumns(['action'])
+        ->rawColumns(['verified', 'action'])
         ->make(true);
     }
 

@@ -54,12 +54,11 @@
                     </form>
                 </div>
             </div>
-
             <div class="col-md-6">
                 <div class="box box-info">
                     <div class="box-body">
                         <label>Survey Links</label>
-                        @foreach ($surveys as $survey)
+                        {{-- @foreach ($surveys as $survey)
                         <div class="row">
                             <div class="form-group col-md-12">
                                 @php
@@ -68,6 +67,22 @@
                                 <div><i class="fa fa-link"></i> <a target="_blank" href="{{ $url }}">{{ $survey->title }} [{{ ucwords($survey->type) }}]</a></div>
                             </div>
                         </div>
+                        @endforeach --}}
+                        @foreach ($surveys as $survey)
+                            @php
+                                $url = $survey->url.'?ch='.$church->uuid;
+                            @endphp
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <div><i class="fa fa-link"></i>  <a target="_blank" href="{{ $url }}">{{ $survey->title }}</a></div>
+                                    <div class="input-group">
+                                        <input id="link-{{ $survey->id }}" type="text" class="form-control" value="{{ $url }}" readonly>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="copy-btn btn btn-primary" data-clipboard-target="#link-{{ $survey->id }}"><i class="fa fa-copy"></i>&nbsp;</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
                     </div>
                 </div>

@@ -108,6 +108,7 @@
                 </div>
             </div>
 
+            @if ($user->verified)
             <div class="col-md-6">
                 <div class="box box-info">
                     <div class="box-body">
@@ -147,6 +148,7 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
     </section>
     <!-- /.content -->

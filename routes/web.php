@@ -9,6 +9,9 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
+// Registration
+Route::get('register', 'Auth\RegisterController@index');
+
 // Password Reset Routes...
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
@@ -41,15 +44,10 @@ Route::patch('settings', 'SettingsController@update');
 // https://laracasts.com/discuss/channels/laravel/laravel-policy-on-user-model?page=1
 Route::get('users/datatable', 'UsersController@datatable');
 Route::resource('users', 'UsersController')->except(['show']);
-// Route::get('users', 'UsersController@index');
-// Route::get('users/create', 'UsersController@create');
-// Route::post('users/', 'UsersController@store');
-// Route::get('users/{user}/edit', 'UsersController@edit')
-//     ->middleware('can:update,user');
-// Route::patch('users/{user}', 'UsersController@update')
-//     ->middleware('can:update,user');
-// Route::delete('users/{user}', 'UsersController@destroy')
-//     ->middleware('can:delete,user');
+
+// public registration of user
+// Route::get('register', 'UsersController@registration');
+// Route::post('register', 'UsersController@register');
 
 // Surveys
 Route::get('surveys', 'SurveysController@index');
@@ -76,21 +74,8 @@ Route::resource('churches', 'ChurchesController')->except(['show']);
 Route::get('reports/{report}/data', 'ReportsController@data');
 Route::resource('reports', 'ReportsController')->except(['show']);
 
-
 // Categories
 Route::resource('categories', 'CategoriesController')->except(['show']);
-
-// Api
-// Route::post('api/leaders', 'ApiController@leaders');
-// Route::post('api/members', 'ApiController@members');
-// Route::post('api/test', 'ApiController@registrations');
-
-// Route::get('results/leaders', 'ResultsController@leaders');
-// Route::get('results/members', 'ResultsController@members');
-
-// Route::post('api/webooks/receiver', 'ApiController@receiver');
-
-
 
 // Webhook
 Route::resource('webhooks', 'WebhooksController');

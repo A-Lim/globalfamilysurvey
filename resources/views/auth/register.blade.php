@@ -1,54 +1,68 @@
-@extends('layouts.admin')
+@extends('layouts.login')
 
 @section('content')
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>Register User</h1>
-      <ol class="breadcrumb">
-        <li><a href=""><i class="fa fa-user"></i> Users</a></li>
-        <li><a class="active"></i> Register User</a></li>
-      </ol>
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="box box-primary">
-        @include('components.status')
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
-            <div class="box-body">
-              <div class="row">
-                <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }} col-md-7">
-                  <label for="name">Name</label>
-                  <input id="name" type="text" class="form-control" name="name" placeholder="Name" value="{{ old('name') }}">
-                  <span class="text-danger">{{ $errors->first('name') }}</span>
+<div class="login-box-body">
+    <p class="text-center">Fill in the fields for network registration.</p>
+    @include('components.status')
+    <form method="post" action="/register">
+        @csrf
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group has-feedback {{ $errors->has('email') ? ' has-error' : '' }}">
+                    <input type="email" class="form-control" placeholder="Email" name="email" value="{{ old('email') }}">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback {{ $errors->has('email') ? ' icon-danger' : '' }}"></span>
+                    @if ($errors->has('email'))
+                        <span class="text-danger" role="alert">{{ $errors->first('email') }}</span>
+                    @endif
                 </div>
-
-                <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }} col-md-7">
-                  <label for="email">Email address</label>
-                  <input type="email" class="form-control" name="email" placeholder="Email Address" value="{{ old('email') }}">
-                  <span class="text-danger">{{ $errors->first('email') }}</span>
-                </div>
-
-                {{-- <div class="form-group {{ $errors->has('password') ? ' has-error' : '' }} col-md-7">
-                  <label for="password">Password</label>
-                  <input id="password" type="password" class="form-control" name="password" placeholder="Password">
-                  <span class="text-danger">{{ $errors->first('password') }}</span>
-                </div>
-
-                <div class="form-group col-md-7">
-                  <label for="password-confirm">Confirm Password</label>
-                  <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
-                </div> --}}
-              </div>
             </div>
-            <!-- /.box-body -->
-            <div class="box-footer">
-              <button type="submit" class="btn btn-primary pull-right">Register</button>
+
+            <div class="col-md-12">
+                <div class="form-group has-feedback {{ $errors->has('city') ? ' has-error' : '' }}">
+                    <input type="text" class="form-control" placeholder="City" name="city" value="{{ old('city') }}">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback {{ $errors->has('city') ? ' icon-danger' : '' }}"></span>
+                    @if ($errors->has('city'))
+                        <span class="text-danger" role="alert">{{ $errors->first('city') }}</span>
+                    @endif
+                </div>
             </div>
-            <!-- /.box-footer -->
-        </form>
-      </div>
-    </section>
-    <!-- /.content -->
+
+            <div class="col-md-12">
+                <div class="form-group has-feedback {{ $errors->has('district') ? ' has-error' : '' }}">
+                    <input type="text" class="form-control" placeholder="District" name="district" value="{{ old('district') }}">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback {{ $errors->has('district') ? ' icon-danger' : '' }}"></span>
+                    @if ($errors->has('district'))
+                        <span class="text-danger" role="alert">{{ $errors->first('district') }}</span>
+                    @endif
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group has-feedback {{ $errors->has('state') ? ' has-error' : '' }}">
+                    <input type="text" class="form-control" placeholder="State" name="state" value="{{ old('state') }}">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback {{ $errors->has('state') ? ' icon-danger' : '' }}"></span>
+                    @if ($errors->has('state'))
+                        <span class="text-danger" role="alert">{{ $errors->first('state') }}</span>
+                    @endif
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group has-feedback {{ $errors->has('nation') ? ' has-error' : '' }}">
+                    <input type="text" class="form-control" placeholder="Nation" name="nation" value="{{ old('nation') }}">
+                    <span class="glyphicon glyphicon-flag form-control-feedback {{ $errors->has('nation') ? ' icon-danger' : '' }}"></span>
+                    @if ($errors->has('nation'))
+                        <span class="text-danger" role="alert">{{ $errors->first('nation') }}</span>
+                    @endif
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary btn-block btn-flat">Register Network</button>
+            </div>
+        </div>
+    </form>
+    <a href="{{ route('login') }}">Back to login</a><br>
+</div>
+<!-- /.login-box-body -->
 @endsection

@@ -28,6 +28,7 @@
                             <th>Email</th>
                             <th>Role</th>
                             <th>Church</th>
+                            <th>Verified</th>
                             <th class="col-action">Actions</th>
                         </tr>
                     </thead>
@@ -83,6 +84,7 @@
             {data: 'email'},
             {data: 'role'},
             {data: 'church'},
+            {data: 'verified'},
             {data: 'action', sortable: false},
         ],
     });

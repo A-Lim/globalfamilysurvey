@@ -6,14 +6,17 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="{{ env('DOMAIN') }}/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('/bootstrap/css/bootstrap.min.css') }}">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/plugins/font-awesome/css/font-awesome.min.css">
 
     <!-- AdminLTE Skins. Choose a skin from the css/skins
     folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="{{ env('DOMAIN') }}/adminlte/css/skins/skin-blue.min.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/css/skins/skin-blue.min.css') }}">
+
+    <!-- select 2 -->
+    <link rel="stylesheet" href="{{ asset('/plugins/select2/select2.min.css') }}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -23,15 +26,15 @@
     <![endif]-->
 
     <!-- Admin LTE -->
-    <link rel="stylesheet" href="{{ env('DOMAIN') }}/adminlte/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="{{ asset('/adminlte/css/AdminLTE.min.css') }}">
 
     <!-- Google Font -->
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> -->
 
     <!-- jQuery -->
-    <script type="text/javascript" src="{{ env('DOMAIN') }}/plugins/jQuery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="{{ asset('/plugins/jQuery/jquery-3.2.1.min.js') }}"></script>
 
-    <link rel="stylesheet" href="{{ env('DOMAIN') }}/css/gfs-admin.css">
+    <link rel="stylesheet" href="{{ asset('/css/gfs-admin.css') }}">
 </head>
 <body class="hold-transition login-page">
     <div class="login-box">
@@ -43,7 +46,10 @@
     </div>
     <!-- /.login-box -->
 
+    <!-- select2 -->
+    <script src="{{ asset('/plugins/select2/select2.full.min.js') }}"></script>
+
     <!-- gfs -->
-    <script type="text/javascript" src="{{ env('DOMAIN') }}/js/gfs-admin.js"></script>
+    <script type="text/javascript" src="{{ asset('/js/gfs-admin.js') }}"></script>
 </body>
 </html>
