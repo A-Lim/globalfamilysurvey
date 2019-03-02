@@ -66,14 +66,14 @@
                 </div>
 
                 @if(env('GOOGLE_RECAPTCHA_KEY'))
-                    <div class="col-md-12">
+                    <div class="col-md-12 text-center">
                         <div class="form-group has-feedback {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
-                        <div class="g-recaptcha" data-sitekey="{{env('GOOGLE_RECAPTCHA_KEY')}}"></div>
-                        @if ($errors->has('g-recaptcha-response'))
-                            <span class="text-danger" role="alert">{{ $errors->first('g-recaptcha-response') }}</span>
-                        @endif
+                            <div class="g-recaptcha" data-sitekey="{{env('GOOGLE_RECAPTCHA_KEY')}}"></div>
+                            @if ($errors->has('g-recaptcha-response'))
+                                <span class="text-danger" role="alert">{{ $errors->first('g-recaptcha-response') }}</span>
+                            @endif
+                        </div>
                     </div>
-                </div>
                 @endif
 
                 <div class="col-md-12">
@@ -88,5 +88,5 @@
 
 
 @section('scripts')
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+
 @endsection

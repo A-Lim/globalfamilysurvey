@@ -35,6 +35,8 @@
     <script type="text/javascript" src="{{ asset('/plugins/jQuery/jquery-3.2.1.min.js') }}"></script>
 
     <link rel="stylesheet" href="{{ asset('/css/gfs-admin.css') }}">
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body class="hold-transition login-page">
     <div class="login-box">
