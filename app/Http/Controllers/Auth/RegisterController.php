@@ -14,7 +14,7 @@ use App\Http\Requests\RegisterChurchRequest;
 class RegisterController extends Controller {
 
     public function __construct() {
-        // $this->middleware('guest');
+        $this->middleware('guest');
     }
 
     public function index() {
