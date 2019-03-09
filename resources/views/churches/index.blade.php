@@ -24,8 +24,8 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Church Name</th>
-                            <th>Denomination</th>
+                            <th>Church Uuid</th>
+                            <th>Network Uuid</th>
                             <th>Country</th>
                             <th>Actions</th>
                         </tr>
@@ -46,9 +46,9 @@
         ajax: '/churches/datatable',
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-            {data: 'name'},
-            {data: 'denomination'},
-            {data: 'country'},
+            {data: 'uuid'},
+            {data: 'network_uuid'},
+            {data: 'country_name', name: 'countries.name'},
             {data: 'action', sortable: false},
         ],
     });

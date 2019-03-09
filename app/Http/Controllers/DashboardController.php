@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use DB;
 use App\Submission;
 use App\Church;
 use App\Report;
@@ -25,13 +26,13 @@ class DashboardController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $permission_role = \DB::table('permission_role')->get();
+        $permission_role = DB::table('permission_role')->get();
         $reports = Report::all();
 
         $data = [
             'submissions_count' => Submission::count(),
             'churches_count' => Church::count(),
-            'countries_count' => Church::distinct('country')->count('country'),
+            'countries_count' => Church::distinct('country_id')->count(),
         ];
         return view('dashboard.index', compact('data', 'permission_role', 'reports'));
     }

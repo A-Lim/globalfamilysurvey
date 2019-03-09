@@ -18,8 +18,8 @@ class RolesTableSeeder extends Seeder
         $roles = [
             ['name' => 'super_admin', 'label' => 'Super Admin', 'created_at' => $now, 'updated_at' => $now],
             ['name' => 'admin', 'label' => 'Admin', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'normal', 'label' => 'Normal', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'registrar', 'label' => 'Registrar', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'network_leader', 'label' => 'Network Leader', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'church_pastor', 'label' => 'Church Pastor', 'created_at' => $now, 'updated_at' => $now],
         ];
 
         Role::insert($roles);

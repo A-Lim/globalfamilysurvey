@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DataTables;
+use App\Country;
 use App\Church;
 use App\Http\Requests\ChurchRequest;
 use Illuminate\Http\Request;
@@ -34,7 +35,8 @@ class ChurchesController extends Controller {
      */
     public function create() {
         $this->authorize('create', Church::class);
-        return view('churches.create');
+        $countries = Country::select('id', 'name')->get();
+        return view('churches.create', compact('countries'));
     }
 
     /**
@@ -58,7 +60,9 @@ class ChurchesController extends Controller {
      */
     public function edit(Church $church) {
         $this->authorize('update', Church::class);
+        $countries = Country::select('id', 'name')->get();
         return view('churches.edit', [
+            'countries' => $countries,
             'church' => $church,
             'surveys' => \App\Survey::all(),
             'survey_base_url' => \App\Setting::where('key', 'survey_base_url')->firstOrFail()
@@ -92,7 +96,9 @@ class ChurchesController extends Controller {
     }
 
     public function datatable() {
-        return Datatables::of(Church::select('*'))
+        $query = Church::join('countries', 'churches.country_id', '=', 'countries.id')
+                    ->select('churches.*', 'countries.full_name as country_name');
+        return Datatables::of($query)
         ->addIndexColumn()
         ->addColumn('action', function($user) {
             $html = '';

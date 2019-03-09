@@ -24,11 +24,10 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>User</th>
                             <th>Email</th>
                             <th>Role</th>
-                            <th>Church</th>
-                            <th>Verified</th>
+                            <th>Network UUID</th>
+                            <th>Church UUID</th>
                             <th class="col-action">Actions</th>
                         </tr>
                     </thead>
@@ -80,11 +79,10 @@
         ajax: '/users/datatable',
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-            {data: 'name'},
             {data: 'email'},
             {data: 'role'},
-            {data: 'church'},
-            {data: 'verified'},
+            {data: 'network_uuid'},
+            {data: 'church_uuid'},
             {data: 'action', sortable: false},
         ],
     });

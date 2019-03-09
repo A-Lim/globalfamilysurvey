@@ -43,7 +43,7 @@ function row_template(text, percentage, color) {
 
 
 
-$('.alert').fadeOut(4000);
+$('.alert').fadeOut(10000);
 $(document).ready(function() {
     // if ($('#datatable').length) {
     //     $('#datatable').DataTable();

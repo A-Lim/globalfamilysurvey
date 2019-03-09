@@ -13,20 +13,10 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $church = App\Church::create([
-            'uuid' => (string) Uuid::generate(4),
-            'name' => 'Calvary Family Church',
-            'denomination' => 'Charismatic',
-            'country' => 'Malaysia'
-        ]);
-
         User::create([
             'name' => 'Alexius',
             'email' => 'alexiuslim1994@gmail.com',
-            'level_id' => 1,
-            'church_id' => $church->id,
             'password' => Hash::make('123456789'),
-            'verified' => true,
         ]);
     }
 }

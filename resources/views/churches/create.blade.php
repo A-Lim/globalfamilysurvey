@@ -20,28 +20,15 @@
                         @csrf
                         <div class="box-body">
                             <div class="row">
-                                <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }} col-md-12">
-                                    <label for="name">Name</label>
-                                    <input id="name" type="text" class="form-control" name="name" placeholder="Name" value="{{ old('name') }}">
-                                    <span class="text-danger">{{ $errors->first('name') }}</span>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group {{ $errors->has('denomination') ? ' has-error' : '' }} col-md-12">
-                                    <label for="denomination">Denomination</label>
-                                    <input type="text" class="form-control" name="denomination" placeholder="Denomination" value="{{ old('denomination') }}">
-                                    <span class="text-danger">{{ $errors->first('denomination') }}</span>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group {{ $errors->has('country') ? ' has-error' : '' }} col-md-12">
-                                    <label for="country">Country</label>
-                                    <select class="form-control select2" name="country">
-                                        @include('components.options.countries')
+                                <div class="form-group {{ $errors->has('country_id') ? ' has-error' : '' }} col-md-12">
+                                    <label for="country_id">Country</label>
+                                    <select name="country_id" class="select2 form-control">
+                                        <option>Select Country</option>
+                                        @foreach ($countries as $country)
+                                            <option value="{{ $country->id }}" {{ old('country_id') == $country->id ? 'selected' : '' }}>{{ $country->name }}</option>
+                                        @endforeach
                                     </select>
-                                    <span class="text-danger">{{ $errors->first('country') }}</span>
+                                    <span class="text-danger">{{ $errors->first('country_id') }}</span>
                                 </div>
                             </div>
                         </div>

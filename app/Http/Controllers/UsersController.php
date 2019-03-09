@@ -61,9 +61,9 @@ class UsersController extends Controller {
     public function edit(User $user) {
         $this->authorize('update', $user);
         return view('users.edit', [
-            'user' => User::with('roles', 'level')->find($user->id),
+            'user' => User::with('roles')->find($user->id),
             'surveys' => \App\Survey::all(),
-            'church' => \App\Church::where('id', $user->church_id)->firstOrFail(),
+            'churches' => \App\Church::all(),
             'survey_base_url' => \App\Setting::where('key', 'survey_base_url')->firstOrFail()
         ]);
     }
@@ -136,10 +136,10 @@ class UsersController extends Controller {
     }
 
     protected function datatable_query() {
-        return User::latest('users.created_at')->permitted()->join('churches', 'churches.id', '=', 'users.church_id')
+        return User::latest('users.created_at')->join('churches', 'churches.id', '=', 'users.church_id')
             ->join('role_user', 'role_user.user_id', '=', 'users.id')
             ->join('roles', 'roles.id', '=', 'role_user.role_id')
             ->whereNotIn('users.id', [auth()->user()->id])
-            ->select('users.id', 'users.name', 'users.email', 'roles.label as role', 'churches.name as church');
+            ->select('users.id', 'users.name', 'users.email', 'roles.label as role', 'churches.uuid as church_uuid', 'churches.network_uuid as network_uuid');
     }
 }

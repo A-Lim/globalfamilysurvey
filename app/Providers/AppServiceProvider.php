@@ -54,15 +54,15 @@ class AppServiceProvider extends ServiceProvider
     protected function getLevels() {
         switch (auth()->user()->roles()->first()->name) {
             case 'super_admin':
-                return \App\Level::all();
+                // return \App\Level::all();
                 break;
 
             case 'registrar':
-                return \App\Level::where('name', 'church_pastor')->first();
+                // return \App\Level::where('name', 'church_pastor')->first();
                 break;
 
             default:
-                return \App\Level::whereNotIn('name', ['all'])->get();
+                // return \App\Level::whereNotIn('name', ['all'])->get();
                 break;
         }
     }
@@ -73,10 +73,10 @@ class AppServiceProvider extends ServiceProvider
             $view->with('roles', $this->getRoles());
         });
 
-        \View::composer('components.options.levels', function ($view) {
-            // dont cache this cause query will change depending on user role
-            $view->with('levels', $this->getLevels());
-        });
+        // \View::composer('components.options.levels', function ($view) {
+        //     // dont cache this cause query will change depending on user role
+        //     $view->with('levels', $this->getLevels());
+        // });
 
         \View::composer('components.options.churches', function ($view) {
             $churches = \Cache::rememberForEver('churches', function() {

@@ -56,21 +56,18 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="form-group {{ $errors->has('level') ? ' has-error' : '' }} col-md-12">
-                                        <label for="level">Level</label>
-                                        <select class="form-control select2" name="level">
-                                            @include('components.options.levels')
-                                        </select>
-                                    </div>
-                                    <span class="text-danger">{{ $errors->first('level') }}</span>
-                                </div>
-
-                                <div class="row">
                                     <div class="form-group {{ $errors->has('church') ? ' has-error' : '' }} col-md-12">
                                         <label for="church">Church</label>
-                                        <select class="form-control select2" name="church">
-                                            @include('components.options.churches')
-                                        </select>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-church"></i></span>
+                                            <select class="form-control select2" name="church">
+                                                <option value="">Select Church</option>
+                                                @foreach ($churches as $church)
+                                                    <option value="{{ $church->id }}" {{ old('church', $user->church_id) == $church->id ? 'selected' : '' }}>{{ $church->uuid }}</option>
+                                                @endforeach
+                                                {{-- @include('components.options.churches') --}}
+                                            </select>
+                                        </div>
                                         <span class="text-danger">{{ $errors->first('church') }}</span>
                                     </div>
                                 </div>

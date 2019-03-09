@@ -27,41 +27,92 @@ class Answer extends Model {
     // only the level of all can see all the answers
     // the rest will be filtered based on their country or church
     public function scopePermitted($query) {
-        $level = auth()->user()->level->name;
+        // $level = auth()->user()->level->name;
+        // $role = auth()->user()->role()->first()->name;
+        // dd($role);
+        // dd(auth()->user()->hasRole('super_admin'));
         $church = auth()->user()->church;
+        $roles = auth()->user()->roles;
+        // $network_uuid = $church->network_uuid;
+        //
+        // if ($network_uuid == null)
+        //     dd("No network");
 
-        switch ($level) {
-            case 'all':
-            break;
 
-            case 'national':
-            $query->whereHas('submission', function ($query) use ($church) {
-                $query->whereHas('church', function ($query) use ($church) {
-                    $query->where('country', $church->country);
+
+        switch ($roles) {
+            case $roles->contains('name', 'super_admin'):
+                // no filter
+                break;
+
+            case $roles->contains('name', 'admin'):
+                // no filter
+                break;
+
+            case $roles->contains('name', 'network_leader'):
+                $church = auth()->user()->church;
+                if ($church == null || $church->network_uuid == null)
+                    return dd("No church or network");
+
+                $query->whereHas('submission', function ($query) use ($church) {
+                    $query->whereHas('church', function ($query) use ($church) {
+                        $query->where('network_uuid', $church->network_uuid);
+                    });
                 });
-            });
-            break;
+                break;
 
-            case 'denominational':
-            $query->whereHas('submission', function ($query) use ($church) {
-                $query->whereHas('church', function ($query) use ($church) {
-                    $query->where([
-                        'country' => $church->country,
-                        'denomination' => $church->denomination
-                    ]);
+            case $roles->contains('name', 'church_pastor'):
+                $church = auth()->user()->church;
+                if ($church == null)
+                    return dd("No church");
+
+                $query->whereHas('submission', function ($query) use ($church) {
+                    $query->whereHas('church', function ($query) use ($church) {
+                        $query->where('id', $church->id);
+                    });
                 });
-            });
-            break;
-
-            case 'church_pastor':
-            $query->whereHas('submission', function ($query) use ($church) {
-                $query->where('church_id', $church->id);
-            });
-            break;
-
-            default:
-            break;
+                break;
         }
+        // $roles = auth()->user()->roles;
+        // dd($roles);
+
+        // if (auth()->user()->hasRole('super_admin'))
+        //     return $query;
+
+        // if (auth())
+
+        // switch ($level) {
+        //     case 'all':
+        //     break;
+        //
+        //     case 'national':
+        //     $query->whereHas('submission', function ($query) use ($church) {
+        //         $query->whereHas('church', function ($query) use ($church) {
+        //             $query->where('country', $church->country);
+        //         });
+        //     });
+        //     break;
+        //
+        //     case 'denominational':
+        //     $query->whereHas('submission', function ($query) use ($church) {
+        //         $query->whereHas('church', function ($query) use ($church) {
+        //             $query->where([
+        //                 'country' => $church->country,
+        //                 'denomination' => $church->denomination
+        //             ]);
+        //         });
+        //     });
+        //     break;
+        //
+        //     case 'church_pastor':
+        //     $query->whereHas('submission', function ($query) use ($church) {
+        //         $query->where('church_id', $church->id);
+        //     });
+        //     break;
+        //
+        //     default:
+        //     break;
+        // }
     }
 
     public static function insertOrUpdate(array $rows){

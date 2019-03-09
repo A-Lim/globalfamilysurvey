@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
             PermissionsTableSeeder::class,
             QuestionsTableSeeder::class,
             SettingsTableSeeder::class,
-            LevelsTableSeeder::class,
             'CountriesSeeder'
         ]);
 

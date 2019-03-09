@@ -17,10 +17,8 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('email')->unique();
-            $table->integer('level_id')->unsigned();
-            $table->integer('church_id')->unsigned();
+            $table->integer('church_id')->nullable();
             $table->string('password');
-            $table->boolean('verified')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

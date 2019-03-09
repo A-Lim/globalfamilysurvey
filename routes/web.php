@@ -12,7 +12,10 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 // Registration
 Route::get('register', 'Auth\RegisterController@index');
-Route::post('register', 'Auth\RegisterController@register');
+Route::get('register/church', 'Auth\RegisterController@church_registration');
+Route::get('register/network', 'Auth\RegisterController@network_registration');
+Route::post('register/church', 'Auth\RegisterController@church_register');
+Route::post('register/network', 'Auth\RegisterController@network_register');
 
 // Password Reset Routes...
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');

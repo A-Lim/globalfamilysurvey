@@ -53,17 +53,7 @@
                                     <span class="text-danger">{{ $errors->first('role') }}</span>
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="form-group {{ $errors->has('level') ? ' has-error' : '' }} col-md-12">
-                                    <label for="level">Level</label>
-                                    <select class="form-control select2" name="level">
-                                        @include('components.options.levels')
-                                    </select>
-                                    <span class="text-danger">{{ $errors->first('level') }}</span>
-                                </div>
-                            </div>
-
+                            
                             <div class="row">
                                 <div class="form-group {{ $errors->has('church') ? ' has-error' : '' }} col-md-12">
                                     <label for="church">Church</label>

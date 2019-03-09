@@ -14,10 +14,12 @@ class CreateChurchesTable extends Migration
     public function up() {
         Schema::create('churches', function (Blueprint $table) {
             $table->increments('id');
-            $table->uuid('uuid');
-            $table->string('name')->unique();
-            $table->string('denomination');
-            $table->string('country');
+            $table->uuid('uuid')->unique();
+            $table->uuid('network_uuid')->nullable();
+            $table->string('city');
+            $table->string('district');
+            $table->string('state');
+            $table->integer('country_id');
             $table->timestamps();
         });
     }
