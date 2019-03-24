@@ -51,21 +51,21 @@ class AppServiceProvider extends ServiceProvider
         return $roles;
     }
 
-    protected function getLevels() {
-        switch (auth()->user()->roles()->first()->name) {
-            case 'super_admin':
-                // return \App\Level::all();
-                break;
-
-            case 'registrar':
-                // return \App\Level::where('name', 'church_pastor')->first();
-                break;
-
-            default:
-                // return \App\Level::whereNotIn('name', ['all'])->get();
-                break;
-        }
-    }
+    // protected function getLevels() {
+    //     switch (auth()->user()->roles()->first()->name) {
+    //         case 'super_admin':
+    //             // return \App\Level::all();
+    //             break;
+    //
+    //         case 'registrar':
+    //             // return \App\Level::where('name', 'church_pastor')->first();
+    //             break;
+    //
+    //         default:
+    //             // return \App\Level::whereNotIn('name', ['all'])->get();
+    //             break;
+    //     }
+    // }
 
     protected function registerViewComposers() {
         \View::composer('components.options.roles', function ($view) {

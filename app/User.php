@@ -30,7 +30,7 @@ class User extends Authenticatable {
     public function church() {
         return $this->belongsTo(Church::class);
     }
-
+    
     // public function level() {
     //     return $this->belongsTo(Level::class);
     // }
