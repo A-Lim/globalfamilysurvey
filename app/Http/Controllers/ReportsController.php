@@ -114,16 +114,16 @@ class ReportsController extends Controller
                     ->select('answers.option_id')
                     ->get();
 
-        // dd($question->survey_id);
-        $count = Submission::where('survey_id', $question->survey_id)->whereHas('answers', function($query) use ($question) {
-            $query->where('question_id', $question->id);
-        })->count();
+        // $count = Submission::where('survey_id', $question->survey_id)->whereHas('answers', function($query) use ($question, $answers) {
+        //     // $query->whereIn('id', $answers->pluck('id')->toArray());
+        //     // $query->where('question_id', $question->id);
+        // })->count();
 
         $data = [];
         $total = $answers->count();
         foreach ($options as $option) {
             $data['type'] = $question->type;
-            $data['total'] = $count;
+            $data['total'] = $total;
             $data['keys'][] = $option->text;
             $data['values'][] = $answers->filter(function ($value, $key) use ($option) {
                 return $value->option_id == $option->id;
