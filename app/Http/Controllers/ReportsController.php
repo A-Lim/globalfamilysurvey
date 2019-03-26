@@ -95,9 +95,16 @@ class ReportsController extends Controller
         return back();
     }
 
-    public function data(Report $report) {
+    public function data(Request $request, Report $report) {
         if (!auth()->check())
             abort(404);
+
+        if ($request->has('filter')) {
+            return response()->json([
+                'leader_data' => $this->group_data($report->leader_question, $request->filter),
+                'member_data' => $this->group_data($report->member_question, $request->filter)
+            ], 200);
+        }
 
         return response()->json([
             'leader_data' => $this->group_data($report->leader_question),
@@ -105,25 +112,31 @@ class ReportsController extends Controller
         ], 200);
     }
 
-    public function group_data(Question $question) {
+    public function group_data(Question $question, $filter = null) {
         $options = \App\Option::where('question_id', $question->id)
                         ->orderBy('position', 'asc')
                         ->get();
-        $answers = Answer::permitted()->where('answers.question_id', $question->id)
+
+        $answers = Answer::permitted($filter)->where('answers.question_id', $question->id)
                     ->join('options', 'options.id', 'answers.option_id')
                     ->select('answers.option_id')
                     ->get();
 
-        // $count = Submission::where('survey_id', $question->survey_id)->whereHas('answers', function($query) use ($question, $answers) {
-        //     // $query->whereIn('id', $answers->pluck('id')->toArray());
-        //     // $query->where('question_id', $question->id);
-        // })->count();
+        // $count = Submission::where('surve')
+        // dd($filter);
+        $count = Submission::permitted($filter)->where('survey_id', $question->survey_id)
+            ->whereHas('answers', function($query) use ($question, $answers) {
+                // $query->whereIn('id', $answers->pluck('id')->toArray());
+                $query->where('question_id', $question->id);
+            })->count();
+
+        // dd($count);
 
         $data = [];
-        $total = $answers->count();
+        // $total = $answers->count();
         foreach ($options as $option) {
             $data['type'] = $question->type;
-            $data['total'] = $total;
+            $data['total'] = $count;
             $data['keys'][] = $option->text;
             $data['values'][] = $answers->filter(function ($value, $key) use ($option) {
                 return $value->option_id == $option->id;

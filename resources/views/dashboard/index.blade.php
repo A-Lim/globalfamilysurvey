@@ -10,6 +10,8 @@
         </ol>
     </section>
 
+
+
     <!-- Main content -->
     <section class="content">
         @if (auth()->user()->hasRole('super_admin') && count($permission_role) == 0)
@@ -22,61 +24,82 @@
         <!-- Small boxes (Stat box) -->
         @if (auth()->user()->hasRole('super_admin'))
             <div class="row">
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-aqua">
-                    <div class="inner">
-                        <h3>{{ $data['submissions_count'] }}</h3>
-                        <p>Submitted Results</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3>{{ $data['submissions_count'] }}</h3>
+                            <p>Submitted Results</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
                     </div>
                 </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3>{{ $data['churches_count'] }}</h3>
+                            <p>Churches Registered</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3>{{ $data['countries_count'] }}</h3>
+                            <p>Countries Participated</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./col -->
+                {{-- <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3>65</h3>
+                            <p></p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-pie-graph"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div> --}}
+                <!-- ./col -->
             </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3>{{ $data['churches_count'] }}</h3>
-                        <p>Churches Registered</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
-                    </div>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3>{{ $data['countries_count'] }}</h3>
-                        <p>Countries Participated</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                    </div>
-                </div>
-            </div>
-            <!-- ./col -->
-            {{-- <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-red">
-                    <div class="inner">
-                        <h3>65</h3>
-                        <p></p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div> --}}
-            <!-- ./col -->
-        </div>
         @endif
+
+        @if (auth()->user()->hasRole('network_leader'))
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="box box-info">
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Filter By:</label>
+                                    <select class="form-control" id="select-filter">
+                                        <option value="network">Whole Network</option>
+                                        <option value="church">Own Church</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
 
         @foreach ($reports as $report)
             <div class="box box-primary">
@@ -97,25 +120,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        // $leader_values = $report->leader_question->answers->pluck('value')->toArray();
-                                        // $member_values = $report->member_question->answers->pluck('value')->toArray();
-                                        // $leader_chart_data = chart_data($leader_values);
-                                        // $member_chart_data = chart_data($member_values);
-                                        // $index = 0;
-                                    @endphp
-                                    {{-- @foreach ($leader_chart_data['percentage'] as $key => $percentage)
-                                        <tr>
-                                            <td>{{ ucwords($key) }}</td>
-                                            <td style="width: 70%;">
-                                                <div class="progress progress-xs">
-                                                    <div class="progress-bar" style="width: {{ round($percentage, 2) }}%; background-color: {{ get_color_palettes(1)[$index] }}"></div>
-                                                </div>
-                                            </td>
-                                            <td style="width: 30%;"><span class="badge" style="background-color:{{ get_color_palettes(1)[$index] }}">{{ round($percentage, 2) }}%</span></td>
-                                        </tr>
-                                    @php $index++; @endphp
-                                    @endforeach --}}
                                 </tbody>
                             </table>
                         </div>
@@ -147,12 +151,26 @@
 
     @push('scripts')
         <script>
+            var all_charts = [];
+            var all_tables = [];
+
             $(document).ready(function() {
                 load_reports();
             });
 
-            function load_reports() {
+            @if (auth()->user()->hasRole('network_leader'))
+                $('#select-filter').on('change', function() {
+                    reset();
+                    load_reports(this.value);
+                });
+            @endif
+
+            function load_reports(filter) {
                 var report_ids = {!! json_encode($reports->pluck('id')->toArray()) !!};
+                var params = '';
+                if (filter != '')
+                    params = "?filter="+filter;
+
                 for (var x = 0; x < report_ids.length; x++) {
                     // https://stackoverflow.com/questions/750486/javascript-closure-inside-loops-simple-practical-example
                     // immediately invoked function expression
@@ -162,9 +180,12 @@
                                 Accept: "application/json",
                             },
                             dataType: 'json',
-                            url: "/reports/" + report_id + "/data",
+                            url: "/reports/" + report_id + "/data" + params,
                         }).done(function(data) {
                             load_charts(report_id, data);
+
+                            // clear table for appending data
+
                             load_percentage_table(report_id, data);
                         });
                     })(report_ids[x]);
@@ -175,8 +196,12 @@
                 var l_chart_id = "report-leader-" + id;
                 var m_chart_id = "report-member-" + id;
 
-                generateBarChart(l_chart_id, 'bar', data.leader_data.keys, data.leader_data.values, color_palettes);
-                generateBarChart(m_chart_id, 'bar', data.member_data.keys, data.member_data.values, other_color_palettes);
+
+                var l_chart = generateBarChart(l_chart_id, 'bar', data.leader_data.keys, data.leader_data.values, color_palettes);
+                var m_chart = generateBarChart(m_chart_id, 'bar', data.member_data.keys, data.member_data.values, other_color_palettes);
+
+                all_charts.push(l_chart);
+                all_charts.push(m_chart);
             }
 
             function load_percentage_table(report_id, data) {
@@ -197,10 +222,28 @@
                     var color = other_color_palettes[x];
                     member_html += row_template(text, percentage, color);
                 }
-                // alert('#table-leader-'+report_id);
+
+                all_tables.push('#table-leader-'+report_id);
+                all_tables.push('#table-member-'+report_id);
 
                 $('#table-leader-'+report_id).append(leader_html);
                 $('#table-member-'+report_id).append(member_html);
+            }
+
+            function reset() {
+                // clear chart
+                for (var i = 0; i < all_charts.length; i++) {
+                    all_charts[i].destroy();
+                }
+
+                // clear table
+                for (var i = 0; i < all_tables.length; i++) {
+                    $(all_tables[i] + '> tbody').empty();
+                }
+
+                // empty array
+                all_charts = [];
+                all_tables = [];
             }
         </script>
     @endpush

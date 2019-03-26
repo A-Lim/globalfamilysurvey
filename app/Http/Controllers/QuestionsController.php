@@ -78,7 +78,8 @@ class QuestionsController extends Controller {
 
         foreach ($options as $option) {
             $data['type'] = $question->type;
-            $data['keys'][] = splitWords($option->text, 3);
+            // $data['keys'][] = splitWords($option->text, 3);
+            $data['keys'][] = $option->text;
             $data['values'][] = $answers->filter(function ($value, $key) use ($option) {
                 return $value->option_id == $option->id;
             })->count();

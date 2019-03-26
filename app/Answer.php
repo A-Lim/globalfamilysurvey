@@ -26,19 +26,9 @@ class Answer extends Model {
     // filter answers based on the user's level
     // only the level of all can see all the answers
     // the rest will be filtered based on their country or church
-    public function scopePermitted($query) {
-        // $level = auth()->user()->level->name;
-        // $role = auth()->user()->role()->first()->name;
-        // dd($role);
-        // dd(auth()->user()->hasRole('super_admin'));
+    public function scopePermitted($query, $filter = null) {
         $church = auth()->user()->church;
         $roles = auth()->user()->roles;
-        // $network_uuid = $church->network_uuid;
-        //
-        // if ($network_uuid == null)
-        //     dd("No network");
-
-
 
         switch ($roles) {
             case $roles->contains('name', 'super_admin'):
@@ -54,11 +44,22 @@ class Answer extends Model {
                 if ($church == null || $church->network_uuid == null)
                     return dd("No church or network");
 
-                $query->whereHas('submission', function ($query) use ($church) {
-                    $query->whereHas('church', function ($query) use ($church) {
-                        $query->where('network_uuid', $church->network_uuid);
+                // only filter by church
+                if ($filter != null && $filter == 'church') {
+                    $query->whereHas('submission', function ($query) use ($church) {
+                        $query->whereHas('church', function ($query) use ($church) {
+                            $query->where('id', $church->id);
+                        });
                     });
-                });
+                } else {
+                    // if no filter
+                    // default filter by network_id
+                    $query->whereHas('submission', function ($query) use ($church) {
+                        $query->whereHas('church', function ($query) use ($church) {
+                            $query->where('network_uuid', $church->network_uuid);
+                        });
+                    });
+                }
                 break;
 
             case $roles->contains('name', 'church_pastor'):
