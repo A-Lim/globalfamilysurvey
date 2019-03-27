@@ -10,8 +10,6 @@
         </ol>
     </section>
 
-
-
     <!-- Main content -->
     <section class="content">
         @if (auth()->user()->hasRole('super_admin') && count($permission_role) == 0)

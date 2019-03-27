@@ -6,6 +6,7 @@ use DB;
 use DataTables;
 use App\Question;
 use App\Answer;
+use App\Option;
 use Illuminate\Http\Request;
 
 class QuestionsController extends Controller {
@@ -66,10 +67,16 @@ class QuestionsController extends Controller {
         return back();
     }
 
-    public function data(Question $question) {
-        $options = \App\Option::where('question_id', $question->id)
-                    ->orderBy('position', 'asc')->get();
-        $answers = Answer::permitted()->where('answers.question_id', $question->id)
+    public function data(Request $request, Question $question) {
+        $filter = null;
+        if ($request->has('filter') && $request->filter == 'church')
+            $filter = $request->filter;
+
+        $options = Option::where('question_id', $question->id)
+                    ->orderBy('position', 'asc')
+                    ->get();
+
+        $answers = Answer::permitted($filter)->where('answers.question_id', $question->id)
                     ->join('options', 'options.id', 'answers.option_id')
                     ->select('answers.option_id')
                     ->get();

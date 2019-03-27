@@ -19,6 +19,25 @@
         @endif
         @include('components.status')
 
+        @if (auth()->user()->hasRole('network_leader'))
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="box box-info">
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Filter By:</label>
+                                    <select class="form-control" id="select-filter">
+                                        <option value="network">Whole Network</option>
+                                        <option value="church">Own Church</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         @foreach ($categories as $category)
             <h2>{{ $category->name }}</h2>
@@ -35,12 +54,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- @php $i++; @endphp --}}
-                    {{-- if there is 4 col in one row already, open a new row --}}
-                    {{-- @if ($i % 4 == 0)
-                        </div>
-                        <div class="row">
-                    @endif --}}
                 @endforeach
             </div>
         @endforeach
@@ -53,30 +66,26 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     @endprepend
 
-    {{-- @php
-        // $questions = [];
-        // $exclude = ['Z7Qf3TBhFyzu', 'mh5iJ7YeCPGr', 'iXNVXrRRhjjH', 'mgU53hRD8kek', 'OkWq9Kh6x8SJ', 'lsxEB9b0Psz6',
-        //             'owI7AqSydQpK', 'KqLHWxTiKXXx', 'IatoKUsfy9KU', 'pdQdVDTLcd6p', 'JO2oxdd9vPaa', 'f9gkhmF0cgAx',
-        //             'XI91zKHIlUfo', 'pj919CvbWdO6'];
-        // // retrieve all questions
-        // foreach ($categories as $category) {
-        //     foreach ($category->questions as $question) {
-        //         // exclude certain questions that we do not want to display as chart
-        //         if (!in_array($question->id, $exclude)) {
-        //             array_push($questions, $question);
-        //         }
-        //     }
-        // }
-    @endphp --}}
-
     @push('scripts')
         <script>
+            var all_charts = [];
             $(document).ready(function() {
                 load_reports();
             });
 
-            function load_reports() {
+            @if (auth()->user()->hasRole('network_leader'))
+                $('#select-filter').on('change', function() {
+                    reset();
+                    load_reports(this.value);
+                });
+            @endif
+
+            function load_reports(filter) {
                 var question_ids = {!! json_encode($question_ids) !!};
+                var params = '';
+                if (filter != '')
+                    params = "?filter="+filter;
+
                 for (var x = 0; x < question_ids.length; x++) {
                     (function(question_id) {
                         $.ajax({
@@ -84,21 +93,33 @@
                                 Accept: "application/json",
                             },
                             dataType: 'json',
-                            url: "/questions/" + question_id + "/data",
+                            url: "/questions/" + question_id + "/data" + params,
                         }).done(function(data) {
+                            var chart;
                             var chart_id = "question-" + question_id;
                             var chart_type = 'bar';
                             var keys = data.keys;
                             var values = data.values;
 
                             if (data.type == 'matrix') {
-                                generateBarChart(chart_id, chart_type, keys, values, color_palettes);
+                                chart = generateBarChart(chart_id, chart_type, keys, values, color_palettes);
                             } else {
-                                generatePieChart(chart_id, 'pie', keys, values, other_color_palettes);
+                                chart = generatePieChart(chart_id, 'pie', keys, values, other_color_palettes);
                             }
+                            all_charts.push(chart);
                         });
                     })(question_ids[x]);
                 }
+            }
+
+            function reset() {
+                // clear chart
+                for (var i = 0; i < all_charts.length; i++) {
+                    all_charts[i].destroy();
+                }
+
+                // empty array
+                all_charts = [];
             }
         </script>
     @endpush

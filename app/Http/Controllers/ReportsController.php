@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Question;
 use App\Report;
 use App\Answer;
+use App\Option;
 use App\Submission;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReportRequest;
@@ -113,7 +114,7 @@ class ReportsController extends Controller
     }
 
     public function group_data(Question $question, $filter = null) {
-        $options = \App\Option::where('question_id', $question->id)
+        $options = Option::where('question_id', $question->id)
                         ->orderBy('position', 'asc')
                         ->get();
 
