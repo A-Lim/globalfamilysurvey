@@ -74,6 +74,12 @@ function setTooltip(button, message) {
 }
 
 function generatePieChart(id, type, labels, values, palette) {
+    var total = 0;
+
+    for(var i = 0; i < values.length; i++){
+      total += values[i];
+    }
+
     return new Chart(document.getElementById(id), {
         type: type,
         data: {
@@ -85,14 +91,47 @@ function generatePieChart(id, type, labels, values, palette) {
             }]
         },
         options: {
-            legend: { display: true },
+            responsive: true,
+            legend: {
+              display: true,
+              position: 'left',
+              labels: {
+                fontStyle: 'bold',
+                fontColor: 'black'
+              }
+            },
             title: {
                 display: false,
             },
-            animation: false
+            animation: false,
+            plugins:{
+              datalabels:{
+                display: (context) => {
+                  return context.dataset.data[context.dataIndex] > 0;
+                },
+                color:'black',
+                anchor:'end',
+                align:'start',
+                borderWidth: 2,
+                borderColor:'black',
+                borderRadius: 25,
+                backgroundColor: (context) => {
+                  return context.dataset.backgroundColor;
+                },
+                font: {
+                  weight: 'bold',
+                  size: '10'
+                },
+                formatter: (value) => {
+                  return ((value / total) * 100).toFixed(2) + ' %';
+                }
+              }
+            }
         }
     });
 }
+
+
 
 function generateBarChart(id, type, labels, values, palette) {
     return new Chart(document.getElementById(id), {
@@ -106,16 +145,36 @@ function generateBarChart(id, type, labels, values, palette) {
             }]
         },
         options: {
-            legend: { display: false },
+            legend: {display: false},
             title: {
                 display: false,
             },
             // scaleSetting is found in js file
             scales: scaleSetting,
-            animation: false
-        }
+            animation: false,
+            plugins: barchart_pluginSetting
+          }
     });
 }
+
+var barchart_pluginSetting = {
+    datalabels:{
+      display: (context) => {
+        return context.dataset.data[context.dataIndex] > 0;
+      },
+      color:'black',
+      anchor:'end',
+      align:'start',
+      borderWidth: 1,
+      borderColor: 'black',
+      borderRadius: 25,
+      backgroundColor: 'white',
+      font: {
+        weight: 'bold',
+        size: '10'
+      }
+    }
+};
 
 var scaleSetting = {
     yAxes: [{
@@ -133,7 +192,10 @@ var scaleSetting = {
     }],
     xAxes: [{
         ticks: {
-            fontSize: 12,
+            fontSize: 11,
+            fontStyle:'bold',
+            fontColor:'black',
+            autoSkip:false
         }
     }]
 };

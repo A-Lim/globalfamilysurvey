@@ -144,7 +144,8 @@
     @endsection
 
     @prepend('scripts')
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.6.0/dist/chartjs-plugin-datalabels.min.js"></script>
     @endprepend
 
     @push('scripts')
@@ -195,8 +196,8 @@
                 var m_chart_id = "report-member-" + id;
 
 
-                var l_chart = generateBarChart(l_chart_id, 'bar', data.leader_data.keys, data.leader_data.values, color_palettes);
-                var m_chart = generateBarChart(m_chart_id, 'bar', data.member_data.keys, data.member_data.values, other_color_palettes);
+                var l_chart = generateBarChart(l_chart_id, 'bar', data.leader_data.keys, data.leader_data.values,color_palettes);
+                var m_chart = generateBarChart(m_chart_id, 'bar', data.member_data.keys, data.member_data.values,other_color_palettes);
 
                 all_charts.push(l_chart);
                 all_charts.push(m_chart);
