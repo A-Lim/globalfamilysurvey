@@ -66,7 +66,7 @@
     <!-- AdminLTE -->
     <script type="text/javascript" src="{{ asset('/adminlte/js/adminlte.min.js') }}"></script>
     <!-- gfs -->
-    <script type="text/javascript" src="{{ url('assets/js/gfs-admin.js?date='.date('YmdHis')) }}"></script>
+    <script type="text/javascript" src="{{ asset('/js/gfs-admin.js') }}"></script>
     <!-- dynamically added scripts -->
     @stack('scripts')
 </body>
