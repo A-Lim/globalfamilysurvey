@@ -44,7 +44,8 @@
             @php $i = 0; @endphp
             <div class="row">
                 @foreach ($category->questions as $question)
-                    <div class="{{ $question->type != 'matrix' ? 'col-lg-6 col-md-6' : 'col-lg-8 col-md-8' }} col-xs-12">
+                    {{-- <div class="{{ $question->type != 'matrix' ? 'col-lg-6 col-md-6' : 'col-lg-8 col-md-8' }} col-xs-12"> --}}
+                    <div class="col-lg-6 col-md-6 col-xs-12">
                         <div class="box">
                             <div class="box-header">
                                 <h3 class="box-title">{{ $question->title }}</h3>
