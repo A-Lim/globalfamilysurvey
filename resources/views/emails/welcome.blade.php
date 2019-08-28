@@ -13,15 +13,15 @@ Use the link below to register any other churches that you want to be under your
 @component('mail::panel', ['url' => ''])
     <a href="{{ url('register/church?network_uuid='.$church->network_uuid) }}">{{ url('register/church?network_uuid='.$church->network_uuid) }}</a>
 @endcomponent
+@else
+  Your church can access the links for the survey as follows:
+
+  @component('mail::panel', ['url' => ''])
+      @foreach ($surveys as $survey)
+          <a href="{{ $survey->url.'?ch='.$church->uuid }}">{{ $survey->title }} [{{ ucfirst($survey->type) }}]</a><br />
+      @endforeach
+  @endcomponent
 @endif
-
-Your church can access the links for the survey as follows:
-
-@component('mail::panel', ['url' => ''])
-    @foreach ($surveys as $survey)
-        <a href="{{ $survey->url.'?ch='.$church->uuid }}">{{ $survey->title }} [{{ ucfirst($survey->type) }}]</a><br />
-    @endforeach
-@endcomponent
 
 @component('mail::button', ['url' => url('/login')])
     Login Here
