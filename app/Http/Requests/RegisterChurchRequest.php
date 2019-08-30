@@ -68,7 +68,7 @@ class RegisterChurchRequest extends FormRequest {
         // assign role church pastor
         $user->assignRoleById(4);
         // send mail
-        Mail::to($user)->send(new WelcomeMail($user, $password));
+        Mail::to($user)->send(new WelcomeMail($user, $password, 'church'));
     }
     //
     // protected function create_user($password) {

@@ -51,25 +51,25 @@ class RegisterNetworkRequest extends FormRequest {
 
         // create church
         // link church to network
-        // $church = Church::create([
-        //     'uuid' => (string) Uuid::generate(4),
-        //     'network_uuid' => $network->uuid,
-        //     'state' => request('state'),
-        //     'district' => request('district'),
-        //     'city' => request('city'),
-        //     'country_id' => request('country_id')
-        // ]);
+        $church = Church::create([
+            'uuid' => (string) Uuid::generate(4),
+            'network_uuid' => $network->uuid,
+            'state' => request('state'),
+            'district' => request('district'),
+            'city' => request('city'),
+            'country_id' => request('country_id')
+        ]);
 
         // create user
         $user = User::create([
             'email' => request('email'),
             'password' => Hash::make($password),
-            // 'church_id' => $church->id
+            'church_id' => $church->id
         ]);
         // assign role network leader
         $user->assignRoleById(3);
         // send mail
-        Mail::to($user)->send(new WelcomeMail($user, $password));
+        Mail::to($user)->send(new WelcomeMail($user, $password, 'network'));
     }
     //
     // protected function create_user($password) {

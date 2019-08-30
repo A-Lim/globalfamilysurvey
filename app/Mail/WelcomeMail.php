@@ -19,19 +19,21 @@ class WelcomeMail extends Mailable
     protected $survey_base_url;
     protected $surveys;
     protected $church;
+    protected $type;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user, $password)
+    public function __construct($user, $password, $type)
     {
         $this->user = $user;
         $this->password = $password;
         $this->survey_base_url = Setting::where('key', 'survey_base_url')->firstOrFail();
         $this->surveys = Survey::all();
         $this->church = Church::where('id', $this->user->church_id)->firstOrFail();
+        $this->type = $type;
     }
 
     /**
@@ -46,6 +48,7 @@ class WelcomeMail extends Mailable
                     ->markdown('emails.welcome')->with([
                             'user' => $this->user,
                             'password' => $this->password,
+                            'type' => $this->type,
                             'church' => $this->church,
                             'survey_base_url' => $this->survey_base_url,
                             'surveys' => $this->surveys,

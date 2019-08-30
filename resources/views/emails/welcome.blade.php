@@ -8,12 +8,14 @@ We have just created an account for you. Your credential are as follows:
     <strong>Password:</strong> {{ $password }} <br />
 @endcomponent
 
-@if ($church->church_uuid == null)
+@if ($type == 'network')
 Use the link below to register any other churches that you want to be under your network.
 @component('mail::panel', ['url' => ''])
     <a href="{{ url('register/church?network_uuid='.$church->network_uuid) }}">{{ url('register/church?network_uuid='.$church->network_uuid) }}</a>
 @endcomponent
-@else
+@endif
+
+@if($type == 'church')
   Your church can access the links for the survey as follows:
 
   @component('mail::panel', ['url' => ''])
