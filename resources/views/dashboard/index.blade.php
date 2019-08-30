@@ -88,7 +88,7 @@
                                     <label>Filter By:</label>
                                     <select class="form-control" id="select-filter">
                                         <option value="network">Whole Network</option>
-                                        <option value="church">Own Church</option>
+                                        {{-- <option value="church">Own Church</option> --}}
                                     </select>
                                 </div>
                             </div>

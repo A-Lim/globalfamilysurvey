@@ -89,7 +89,7 @@ class ChurchesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy(Church $church) {
-        $this->authorize('delete', Delete::class);
+        $this->authorize('delete', Church::class);
         $church->delete();
         session()->flash('success', 'Church successfully deleted');
         return back();
