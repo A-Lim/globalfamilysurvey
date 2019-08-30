@@ -64,7 +64,7 @@ class RegisterNetworkRequest extends FormRequest {
         $user = User::create([
             'email' => request('email'),
             'password' => Hash::make($password),
-            'church_id' => $church->id
+            // 'church_id' => $church->id
         ]);
         // assign role network leader
         $user->assignRoleById(3);
