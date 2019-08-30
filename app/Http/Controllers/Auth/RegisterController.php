@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\User; 
 use App\Survey;
 use App\Country;
 use App\Network;

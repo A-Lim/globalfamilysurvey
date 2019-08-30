@@ -8,7 +8,7 @@ We have just created an account for you. Your credential are as follows:
     <strong>Password:</strong> {{ $password }} <br />
 @endcomponent
 
-@if ($church->network_uuid != null)
+@if ($church->church_uuid == null)
 Use the link below to register any other churches that you want to be under your network.
 @component('mail::panel', ['url' => ''])
     <a href="{{ url('register/church?network_uuid='.$church->network_uuid) }}">{{ url('register/church?network_uuid='.$church->network_uuid) }}</a>
@@ -22,6 +22,16 @@ Use the link below to register any other churches that you want to be under your
       @endforeach
   @endcomponent
 @endif
+
+{{-- @if ($church->church_uuid != null)
+  Your church can access the links for the survey as follows:
+
+  @component('mail::panel', ['url' => ''])
+      @foreach ($surveys as $survey)
+          <a href="{{ $survey->url.'?ch='.$church->uuid }}">{{ $survey->title }} [{{ ucfirst($survey->type) }}]</a><br />
+      @endforeach
+  @endcomponent
+@endif --}}
 
 @component('mail::button', ['url' => url('/login')])
     Login Here
