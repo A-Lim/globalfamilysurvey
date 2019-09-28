@@ -98,47 +98,49 @@
             </div>
         @endif
 
+        @if ($reports)
+          @foreach ($reports as $report)
+              <div class="box box-primary">
+                  <div class="box-header with-border">
+                      <h3 class="box-title">{{ $report->name }}</h1>
+                  </div>
 
-        @foreach ($reports as $report)
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title">{{ $report->name }}</h1>
-                </div>
+                  <div class="box-body">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <canvas id="report-leader-{{ $report->id }}"></canvas>
+                              <h4>{{ $report->leader_question->title }}</h4>
+                              <table id="table-leader-{{ $report->id }}" class="table table-bordered" style="font-size: 14px;">
+                                  <thead>
+                                      <tr>
+                                          <th style="width: 50%;">Label</th>
+                                          <th colspan="2" style="width: 50%;">Percentage</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                  </tbody>
+                              </table>
+                          </div>
+                          <div class="col-md-6">
+                              <canvas id="report-member-{{ $report->id }}"></canvas>
+                              <h4>{{ $report->member_question->title }}</h4>
+                              <table id="table-member-{{ $report->id }}" class="table table-bordered" style="font-size: 14px;">
+                                  <thead>
+                                      <tr>
+                                          <th style="width: 50%;">Label</th>
+                                          <th colspan="2" style="width: 50%;">Percentage</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          @endforeach
+        @endif
 
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <canvas id="report-leader-{{ $report->id }}"></canvas>
-                            <h4>{{ $report->leader_question->title }}</h4>
-                            <table id="table-leader-{{ $report->id }}" class="table table-bordered" style="font-size: 14px;">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 50%;">Label</th>
-                                        <th colspan="2" style="width: 50%;">Percentage</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-md-6">
-                            <canvas id="report-member-{{ $report->id }}"></canvas>
-                            <h4>{{ $report->member_question->title }}</h4>
-                            <table id="table-member-{{ $report->id }}" class="table table-bordered" style="font-size: 14px;">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 50%;">Label</th>
-                                        <th colspan="2" style="width: 50%;">Percentage</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endforeach
     </section>
     <!-- /.content -->
     @endsection
