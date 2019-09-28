@@ -3,7 +3,7 @@
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1>Categories <small>Members' Report</small></h1>
+        <h1>Categories <small>Congregational Report</small></h1>
         <ol class="breadcrumb">
             <li><a class="active"><i class="fa fa-tags"></i> Category</a></li>
         </ol>

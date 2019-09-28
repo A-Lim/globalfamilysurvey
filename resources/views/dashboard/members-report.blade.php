@@ -3,7 +3,7 @@
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1>Dashboard <small>Members Report</small></h1>
+        <h1>Dashboard <small><i class="fas fa-caret-right"></i> Congregational Report</small></h1>
         <ol class="breadcrumb">
             <li><a class="active"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
         </ol>

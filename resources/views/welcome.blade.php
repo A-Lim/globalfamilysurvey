@@ -71,6 +71,7 @@
                     @auth
                         <a href="{{ url('/dashboard') }}">Dashboard</a>
                     @else
+                        <a href="{{ url('/register') }}">Register</a>
                         <a href="{{ route('login') }}">Login</a>
                     @endauth
                 </div>

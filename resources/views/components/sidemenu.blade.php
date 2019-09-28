@@ -15,12 +15,12 @@
                 <ul class="treeview-menu">
                     <li class="{{ request()->is('dashboard') ? 'active' : '' }}">
                         <a href="/dashboard">
-                            <span> Comparison Report</span>
+                            <span> Leadership Report</span>
                         </a>
                     </li>
                     <li class="{{ request()->is('dashboard/members-report') ? 'active' : '' }}">
                         <a href="/dashboard/members-report">
-                            <span> Church Report</span>
+                            <span> Congregational Report</span>
                         </a>
                     </li>
                 </ul>
@@ -77,12 +77,12 @@
                     <ul class="treeview-menu">
                         <li class="{{ request()->is('reports*') ? 'active' : '' }}">
                             <a href="/reports">
-                                <i class="fa fa-chart-pie"></i> <span> Manage Reports</span>
+                                <i class="fa fa-chart-pie"></i> <span> Manage Comparison</span>
                             </a>
                         </li>
                         <li class="{{ request()->is('categories*') ? 'active' : '' }}">
                             <a href="/categories">
-                                <i class="fa fa-tags"></i> <span> Categories</span>
+                                <i class="fa fa-tags"></i> <span> Manage Categories</span>
                             </a>
                         </li>
                     </ul>

@@ -11,7 +11,7 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 
 // Registration
-Route::get('register', 'Auth\RegisterController@index');
+Route::get('register', 'Auth\RegisterController@index')->name('register');
 Route::get('register/church', 'Auth\RegisterController@church_registration');
 Route::get('register/network', 'Auth\RegisterController@network_registration');
 Route::post('register/church', 'Auth\RegisterController@church_register');

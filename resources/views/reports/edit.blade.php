@@ -32,7 +32,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group {{ $errors->has('leader_question') ? ' has-error' : '' }}">
-                                        <label for="leader_question">Leader's Question</label>
+                                        <label for="leader_question">Leadership's Question</label>
                                         <select class="form-control select2" name="leader_question">
                                             <option value="">Select Question</option>
                                             @foreach ($questions as $question)
@@ -50,7 +50,7 @@
                         <div class="col-md-6">
                             <div class="row">
                                 <div class="form-group {{ $errors->has('member_question') ? ' has-error' : '' }} col-md-12">
-                                    <label for="member_question">Member's Question</label>
+                                    <label for="member_question">Congregation's Question</label>
                                     <select class="form-control select2" name="member_question">
                                         <option value="">Select Question</option>
                                         @foreach ($questions as $question)
@@ -67,7 +67,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary pull-right">Edit</button>
+                    <button type="submit" class="btn btn-primary pull-right">Save</button>
                 </div>
                 <!-- /.box-footer -->
             </div>

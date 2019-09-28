@@ -98,7 +98,7 @@
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary pull-right">Edit</button>
+                            <button type="submit" class="btn btn-primary pull-right">Save</button>
                         </div>
                         <!-- /.box-footer -->
                     </form>

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="login-box-body">
-    <p class="text-center">Please enter your credentials.</p>
+    <p class="text-center">Please Enter Your Credentials</p>
     <form method="post" action="{{ route('login') }}">
         @csrf
         <div class="row">
