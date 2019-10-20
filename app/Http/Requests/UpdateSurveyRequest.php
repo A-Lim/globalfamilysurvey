@@ -25,22 +25,23 @@ class UpdateSurveyRequest extends FormRequest
     */
     public function rules() {
         return [
-            'name' => 'required|string',
+            'title' => 'required|string',
             'url' => 'required|string',
             'survey_id' => 'required',
             'type' => 'required|string|in:'.implode(',', Survey::TYPES)
         ];
     }
 
-    public function save($content) {
-        DB::beginTransaction();
-        Survey::saveFromJson(request('name'), request('type'), request('url'), $content);
-        Question::saveFromJson($content);
-        DB::commit();
-    }
-
-    public function messages() {
+    public function attributes() {
         return [
+            'title' => 'survey title',
         ];
     }
+
+    // public function save($content) {
+    //     DB::beginTransaction();
+    //     Survey::saveFromJson(request('name'), request('type'), request('url'), $content);
+    //     Question::saveFromJson($content);
+    //     DB::commit();
+    // }
 }

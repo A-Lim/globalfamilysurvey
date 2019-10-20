@@ -23,7 +23,33 @@
                             <div class="row">
                                 <div class="form-group col-md-12">
                                     <label>Results</label>
-                                    <textarea class="form-control" rows=20>{{ json_encode(Session::get('content'), JSON_PRETTY_PRINT) }}</textarea>
+                                    @if ($session = Session::has('content'))
+                                        @php $content = Session::get('content') @endphp
+                                        @if (count($content->data) > 0)
+                                            <table class="table table-bordered" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Info</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($content->data as $row)
+                                                        <tr>
+                                                            <td><small>{{ $row->id }}</small></td>
+                                                            <td>
+                                                                <small>{{ $row->title }}</small></br>
+                                                                <small>{{ $row->href }}</small>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        @else
+                                            <p class="help-block">No data found</p>
+                                        @endif
+                                    @endif
+                                    {{-- <textarea class="form-control" rows=20>{{ json_encode(Session::get('content'), JSON_PRETTY_PRINT) }}</textarea> --}}
                                 </div>
                             </div>
                         </div>
@@ -39,10 +65,10 @@
                     <div class="box box-primary">
                         <div class="box-body">
                             <div class="row">
-                                <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }} col-md-12">
-                                    <label for="name">Survey Name</label>
-                                    <input type="text" name="name" class="form-control" placeholder="Name" value="{{ old('name') }}"/>
-                                    <span class="text-danger">{{ $errors->first('name') }}</span>
+                                <div class="form-group {{ $errors->has('title') ? ' has-error' : '' }} col-md-12">
+                                    <label for="title">Survey Title</label>
+                                    <input type="text" name="title" class="form-control" placeholder="Title" value="{{ old('title') }}"/>
+                                    <span class="text-danger">{{ $errors->first('title') }}</span>
                                 </div>
                             </div>
                             <div class="row">

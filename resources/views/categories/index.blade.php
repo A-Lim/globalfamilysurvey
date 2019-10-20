@@ -24,6 +24,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th class="col-sequence">Sequence</th>
                             <th class="col-action">Actions</th>
                         </tr>
                     </thead>
@@ -31,6 +32,7 @@
                         @foreach ($categories as $category)
                             <tr>
                                 <td>{{ $category->name }}</td>
+                                <td>{{ $category->sequence }}</td>
                                 <td>
                                     @can('update', App\Category::class)
                                         <a class="link-btn" href="/categories/{{ $category->id }}/edit" title="Edit">

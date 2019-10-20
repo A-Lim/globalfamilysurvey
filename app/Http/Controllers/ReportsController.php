@@ -8,141 +8,103 @@ use App\Answer;
 use App\Option;
 use App\Submission;
 use Illuminate\Http\Request;
-use App\Http\Requests\ReportRequest;
+use App\Http\Requests\Report\CreateRequest;
+use App\Http\Requests\Report\UpdateRequest;
+
+use App\Repositories\ReportRepositoryInterface;
+use App\Repositories\QuestionRepositoryInterface;
 
 class ReportsController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct() {
+    private $questionRepository;
+    private $reportRepository;
+
+    public function __construct(QuestionRepositoryInterface $questionRepositoryInterface,
+        ReportRepositoryInterface $reportRepositoryInterface) {
         $this->middleware('auth');
+        $this->questionRepository = $questionRepositoryInterface;
+        $this->reportRepository = $reportRepositoryInterface;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index() {
         $this->authorize('view', Report::class);
-        $reports = Report::all();
+        $reports = $this->reportRepository->all();
         return view('reports.index', compact('reports'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create() {
         $this->authorize('create', Report::class);
-        $questions = Question::with('survey')->orderBy('sequence')->get();
+        $questions = $this->questionRepository->all();
         return view('reports.create', compact('questions'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\ReportRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(ReportRequest $request) {
+    public function store(CreateRequest $request) {
         $this->authorize('create', Report::class);
-        $request->save();
+        $this->reportRepository->create($request);
         session()->flash('success', 'Report successfully created.');
         return redirect('reports');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Report $report) {
         $this->authorize('update', Report::class);
-        $questions = Question::with('survey')->get();
+        $questions = $this->questionRepository->all();
         return view('reports.edit', compact('report', 'questions'));
-        // return $report;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\ReportRequest  $request
-     * @param  \App\Report  $report
-     * @return \Illuminate\Http\Response
-     */
-    public function update(ReportRequest $request, Report $report) {
+    public function update(UpdateRequest $request, Report $report) {
         $this->authorize('update', Report::class);
-        $request->save();
+        $this->reportRepository->update($report, $request);
         session()->flash('success', 'Report successfully updated.');
         return redirect('reports');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Report  $report
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Report $report) {
         $this->authorize('delete', Report::class);
-        $report->delete();
+        $this->reportRepository->delete($report);
         session()->flash('success', 'Report successfully deleted');
         return back();
     }
 
+    // TODO::move to repository
     public function data(Request $request, Report $report) {
-        if (!auth()->check())
-            abort(404);
+        // if (!auth()->check())
+        //     abort(404);
 
-        if ($request->has('filter')) {
-            return response()->json([
-                'leader_data' => $this->group_data($report->leader_question, $request->filter),
-                'member_data' => $this->group_data($report->member_question, $request->filter)
-            ], 200);
-        }
-
-        return response()->json([
-            'leader_data' => $this->group_data($report->leader_question),
-            'member_data' => $this->group_data($report->member_question)
-        ], 200);
+        // if ($request->has('filter')) {
+        //     return response()->json([
+        //         'leader_data' => $this->group_data($report->leader_question, $request->filter),
+        //         'member_data' => $this->group_data($report->member_question, $request->filter)
+        //     ], 200);
+        // }
+        $result = $this->reportRepository->data($report, $request->filter);
+        return response()->json($result, 200);
     }
 
-    public function group_data(Question $question, $filter = null) {
-        $options = Option::where('question_id', $question->id)
-                        ->orderBy('position', 'asc')
-                        ->get();
-
-        $answers = Answer::permitted($filter)->where('answers.question_id', $question->id)
-                    ->join('options', 'options.id', 'answers.option_id')
-                    ->select('answers.option_id')
-                    ->get();
-
-        // $count = Submission::where('surve')
-        // dd($filter);
-        $count = Submission::permitted($filter)->where('survey_id', $question->survey_id)
-            ->whereHas('answers', function($query) use ($question, $answers) {
-                // $query->whereIn('id', $answers->pluck('id')->toArray());
-                $query->where('question_id', $question->id);
-            })->count();
-
-        // dd($count);
-
-        $data = [];
-        // $total = $answers->count();
-        foreach ($options as $option) {
-            $data['type'] = $question->type;
-            $data['total'] = $count;
-            $data['keys'][] = $option->text;
-            $data['values'][] = $answers->filter(function ($value, $key) use ($option) {
-                return $value->option_id == $option->id;
-            })->count();
-        }
-        return $data;
-    }
+    // TODO::move to repository
+    // public function group_data(Question $question, $filter = null) {
+    //     $options = Option::where('question_id', $question->id)
+    //                     ->orderBy('position', 'asc')
+    //                     ->get();
+    //
+    //     $answers = Answer::permitted($filter)->where('answers.question_id', $question->id)
+    //                 ->join('options', 'options.id', 'answers.option_id')
+    //                 ->select('answers.option_id')
+    //                 ->get();
+    //
+    //     $count = Submission::permitted($filter)->where('survey_id', $question->survey_id)
+    //         ->whereHas('answers', function($query) use ($question, $answers) {
+    //             $query->where('question_id', $question->id);
+    //         })->count();
+    //
+    //     $data = [];
+    //     foreach ($options as $option) {
+    //         $data['type'] = $question->type;
+    //         $data['total'] = $count;
+    //         $data['keys'][] = $option->text;
+    //         $data['values'][] = $answers->filter(function ($value, $key) use ($option) {
+    //             return $value->option_id == $option->id;
+    //         })->count();
+    //     }
+    //     return $data;
+    // }
 }

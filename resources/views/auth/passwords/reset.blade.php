@@ -1,5 +1,7 @@
 @extends('layouts.login')
 
+@section('page-title', 'Reset Password')
+
 @section('content')
     <div class="login-box-body">
         <p class="text-center">Please key in your new password.</p>

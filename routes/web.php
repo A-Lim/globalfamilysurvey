@@ -48,6 +48,7 @@ Route::patch('settings', 'SettingsController@update');
 // Users
 // https://laracasts.com/discuss/channels/laravel/laravel-policy-on-user-model?page=1
 Route::get('users/datatable', 'UsersController@datatable');
+Route::get('profile', 'UsersController@profile');
 Route::resource('users', 'UsersController')->except(['show']);
 
 // public registration of user
@@ -56,10 +57,9 @@ Route::resource('users', 'UsersController')->except(['show']);
 
 // Surveys
 Route::get('surveys', 'SurveysController@index');
-
-Route::get('surveys/retrieve', 'SurveysController@retrieve');
-Route::post('surveys/retrieve', 'SurveysController@get_survey_list');
-Route::post('surveys', 'SurveysController@create_update_survey');
+Route::get('surveys/create', 'SurveysController@create');
+Route::post('surveys/retrieve', 'SurveysController@retrieve');
+Route::post('surveys', 'SurveysController@save');
 
 Route::get('surveys/{survey}', 'SurveysController@show');
 Route::delete('surveys/{survey}', 'SurveysController@destroy');

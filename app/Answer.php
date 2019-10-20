@@ -40,7 +40,7 @@ class Answer extends Model {
                 break;
 
             case $roles->contains('name', 'network_leader'):
-                $church = auth()->user()->church;
+                // $church = auth()->user()->church;
                 if ($church == null || $church->network_uuid == null)
                     return dd("No church or network");
 
@@ -74,46 +74,6 @@ class Answer extends Model {
                 });
                 break;
         }
-        // $roles = auth()->user()->roles;
-        // dd($roles);
-
-        // if (auth()->user()->hasRole('super_admin'))
-        //     return $query;
-
-        // if (auth())
-
-        // switch ($level) {
-        //     case 'all':
-        //     break;
-        //
-        //     case 'national':
-        //     $query->whereHas('submission', function ($query) use ($church) {
-        //         $query->whereHas('church', function ($query) use ($church) {
-        //             $query->where('country', $church->country);
-        //         });
-        //     });
-        //     break;
-        //
-        //     case 'denominational':
-        //     $query->whereHas('submission', function ($query) use ($church) {
-        //         $query->whereHas('church', function ($query) use ($church) {
-        //             $query->where([
-        //                 'country' => $church->country,
-        //                 'denomination' => $church->denomination
-        //             ]);
-        //         });
-        //     });
-        //     break;
-        //
-        //     case 'church_pastor':
-        //     $query->whereHas('submission', function ($query) use ($church) {
-        //         $query->where('church_id', $church->id);
-        //     });
-        //     break;
-        //
-        //     default:
-        //     break;
-        // }
     }
 
     public static function insertOrUpdate(array $rows){
@@ -137,30 +97,4 @@ class Answer extends Model {
 
         return \DB::statement( $sql );
     }
-
-
-
-// public static function saveFromJson($json, \App\Submission $submission) {
-//     foreach ($json->form_response->answers as $json_answer) {
-//         $type = $json_answer->type;
-//         $values = [];
-//
-//         if ($json_answer->type == 'choices') {
-//             foreach ($json_answer->{$type}->labels as $label) {
-//                 array_push($values, $label);
-//             }
-//         } else if ($json_answer->type == 'choice') {
-//             array_push($values, $json_answer->{$type}->label);
-//         } else {
-//             array_push($values, $json_answer->{$type});
-//         }
-//
-//         self::create([
-//             'question_id'   => $json_answer->field->id,
-//             'type'          => $json_answer->type,
-//             'submission_id' => $submission->id,
-//             'value'         => serialize($values)
-//         ]);
-//     }
-// }
 }

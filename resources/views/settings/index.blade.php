@@ -20,7 +20,10 @@
                     @foreach ($settings as $setting)
                         <div class="row">
                             <div class="form-group {{ $errors->has($setting->key) ? ' has-error' : '' }} col-md-6">
-                                <label for="label">{{ ucwords($setting->name) }}</label>
+                                @if ($setting->type != \App\Setting::TYPE_CHECKBOX)
+                                    <label for="label">{{ ucwords($setting->name) }}</label>
+                                @endif
+
                                 @switch($setting->type)
                                     @case(\App\Setting::TYPE_TEXT)
                                         <input type="text" class="form-control" name="{{ $setting->key }}" placeholder="{{ ucwords($setting->name) }}" value="{{ old($setting->key, $setting->value) }}">
@@ -31,6 +34,12 @@
 
                                     @case(\App\Setting::TYPE_TEXTAREA)
                                         <textarea class="form-control" name="{{ $setting->key }}" placeholder="{{ ucwords($setting->name) }}" rows="5">{{ old($setting->key, $setting->value) }}</textarea>
+                                        @break
+
+                                    @case(\App\Setting::TYPE_CHECKBOX)
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" name="{{ $setting->key }}" value="1" {{ old($setting->key, $setting->value) == 1 ? 'checked' : '' }}><strong>{{ ucwords($setting->name) }}</strong></label>
+                                        </div>
                                         @break
 
                                     @default

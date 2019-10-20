@@ -10,9 +10,13 @@ class Setting extends Model
 
     const TYPE_TEXT = 'text';
     const TYPE_TEXTAREA = 'textarea';
+    const TYPE_CHECKBOX = 'checkbox';
+
+    const CACHE_KEY = 'settings';
 
     const TYPES = [
         self::TYPE_TEXT,
-        self::TYPE_TEXTAREA
+        self::TYPE_TEXTAREA,
+        self::TYPE_CHECKBOX,
     ];
 }

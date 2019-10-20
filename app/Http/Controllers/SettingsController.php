@@ -4,27 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Setting;
 use Illuminate\Http\Request;
-use App\Http\Requests\SettingsRequest;
+use App\Http\Requests\Settings\UpdateRequest;
+use App\Repositories\SettingsRepositoryInterface;
 
 class SettingsController extends Controller {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct() {
+    private $settingsRepository;
+
+    public function __construct(SettingsRepositoryInterface $settingsRepositoryInterface) {
         $this->middleware('auth');
+        $this->settingsRepository = $settingsRepositoryInterface;
     }
 
     public function index() {
         $this->authorize('update', Setting::class);
-        $settings = \App\Setting::all();
+        $settings = $this->settingsRepository->all();
         return view('settings.index', compact('settings'));
     }
 
-    public function update(SettingsRequest $request) {
+    public function update(UpdateRequest $request) {
         $this->authorize('update', Setting::class);
-        $request->save();
+        $this->settingsRepository->update_all($request);
         session()->flash('success', 'Settings successfully updated');
         return back();
     }

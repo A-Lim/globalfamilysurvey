@@ -42,25 +42,25 @@
                             </div>
 
                             <div class="row">
-                                <div class="form-group {{ $errors->has('role') ? ' has-error' : '' }} col-md-12">
-                                    <label for="role">Role</label>
+                                <div class="form-group {{ $errors->has('role_id') ? ' has-error' : '' }} col-md-12">
+                                    <label for="role_id">Role</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-user-circle"></i></span>
-                                        <select class="form-control select2" name="role">
+                                        <select class="form-control select2" name="role_id">
                                             @include('components.options.roles')
                                         </select>
                                     </div>
-                                    <span class="text-danger">{{ $errors->first('role') }}</span>
+                                    <span class="text-danger">{{ $errors->first('role_id') }}</span>
                                 </div>
                             </div>
-                            
+
                             <div class="row">
-                                <div class="form-group {{ $errors->has('church') ? ' has-error' : '' }} col-md-12">
-                                    <label for="church">Church</label>
-                                    <select class="form-control select2" name="church">
+                                <div class="form-group {{ $errors->has('church_id') ? ' has-error' : '' }} col-md-12">
+                                    <label for="church_id">Church</label>
+                                    <select class="form-control select2" name="church_id">
                                         @include('components.options.churches')
                                     </select>
-                                    <span class="text-danger">{{ $errors->first('church') }}</span>
+                                    <span class="text-danger">{{ $errors->first('church_id') }}</span>
                                 </div>
                             </div>
                         </div>

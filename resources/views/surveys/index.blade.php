@@ -16,7 +16,7 @@
             <div class="box-body">
                 @can('retrieve', App\Survey::class)
                     <div class="box-header with-border">
-                        <a href="/surveys/retrieve" class="btn btn-primary pull-right">Retrieve Survey</a>
+                        <a href="/surveys/create" class="btn btn-primary pull-right">Retrieve Survey</a>
                     </div>
                 @endcan
                 <table id="datatable" class="table table-bordered" cellspacing="0">
@@ -55,9 +55,9 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="pull-right">
+                {{-- <div class="pull-right">
                     {{ $surveys->links() }}
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>

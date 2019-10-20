@@ -30,17 +30,17 @@
                         <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group {{ $errors->has('leader_question') ? ' has-error' : '' }}">
-                                        <label for="leader_question">Leader's Question</label>
-                                        <select class="form-control select2" name="leader_question">
+                                    <div class="form-group {{ $errors->has('leader_question_id') ? ' has-error' : '' }}">
+                                        <label for="leader_question_id">Leader's Question</label>
+                                        <select class="form-control select2" name="leader_question_id">
                                             <option value="">Select Question</option>
                                             @foreach ($questions as $question)
                                                 @if ($question->survey->type == 'leader')
-                                                    <option value="{{ $question->id }}" {{ $question->id == old('leader_question') ? 'selected' : '' }}>{{ $question->title }}</option>
+                                                    <option value="{{ $question->id }}" {{ $question->id == old('leader_question_id') ? 'selected' : '' }}>{{ $question->title }}</option>
                                                 @endif
                                             @endforeach
                                         </select>
-                                        <span class="text-danger">{{ $errors->first('leader_question') }}</span>
+                                        <span class="text-danger">{{ $errors->first('leader_question_id') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -48,17 +48,17 @@
                         <!-- member -->
                         <div class="col-md-6">
                             <div class="row">
-                                <div class="form-group {{ $errors->has('member_question') ? ' has-error' : '' }} col-md-12">
-                                    <label for="member_question">Member's Question</label>
-                                    <select class="form-control select2" name="member_question">
+                                <div class="form-group {{ $errors->has('member_question_id') ? ' has-error' : '' }} col-md-12">
+                                    <label for="member_question_id">Member's Question</label>
+                                    <select class="form-control select2" name="member_question_id">
                                         <option value="">Select Question</option>
                                         @foreach ($questions as $question)
                                             @if ($question->survey->type == 'member')
-                                                <option value="{{ $question->id }}" {{ $question->id == old('member_question') ? 'selected' : '' }}>{{ $question->title }}</option>
+                                                <option value="{{ $question->id }}" {{ $question->id == old('member_question_id') ? 'selected' : '' }}>{{ $question->title }}</option>
                                             @endif
                                         @endforeach
                                     </select>
-                                    <span class="text-danger">{{ $errors->first('member_question') }}</span>
+                                    <span class="text-danger">{{ $errors->first('member_question_id') }}</span>
                                 </div>
                             </div>
                         </div>

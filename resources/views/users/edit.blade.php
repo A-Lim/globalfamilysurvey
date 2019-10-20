@@ -43,19 +43,19 @@
 
                             @if (auth()->user()->hasRole('super_admin'))
                                 <div class="row">
-                                    <div class="form-group {{ $errors->has('role') ? ' has-error' : '' }} col-md-12">
-                                        <label for="role">Role</label>
+                                    <div class="form-group {{ $errors->has('role_id') ? ' has-error' : '' }} col-md-12">
+                                        <label for="role_id">Role</label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-user-circle"></i></span>
-                                            <select class="form-control select2" name="role">
+                                            <select class="form-control select2" name="role_id">
                                                 @include('components.options.roles')
                                             </select>
                                         </div>
-                                        <span class="text-danger">{{ $errors->first('role') }}</span>
+                                        <span class="text-danger">{{ $errors->first('role_id') }}</span>
                                     </div>
                                 </div>
 
-                                <div class="row">
+                                {{-- <div class="row">
                                     <div class="form-group {{ $errors->has('church') ? ' has-error' : '' }} col-md-12">
                                         <label for="church">Church</label>
                                         <div class="input-group">
@@ -65,12 +65,11 @@
                                                 @foreach ($churches as $church)
                                                     <option value="{{ $church->id }}" {{ old('church', $user->church_id) == $church->id ? 'selected' : '' }}>{{ $church->uuid }}</option>
                                                 @endforeach
-                                                {{-- @include('components.options.churches') --}}
                                             </select>
                                         </div>
                                         <span class="text-danger">{{ $errors->first('church') }}</span>
                                     </div>
-                                </div>
+                                </div> --}}
                             @endif
 
                             @if (auth()->user()->id == $user->id)

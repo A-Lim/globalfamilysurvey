@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 
-class ApiController extends Controller {
+class ApiResponseController extends Controller {
     // if survey does not exists, return 404 not found
     // if exists return 200
     public function verify_subscription_url(Request $request, Survey $survey) {

@@ -31,39 +31,7 @@
                             <th class="col-action">Actions</th>
                         </tr>
                     </thead>
-                    {{-- <tbody>
-                        @foreach ($users as $user)
-                            <tr>
-                                <td> {{ $user->name }} </td>
-                                <td> {{ $user->email }} </td>
-                                <td> {{ $user->roles->first()['label'] }} </td>
-                                <td> {{ $user->church->name ?? ''  }} </td>
-                                <td>
-                                    @can('update', $user)
-                                        <a class="link-btn" href="/users/{{ $user->id }}/edit" title="Edit">
-                                            <button type="button" class="btn btn-primary">
-                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                            </button>
-                                        </a>&nbsp;
-                                    @endcan
-
-                                    @can('delete', $user)
-                                        <form action="/users/{{ $user->id }}" method="post" class="form-btn">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete user?')">
-                                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                            </button>
-                                        </form>
-                                    @endcan
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody> --}}
                 </table>
-                {{-- <div class="pull-right">
-                    {{ $users->links() }}
-                </div> --}}
             </div>
         </div>
     </section>
@@ -79,10 +47,10 @@
         ajax: '/users/datatable',
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-            {data: 'email'},
-            {data: 'role'},
-            {data: 'network_uuid'},
-            {data: 'church_uuid'},
+            {data: 'email', name: 'users.email'},
+            {data: 'role', name: 'roles.label'},
+            {data: 'network_uuid', name: 'churches.network_uuid'},
+            {data: 'church_uuid', name: 'churches.uuid' },
             {data: 'action', sortable: false},
         ],
     });
