@@ -19,4 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('surveys/{survey}/subscription', 'ApiResponseController@subscription');
 Route::get('surveys/{survey}/subscription', 'ApiResponseController@verify_subscription_url');
-Route::post('test/{survey}', 'ApiResponseController@test');
+// Route::post('test/{survey}', 'ApiResponseController@test');

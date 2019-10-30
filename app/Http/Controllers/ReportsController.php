@@ -65,46 +65,8 @@ class ReportsController extends Controller
         return back();
     }
 
-    // TODO::move to repository
     public function data(Request $request, Report $report) {
-        // if (!auth()->check())
-        //     abort(404);
-
-        // if ($request->has('filter')) {
-        //     return response()->json([
-        //         'leader_data' => $this->group_data($report->leader_question, $request->filter),
-        //         'member_data' => $this->group_data($report->member_question, $request->filter)
-        //     ], 200);
-        // }
         $result = $this->reportRepository->data($report, $request->filter);
         return response()->json($result, 200);
     }
-
-    // TODO::move to repository
-    // public function group_data(Question $question, $filter = null) {
-    //     $options = Option::where('question_id', $question->id)
-    //                     ->orderBy('position', 'asc')
-    //                     ->get();
-    //
-    //     $answers = Answer::permitted($filter)->where('answers.question_id', $question->id)
-    //                 ->join('options', 'options.id', 'answers.option_id')
-    //                 ->select('answers.option_id')
-    //                 ->get();
-    //
-    //     $count = Submission::permitted($filter)->where('survey_id', $question->survey_id)
-    //         ->whereHas('answers', function($query) use ($question, $answers) {
-    //             $query->where('question_id', $question->id);
-    //         })->count();
-    //
-    //     $data = [];
-    //     foreach ($options as $option) {
-    //         $data['type'] = $question->type;
-    //         $data['total'] = $count;
-    //         $data['keys'][] = $option->text;
-    //         $data['values'][] = $answers->filter(function ($value, $key) use ($option) {
-    //             return $value->option_id == $option->id;
-    //         })->count();
-    //     }
-    //     return $data;
-    // }
 }

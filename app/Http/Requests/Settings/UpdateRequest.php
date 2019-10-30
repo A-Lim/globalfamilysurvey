@@ -23,7 +23,16 @@ class UpdateRequest extends FormRequest {
     public function rules() {
         $rules = [];
         foreach ($this->settings as $setting) {
-            $rules[$setting->key] = $setting->validation;
+            switch ($setting->type) {
+                case Setting::TYPE_SELECT:
+                    $allowed_options = collect(json_decode($setting->options))->pluck('value')->toArray();
+                    $rules[$setting->key] = $setting->validation.'|in:'.implode($allowed_options, ',');
+                    break;
+
+                default:
+                    $rules[$setting->key] = $setting->validation;
+                    break;
+            }
         }
         return $rules;
     }

@@ -44,7 +44,7 @@ class Answer extends Model {
                 if ($church == null || $church->network_uuid == null)
                     return dd("No church or network");
 
-                // only filter by church
+                // only filter by user's church
                 if ($filter != null && $filter == 'church') {
                     $query->whereHas('submission', function ($query) use ($church) {
                         $query->whereHas('church', function ($query) use ($church) {

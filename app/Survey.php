@@ -11,6 +11,7 @@ class Survey extends Model {
     public $incrementing = false;
     public $timestamps = false;
 
+    const API_URL = 'https://api.surveymonkey.net/v3/surveys/';
     const CACHE_KEY = 'survey';
 
     const TYPE_LEADER = 'leader';

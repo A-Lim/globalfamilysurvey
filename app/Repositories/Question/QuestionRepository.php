@@ -1,8 +1,10 @@
 <?php
 namespace App\Repositories;
 
+use DB;
 use App\Option;
 use App\Question;
+use App\Answer;
 
 use Illuminate\Http\Request;
 
@@ -15,6 +17,18 @@ class QuestionRepository implements QuestionRepositoryInterface
         return \Cache::rememberForEver(Question::CACHE_KEY, function() {
             return Question::with('survey')->orderBy('sequence')->get();
         });
+    }
+
+    /**
+    * {@inheritdoc}
+    */
+    public function delete(Question $question, $linked = false) {
+        DB::beginTransaction();
+        $question->delete();
+        if ($linked) {
+            $question->answers()->delete();
+        }
+        DB::commit();
     }
 
     /**
@@ -61,9 +75,38 @@ class QuestionRepository implements QuestionRepositoryInterface
     /**
     * {@inheritdoc}
     */
-    public function update(Question $question, $data) {
-        $this->clear_cache();
-        $question->update($data);
+    public function chart_data(Question $question, $filter = null) {
+        $options = Option::where('question_id', $question->id)
+                    ->orderBy('position', 'asc')
+                    ->get();
+
+        $answers = Answer::permitted($filter)->where('answers.question_id', $question->id)
+                    ->join('options', 'options.id', 'answers.option_id')
+                    ->select('answers.option_id')
+                    ->get();
+
+        $data = [];
+
+        foreach ($options as $option) {
+            $data['type'] = $question->type;
+            // $data['keys'][] = splitWords($option->text, 3);
+            $data['keys'][] = $option->text;
+            $data['values'][] = $answers->filter(function ($value, $key) use ($option) {
+                return $value->option_id == $option->id;
+            })->count();
+        }
+        return $data;
+    }
+
+    /**
+    * {@inheritdoc}
+    */
+    public function datatable_query() {
+        return Question::join('surveys', 'questions.survey_id', '=', 'surveys.id')
+            ->orderBy('surveys.id', 'asc')
+            ->orderBy('questions.sequence', 'asc')
+            ->select('questions.*', 'surveys.type as survey_type')
+            ->withCount('answers');
     }
 
     /**

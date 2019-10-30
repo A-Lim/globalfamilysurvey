@@ -1,12 +1,22 @@
 <?php
 namespace App\Repositories;
 
+use DB;
 use App\Survey;
 
 use Illuminate\Http\Request;
 
 class SurveyRepository implements SurveyRepositoryInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function all_count() {
+        return \Cache::rememberForEver(Survey::CACHE_KEY.':count', function() {
+            return Survey::count();
+        });
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -42,6 +52,23 @@ class SurveyRepository implements SurveyRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function delete(Survey $survey, $linked) {
+        DB::beginTransaction();
+        $ids = DB::table('questions')->where(['survey_id' => $survey->id])->pluck('id')->toArray();
+        DB::table('surveys')->where(['id' => $survey->id])->delete();
+        if ($linked) {
+            DB::table('questions')->where('survey_id', $survey->id)->delete();
+            DB::table('answers')->whereIn('question_id', $ids)->delete();
+            DB::table('options')->whereIn('question_id', $ids)->delete();
+            DB::table('submissions')->where('survey_id', $survey->id)->delete();
+        }
+        DB::commit();
+        $this->clear_cache();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function saveFromJson($data, $json) {
         $survey = Survey::find($json->id);
         $data['preview_url'] = $json->preview;
@@ -58,6 +85,7 @@ class SurveyRepository implements SurveyRepositoryInterface
 
     private function clear_cache() {
         \Cache::forget(Survey::CACHE_KEY.':question_count_paginated');
+        \Cache::forget(Survey::CACHE_KEY.':count');
         \Cache::forget(Survey::CACHE_KEY);
     }
 }

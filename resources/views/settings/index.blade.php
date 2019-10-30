@@ -20,19 +20,14 @@
                     @foreach ($settings as $setting)
                         <div class="row">
                             <div class="form-group {{ $errors->has($setting->key) ? ' has-error' : '' }} col-md-6">
-                                @if ($setting->type != \App\Setting::TYPE_CHECKBOX)
-                                    <label for="label">{{ ucwords($setting->name) }}</label>
-                                @endif
-
                                 @switch($setting->type)
                                     @case(\App\Setting::TYPE_TEXT)
+                                        <label for="label">{{ ucwords($setting->name) }}</label>
                                         <input type="text" class="form-control" name="{{ $setting->key }}" placeholder="{{ ucwords($setting->name) }}" value="{{ old($setting->key, $setting->value) }}">
-                                        @if ($setting->key == 'survey_base_url')
-                                            <small class="text-muted">Links end with "/" eg. https://google.com/</small>
-                                        @endif
                                         @break
 
                                     @case(\App\Setting::TYPE_TEXTAREA)
+                                        <label for="label">{{ ucwords($setting->name) }}</label>
                                         <textarea class="form-control" name="{{ $setting->key }}" placeholder="{{ ucwords($setting->name) }}" rows="5">{{ old($setting->key, $setting->value) }}</textarea>
                                         @break
 
@@ -42,11 +37,22 @@
                                         </div>
                                         @break
 
+                                    @case(\App\Setting::TYPE_SELECT)
+                                        <label for="label">{{ ucwords($setting->name) }}</label>
+                                        <select class="form-control" name="{{ $setting->key }}">
+                                            @foreach(json_decode($setting->options) as $option)
+                                                <option value="{{ $option->value }}" {{ old($setting->key, $setting->value) == $option->value ? 'selected' : '' }} > {{ $option->label }}</option>
+                                            @endforeach
+                                        </select>
+                                        @break;
+
                                     @default
                                         @break
                                 @endswitch
 
-
+                                @if ($setting->help_text != '')
+                                    <span class="help-block">{{ $setting->help_text }}</span>
+                                @endif
                                 <span class="text-danger">{{ $errors->first($setting->key) }}</span>
                             </div>
                         </div>

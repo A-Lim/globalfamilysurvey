@@ -1,8 +1,6 @@
 <?php
 // Homepage
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function () { return view('welcome'); });
 
 // Authentication Routes
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -27,22 +25,14 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 Route::get('dashboard/members-report', 'DashboardController@members_report');
 
-// Settings
-// Route::get('settings', 'SettingsController@index');
-
 // Roles
-// Route::get('roles', 'RolesController@index');
-// Route::get('roles/create', 'RolesController@create');
-// Route::post('roles/', 'RolesController@store');
-// Route::get('roles/{role}', 'RolesController@edit');
-// Route::patch('roles/{role}', 'RolesController@update');
-// Route::delete('roles/{role}', 'RolesController@destroy');
 Route::get('roles/datatable', 'RolesController@datatable');
 Route::resource('roles', 'RolesController')->except(['show']);
 
 // Settings
-// Route::resource('settings', 'SettingsController')->except(['show']);
 Route::get('settings', 'SettingsController@index');
+Route::get('settings/dashboard', 'SettingsController@dashboard');
+Route::get('settings/jobs', 'SettingsController@jobs');
 Route::patch('settings', 'SettingsController@update');
 
 // Users
@@ -50,10 +40,6 @@ Route::patch('settings', 'SettingsController@update');
 Route::get('users/datatable', 'UsersController@datatable');
 Route::get('profile', 'UsersController@profile');
 Route::resource('users', 'UsersController')->except(['show']);
-
-// public registration of user
-// Route::get('register', 'UsersController@registration');
-// Route::post('register', 'UsersController@register');
 
 // Surveys
 Route::get('surveys', 'SurveysController@index');
@@ -84,3 +70,14 @@ Route::resource('categories', 'CategoriesController')->except(['show']);
 
 // Webhook
 Route::resource('webhooks', 'WebhooksController');
+
+// Submissions
+Route::post('submissions/pull', 'SubmissionsController@pull');
+
+// Request Log
+Route::get('requestlogs/stats', 'RequestLogsController@stats');
+Route::get('requestlogs/datatable', 'RequestLogsController@datatable');
+Route::get('requestlogs/{requestLog}', 'RequestLogsController@show');
+
+// Test
+// Route::get('test', 'TestController@index');

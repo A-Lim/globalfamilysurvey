@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 
+use App\Question;
 use Illuminate\Http\Request;
 
 interface QuestionRepositoryInterface
@@ -11,6 +12,15 @@ interface QuestionRepositoryInterface
      * @return [Question]
      */
     public function all();
+
+    /**
+     * Delete questions
+     *
+     * @param Question $question
+     * @param bool $linked - If true delete questions with answers and options linked to it
+     * @return [Question]
+     */
+    public function delete(Question $question, $linked = false);
 
     /**
      * Retrieve all questions from member survey
@@ -43,4 +53,20 @@ interface QuestionRepositoryInterface
      * @return [Question]
      */
     public function findBySurveyId($survey_id, $paginate = false);
+
+    /**
+     * Retrieve answers for question in chart format
+     *
+     * @param Question $question
+     * @param string church
+     * @return [Question]
+     */
+    public function chart_data(Question $question, $filter);
+
+    /**
+     * Retrieve query for datatable
+     *
+     * @return QueryBuilder
+     */
+    public function datatable_query();
 }

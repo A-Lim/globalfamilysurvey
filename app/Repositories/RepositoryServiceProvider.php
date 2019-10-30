@@ -18,5 +18,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind('App\Repositories\RoleRepositoryInterface', 'App\Repositories\RoleRepository');
         $this->app->bind('App\Repositories\PermissionRepositoryInterface', 'App\Repositories\PermissionRepository');
         $this->app->bind('App\Repositories\CategoryRepositoryInterface', 'App\Repositories\CategoryRepository');
+        $this->app->bind('App\Repositories\SubmissionRepositoryInterface', 'App\Repositories\SubmissionRepository');
+        $this->app->bind('App\Repositories\RequestLogRepositoryInterface', 'App\Repositories\RequestLogRepository');
     }
 }

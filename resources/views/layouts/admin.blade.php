@@ -7,11 +7,14 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('/bootstrap/css/bootstrap.min.css') }}">
 
     <!-- Font Awesome -->
     {{-- <link rel="stylesheet" href="/plugins/font-awesome/css/font-awesome.min.css"> --}}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="{{ asset('plugins/Ionicons/css/ionicons.min.css') }} ">
 
     <!-- AdminLTE Skins. Choose a skin from the css/skins
     folder instead of downloading all of them to reduce the load. -->

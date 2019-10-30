@@ -22,7 +22,7 @@ interface RoleRepositoryInterface
     public function create(Request $request);
 
     /**
-     * Retrieve all roles
+     * Update role
      *
      * @param Role $role
      * @param Request $request

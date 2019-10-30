@@ -91,3 +91,19 @@
     </section>
     <!-- /.content -->
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('/plugins/clipboard/clipboard.min.js') }}"></script>
+    <script type="text/javascript">
+    $( document ).ready(function() {
+        $('.copy-btn').tooltip({
+            trigger: 'click',
+            placement: 'bottom'
+        });
+        var clipboard = new ClipboardJS('.copy-btn');
+        clipboard.on('success', function(e) {
+            setTooltip(e.trigger, 'Copied!');
+        });
+    });
+    </script>
+@endpush

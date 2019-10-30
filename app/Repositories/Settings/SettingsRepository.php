@@ -21,14 +21,18 @@ class SettingsRepository implements SettingsRepositoryInterface
      * {@inheritdoc}
      */
     public function get($key) {
-        return Setting::where('key', $key)->first();
+        return \Cache::rememberForEver(Setting::CACHE_KEY.':'.$key, function() use ($key) {
+            return Setting::where('key', $key)->first();
+        });
     }
 
     /**
      * {@inheritdoc}
      */
     public function registration_is_opened() {
-        return $this->get('open_registration')->value == "1";
+        return \Cache::rememberForEver(Setting::CACHE_KEY.':open_registration', function() {
+            return $this->get('open_registration')->value == "1";
+        });
     }
 
     /**
@@ -39,6 +43,8 @@ class SettingsRepository implements SettingsRepositoryInterface
         $settings = $this->all();
         foreach ($settings as $setting) {
             $setting->update(['value' => $request->{$setting->key}]);
+            // clear individual cache
+            \Cache::forget(Setting::CACHE_KEY.':'.$setting->key);
         }
         DB::commit();
 

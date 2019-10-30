@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 interface SurveyRepositoryInterface
 {
     /**
+     * Retrieve count of all surveys
+     *
+     * @return integer
+     */
+    public function all_count();
+
+    /**
      * Retrieve all surveys
      *
      * @return [Survey]
@@ -37,6 +44,15 @@ interface SurveyRepositoryInterface
      * @return null
      */
     public function update(Survey $survey, $data);
+
+    /**
+     * Delete survey
+     *
+     * @param Survey $survey
+     * @param bool $linekd - If true delete all related data
+     * @return null
+     */
+    public function delete(Survey $survey, $linked);
 
     /**
      * Save surveys from json

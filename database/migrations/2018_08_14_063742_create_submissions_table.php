@@ -17,12 +17,12 @@ class CreateSubmissionsTable extends Migration
             $table->string('id')->primary();
             $table->string('survey_id');
             $table->string('church_id');
-            $table->integer('total_time');
-            $table->text('href');
-            $table->text('analyze_url');
-            $table->string('ip_address');
-            $table->string('response_status');
-            $table->string('language');
+            $table->integer('total_time')->nullable();
+            $table->text('href')->nullable();
+            $table->text('analyze_url')->nullable();
+            $table->string('ip_address')->nullable();
+            $table->string('response_status')->nullable();
+            $table->string('language')->nullable();
             $table->timestamps();
         });
     }

@@ -9,7 +9,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Submission extends Model
 {
-    protected $guarded = [];
+    protected $fillable = ['survey_id', 'church_id', 'total_time', 'href', 'analyze_url', 'ip_address', 'response_status', 'language', 'created_at', 'updated_at'];
+    const API_URL = 'https://api.surveymonkey.net/v3/surveys/';
+
+    const REQ_TYPE_EVERYTHING = 'everything';
+    const REQ_TYPE_TODAY = 'today';
+
+    const REQ_TYPES = [
+        self::REQ_TYPE_EVERYTHING,
+        self::REQ_TYPE_TODAY,
+    ];
+
+    const STATUS_COMPLETED = 'completed';
 
     public function survey() {
         return $this->belongsTo(Survey::class);
@@ -21,28 +32,6 @@ class Submission extends Model
 
     public function answers() {
         return $this->hasMany(Answer::class);
-    }
-
-    // retrieve raw JSON and save it into database
-    public static function saveFromJson($json) {
-        $questions = $json->form_response->definition->fields;
-        $answers = $json->form_response->answers;
-
-        // question id that contains church code
-        $question_id = '';
-        // hidden field church code
-        $church_code = $json->form_response->hidden->ch;
-        // check if church code is correct and already in database
-        // if not do not save to database
-        $church = Church::where('uuid', $church_code)->firstOrFail();
-
-        if ($church != null) {
-            return self::create([
-                'survey_id' => $json->form_response->form_id,
-                'church_id' => $church->id
-            ]);
-        }
-        return null;
     }
 
     // filter answers based on the user's level
