@@ -42,10 +42,7 @@ class SettingsController extends Controller {
 
     public function dashboard() {
         $this->authorize('view', Setting::class);
-        // $jobs = \DB::table('jobs')->get();
         $survey_count = $this->surveyRepository->all_count();
-        // $total_count = $this->requestLogRepository->total_count();
-        // $today_count = $this->requestLogRepository->today_count();
         return view('settings.dashboard', compact('survey_count'));
     }
 

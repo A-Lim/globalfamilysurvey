@@ -35,20 +35,10 @@
                                 <td>{{ $category->sequence }}</td>
                                 <td>
                                     @can('update', App\Category::class)
-                                        <a class="link-btn" href="/categories/{{ $category->id }}/edit" title="Edit">
-                                            <button type="button" class="btn btn-primary">
-                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                            </button>
-                                        </a>&nbsp;
+                                        {!! edit_button('categories', $category->id) !!}
                                     @endcan
                                     @can('delete', App\Category::class)
-                                        <form action="/categories/{{ $category->id }}" method="post" class="form-btn">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this report?')">
-                                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                            </button>
-                                        </form>
+                                        {!! delete_button('categories', $category->id) !!}
                                     @endcan
                                 </td>
                             </tr>

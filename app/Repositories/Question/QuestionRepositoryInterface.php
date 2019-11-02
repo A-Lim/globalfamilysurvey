@@ -30,6 +30,25 @@ interface QuestionRepositoryInterface
     public function members();
 
     /**
+     * Create question
+     *
+     * @param array $data
+     * @return [Question]
+     */
+    public function create($data);
+
+
+    /**
+     * Update question
+     *
+     * @param Question $question
+     * @param array $data
+     * @return null
+     */
+    public function update(Question $question, $data);
+
+
+    /**
      * Save questions from json
      *
      * @param array $data

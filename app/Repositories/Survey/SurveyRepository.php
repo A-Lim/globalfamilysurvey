@@ -71,6 +71,7 @@ class SurveyRepository implements SurveyRepositoryInterface
      */
     public function saveFromJson($data, $json) {
         $survey = Survey::find($json->id);
+        $data['title'] = $json->title;
         $data['preview_url'] = $json->preview;
         $data['language'] = $json->language;
         $data['analyze_url'] = $json->analyze_url;

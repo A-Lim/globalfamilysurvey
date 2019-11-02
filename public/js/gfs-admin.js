@@ -3,6 +3,13 @@
 var color_palettes = ["#808080", "#c45850", "#ff9800", "#3e95cd", "#004d40", "#8e5ea2","#3cba9f","#e8c3b9", "#f50057", "#ffeb3b"];
 var other_color_palettes = ["#3e95cd", "#8e5ea2","#3cba9f","#f50057","#c45850", "#e8c3b9", "#ffeb3b", "#ff9800", "#607d8b", "#808080"];
 
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+    // if ($('#datatable').length) {
+    //     $('#datatable').DataTable();
+    // }
+});
+
 function row_template(text, percentage, color) {
     return '<tr>' +
     `<td>${text}</td>` +
@@ -16,12 +23,7 @@ function row_template(text, percentage, color) {
 }
 
 $('.alert').fadeOut(10000);
-$(document).ready(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-    // if ($('#datatable').length) {
-    //     $('#datatable').DataTable();
-    // }
-});
+
 
 $('.select2').select2();
 $('.select2.hasTags').select2({

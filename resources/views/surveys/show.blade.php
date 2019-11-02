@@ -50,11 +50,7 @@
                                         <td> {{ $question->page }} </td>
                                         <td> {{ $question->sequence }} </td>
                                         <td>
-                                            <a class="link-btn" href="/questions/{{ $question->id }}" title="View">
-                                                <button type="button" class="btn btn-primary">
-                                                    <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
-                                                </button>
-                                            </a>
+                                            {!! view_button('questions', $question->id) !!}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -65,22 +61,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-                {{-- <div class="row">
-                    <div class="form-group col-md-7">
-                        <label for="id">Typeform ID</label>
-                        <input type="text" class="form-control" name="id" placeholder="Typeform ID" value="{{ $question->id }}" disabled>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="form-group col-md-7">
-                        <label for="title">Title</label>
-                        <textarea class="form-control" name="title" placeholder="Title" rows="5" disabled>{{ $question->title }}</textarea>
-                    </div>
-                </div> --}}
             </div>
             <!-- /.box-body -->
         </div>

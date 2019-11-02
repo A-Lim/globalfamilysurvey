@@ -45,6 +45,7 @@ Route::resource('users', 'UsersController')->except(['show']);
 Route::get('surveys', 'SurveysController@index');
 Route::get('surveys/create', 'SurveysController@create');
 Route::post('surveys/retrieve', 'SurveysController@retrieve');
+Route::post('surveys/{survey}/refresh', 'SurveysController@save');
 Route::post('surveys', 'SurveysController@save');
 
 Route::get('surveys/{survey}', 'SurveysController@show');

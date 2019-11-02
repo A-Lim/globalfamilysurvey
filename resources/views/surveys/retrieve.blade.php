@@ -65,13 +65,6 @@
                     <div class="box box-primary">
                         <div class="box-body">
                             <div class="row">
-                                <div class="form-group {{ $errors->has('title') ? ' has-error' : '' }} col-md-12">
-                                    <label for="title">Survey Title</label>
-                                    <input type="text" name="title" class="form-control" placeholder="Title" value="{{ old('title') }}"/>
-                                    <span class="text-danger">{{ $errors->first('title') }}</span>
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="form-group {{ $errors->has('survey_id') ? ' has-error' : '' }} col-md-12">
                                     <label for="survey_id">Survey ID</label>
                                     <input type="text" name="survey_id" class="form-control" placeholder="Survey ID" value="{{ old('survey_id') }}"/>

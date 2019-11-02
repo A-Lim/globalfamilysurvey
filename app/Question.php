@@ -35,6 +35,18 @@ class Question extends Model {
         return $this->belongsToMany(Category::class);
     }
 
+    public static function formatFromJson($survey_id, $page, $json) {
+        return [
+            'survey_id' => $survey_id,
+            'page' => $page,
+            'type' => $json->family,
+            'subtype' => $json->subtype,
+            'href' => $json->href,
+            'title' => $json->headings[0]->heading,
+            'sequence' => $json->position
+        ];
+    }
+
     public function scopeFilter($query, $filters) {
         if (isset($filters['search'])) {
             $query->orWhere('title', 'like', '%'.$filters['search'].'%');
@@ -42,43 +54,5 @@ class Question extends Model {
                     //     $query->whereType($filters['search']);
                     // });
         }
-  }
-
-    // public static function saveFromJson($json) {
-    //     $survey_id = $json->id;
-    //     $data = [];
-    //     $page_num = 0;
-    //     foreach ($json->pages as $page) {
-    //         $page_num++;
-    //         foreach ($page->questions as $question_obj) {
-    //             if ($question = self::where('id', $question_obj->id)->first()) {
-    //                 $question->update([
-    //                     'survey_id' => $survey_id,
-    //                     'page' => $page_num,
-    //                     'type' => $question_obj->family,
-    //                     'subtype' => $question_obj->subtype,
-    //                     'href' => $question_obj->href,
-    //                     'title' => $question_obj->headings[0]->heading,
-    //                     'sequence' => $question_obj->position
-    //                 ]);
-    //             } else {
-    //                 $data[] = [
-    //                     'id' => $question_obj->id,
-    //                     'survey_id' => $survey_id,
-    //                     'page' => $page_num,
-    //                     'type' => $question_obj->family,
-    //                     'subtype' => $question_obj->subtype,
-    //                     'href' => $question_obj->href,
-    //                     'title' => $question_obj->headings[0]->heading,
-    //                     'sequence' => $question_obj->position
-    //                 ];
-    //             }
-    //             Option::saveFromJson($question_obj->id, @$question_obj->answers->choices);
-    //             if (isset($question_obj->answers->other)) {
-    //                 Option::saveOtherFromJson($question_obj->id, $question_obj->answers->other);
-    //             }
-    //         }
-    //     }
-    //     Question::insert($data);
-    // }
+    }
 }

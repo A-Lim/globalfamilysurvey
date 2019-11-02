@@ -5,6 +5,8 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+use App\Repositories\SettingsRepositoryInterface;
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -22,10 +24,11 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    protected function schedule(Schedule $schedule)
-    {
-        // $schedule->command('inspire')
-        //          ->hourly();
+    protected function schedule(Schedule $schedule) {
+        $settingsRepository = resolve(SettingsRepositoryInterface::class);
+
+        $request_interval = $settingsRepository->get('request_interval')->value;
+        $schedule->command('submissions:pull')->cron($request_interval);
     }
 
     /**

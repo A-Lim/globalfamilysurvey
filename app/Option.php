@@ -13,4 +13,13 @@ class Option extends Model
     public function question() {
         return $this->belongsTo(Question::class);
     }
+
+    public static function formatFromJson($question_id, $json) {
+        return [
+            'question_id' => $question_id,
+            'text' => $json->text,
+            'visible' => $json->visible,
+            'position' => $json->position
+        ];
+    }
 }

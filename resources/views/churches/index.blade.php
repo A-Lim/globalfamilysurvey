@@ -51,6 +51,9 @@
             {data: 'country_name', name: 'countries.name'},
             {data: 'action', sortable: false},
         ],
+        initComplete: function(settings, json) {
+            $('[data-toggle="tooltip"]').tooltip();
+        }
     });
     </script>
 @endpush

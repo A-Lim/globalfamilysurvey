@@ -35,17 +35,26 @@
                                 <td>
                                     @can('view', App\Survey::class)
                                         <a class="link-btn" href="/surveys/{{ $survey->id }}" title="View">
-                                            <button type="button" class="btn btn-primary">
+                                            <button type="button" class="btn btn-primary" data-toggle="tooltip" title="View">
                                                 <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
                                             </button>
                                         </a>
+                                    @endcan
+
+                                    @can('retrieve', App\Survey::class)
+                                        <form action="/surveys/{{ $survey->id }}/refresh" method="post" class="form-btn">
+                                            @csrf
+                                            <button type="submit" class="btn btn-warning" data-toggle="tooltip" title="Update survey" onclick="return confirm('Are you sure you want to update this survey?')">
+                                                <span class="fa fa-sync" aria-hidden="true"></span>
+                                            </button>
+                                        </form>
                                     @endcan
 
                                     @can('delete', App\Role::class)
                                         <form action="/surveys/{{ $survey->id }}" method="post" class="form-btn">
                                             @csrf
                                             @method('delete')
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete survey? This will delete all questions and results linked to this survey.')">
+                                            <button type="submit" class="btn btn-danger" data-toggle="tooltip" title="Delete" onclick="return confirm('Are you sure you want to delete survey? This will delete all questions and results linked to this survey.')">
                                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                             </button>
                                         </form>
@@ -55,9 +64,6 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{-- <div class="pull-right">
-                    {{ $surveys->links() }}
-                </div> --}}
             </div>
         </div>
     </section>
