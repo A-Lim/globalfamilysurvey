@@ -69,6 +69,4 @@ class CreateRequest extends FormRequest
             return ['status' => false, 'message' => 'Status Code ('.$error->http_status_code.'): '.$error->message, 'content' => $contents];
         }
     }
-
-
 }

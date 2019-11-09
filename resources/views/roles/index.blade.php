@@ -76,6 +76,9 @@
             {data: 'access', sortable: false},
             {data: 'action', sortable: false},
         ],
+        initComplete: function(settings, json) {
+            $('[data-toggle="tooltip"]').tooltip();
+        }
     });
     </script>
 @endpush

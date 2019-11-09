@@ -4,87 +4,56 @@ namespace App\Http\Controllers;
 
 use DataTables;
 use App\Role;
-use App\Permission;
+// use App\Permission;
 use Illuminate\Http\Request;
-use App\Http\Requests\RoleRequest;
+use App\Http\Requests\Roles\CreateRequest;
+use App\Http\Requests\Roles\UpdateRequest;
+
+use App\Repositories\RoleRepositoryInterface;
+use App\Repositories\PermissionRepositoryInterface;
 
 class RolesController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct() {
+    private $roleRepository;
+    private $permissionRepository;
+
+    public function __construct(RoleRepositoryInterface $roleRepositoryInterface,
+        PermissionRepositoryInterface $permissionRepositoryInterface) {
         $this->middleware('auth');
+        $this->roleRepository = $roleRepositoryInterface;
+        $this->permissionRepository = $permissionRepositoryInterface;
     }
 
-    /**
-     * Show settings page.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index() {
         $this->authorize('view', Role::class);
-        $permissions = Permission::all();
+        $permissions = $this->permissionRepository->all();
         return view('roles.index', compact('permissions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create() {
         $this->authorize('create', Role::class);
         return view('roles.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\RoleRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(RoleRequest $request) {
+    public function store(CreateRequest $request) {
         $this->authorize('create', Role::class);
         $request->save();
         session()->flash('success', 'Role successfully created');
         return redirect('roles');
     }
 
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Role $role) {
         $this->authorize('update', Role::class);
         return view('roles.edit', compact('role'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\RoleRequest  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(RoleRequest $request, Role $role) {
+    public function update(UpdateRequest $request, Role $role) {
         $this->authorize('update', Role::class);
         $request->save();
         session()->flash('success', 'Role successfully updated');
         return redirect('roles');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Role  $role
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Role $role) {
         $this->authorize('delete', Role::class);
         $role->delete();
@@ -93,7 +62,7 @@ class RolesController extends Controller
     }
 
     public function datatable() {
-        return Datatables::of(Role::with('permissions'))
+        return Datatables::of($this->roleRepository->datatable_query())
         ->addIndexColumn()
         ->addColumn('access', function($role) {
             $html = '';
@@ -101,7 +70,7 @@ class RolesController extends Controller
                 return '<span class="label label-success">full</span>';
             } else {
                 if ($role->permissions->count() == 0)
-                    return '<span class="badge">No permissions assigned</span>';
+                    return '<span class="label label-default">No permissions assigned</span>';
 
                 foreach ($role->permissions as $permission) {
                     $html .= '<span class="label label-'.tag_type_for_permisson($permission->name).'">'.$permission->label.'</span> ';
@@ -118,7 +87,7 @@ class RolesController extends Controller
                 $html .= edit_button('roles', $role->id).' ';
             }
 
-            if (auth()->user()->can('delete', Role::class)) {
+            if (auth()->user()->can('delete', Role::class) && $role->isDeletable()) {
                 $html .= delete_button('roles', $role->id);
             }
             return $html;

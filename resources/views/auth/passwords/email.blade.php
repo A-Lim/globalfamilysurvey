@@ -1,5 +1,7 @@
 @extends('layouts.login')
 
+@section('page-title', 'Forget Password')
+
 @section('content')
 <div class="login-box-body">
     <p class="text-center">Please enter your email.</p>

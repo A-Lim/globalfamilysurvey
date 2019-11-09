@@ -39,16 +39,13 @@ class RegisterRequest extends FormRequest {
     protected function createUser() {
         // random generate password
         $password = str_random(8);
+        $data = request()->input();
+        // level_id 4 (none)
+        $data['level_id'] = 4;
+        $data['password'] = Hash::make($password);
+        $data['verified'] = false;
 
-        $user = User::create([
-            'name' => request('name'),
-            'email' => request('email'),
-            'church_id' => request('church'),
-            // level_id 4 (none)
-            'level_id' => 4,
-            'password' => Hash::make($password),
-            'verified' => false,
-        ]);
+        $user = User::create($data);
 
         // assign role user
         $user->assignRoleById(3);

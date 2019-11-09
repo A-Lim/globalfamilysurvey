@@ -103,7 +103,7 @@
                             var keys = data.keys;
                             var values = data.values;
 
-                            if (data.type == 'matrix') {
+                            if (data.type == 'matrix' || data.type == 'multiple_choice') {
                                 chart = generateBarChart(chart_id, chart_type, keys, values, color_palettes);
                             } else {
                                 chart = generatePieChart(chart_id, 'pie', keys, values, other_color_palettes);

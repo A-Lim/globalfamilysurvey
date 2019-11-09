@@ -3,15 +3,12 @@
 var color_palettes = ["#808080", "#c45850", "#ff9800", "#3e95cd", "#004d40", "#8e5ea2","#3cba9f","#e8c3b9", "#f50057", "#ffeb3b"];
 var other_color_palettes = ["#3e95cd", "#8e5ea2","#3cba9f","#f50057","#c45850", "#e8c3b9", "#ffeb3b", "#ff9800", "#607d8b", "#808080"];
 
-// var row_template = '<tr>' +
-//     '<td>{text}</td>' +
-//     '<td style="width: 70%;">' +
-//         '<div class="progress progress-xs">' +
-//             '<div class="progress-bar" style="width: {percentage}%; background-color:{color}"></div>' +
-//         '</div>' +
-//     '</td>' +
-//     '<td style="width: 30%;"><span class="badge" style="background-color:{color}">{percentage}%</span></td>' +
-// '</tr>';
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+    // if ($('#datatable').length) {
+    //     $('#datatable').DataTable();
+    // }
+});
 
 function row_template(text, percentage, color) {
     return '<tr>' +
@@ -25,31 +22,7 @@ function row_template(text, percentage, color) {
     '</tr>';
 }
 
-// if (!String.format) {
-// String.format = function(format) {
-//   var args = Array.prototype.slice.call(arguments, 1);
-//   return format.replace(/{(\d+)}/g, function(match, number) {
-//     return typeof args[number] != 'undefined'
-//       ? args[number]
-//       : match
-//     ;
-//   });
-// };
-// }
-
-
-
-
-
-
-
 $('.alert').fadeOut(10000);
-$(document).ready(function() {
-    // if ($('#datatable').length) {
-    //     $('#datatable').DataTable();
-    // }
-});
-
 
 
 $('.select2').select2();
@@ -130,8 +103,6 @@ function generatePieChart(id, type, labels, values, palette) {
         }
     });
 }
-
-
 
 function generateBarChart(id, type, labels, values, palette) {
     return new Chart(document.getElementById(id), {

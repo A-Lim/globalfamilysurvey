@@ -19,7 +19,6 @@ class CreateOptionsTable extends Migration
             $table->text('text');
             $table->boolean('visible');
             $table->integer('position');
-            $table->timestamps();
         });
     }
 

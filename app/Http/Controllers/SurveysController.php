@@ -1,58 +1,76 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use DB;
-use App\Setting;
+use App\RequestLog;
 use App\Survey;
-use App\Question;
+
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
-use App\Http\Requests\UpdateSurveyRequest;
+use App\Http\Requests\Surveys\RetrieveRequest;
+
+use App\Repositories\RequestLogRepositoryInterface;
+use App\Repositories\QuestionRepositoryInterface;
+use App\Repositories\SurveyRepositoryInterface;
+use App\Repositories\SettingsRepositoryInterface;
 
 class SurveysController extends Controller {
+    private $settingsRepository;
+    private $surveyRepository;
+    private $questionRepository;
+    private $requestLogRepository;
 
-    public function __construct() {
+    public function __construct(SettingsRepositoryInterface $settingsRepositoryInterface,
+        SurveyRepositoryInterface $surveyRepositoryInterface,
+        QuestionRepositoryInterface $questionRepositoryInterface,
+        RequestLogRepositoryInterface $requestLogRepositoryInterface) {
         $this->middleware('auth');
+        $this->settingsRepository = $settingsRepositoryInterface;
+        $this->surveyRepository = $surveyRepositoryInterface;
+        $this->questionRepository = $questionRepositoryInterface;
+        $this->requestLogRepository = $requestLogRepositoryInterface;
     }
 
     public function index() {
         $this->authorize('view', Survey::class);
-        $surveys = Survey::withCount('questions')->paginate(10);
+        $surveys = $this->surveyRepository->all();
         return view('surveys.index', compact('surveys'));
     }
 
-    public function retrieve() {
+    public function create() {
+        $this->authorize('retrieve', Survey::class);
         return view('surveys.retrieve');
     }
 
-    public function get_survey_list() {
-        $token = Setting::where('name', 'Survey Monkey Token')->first()->value;
+    public function retrieve() {
+        $this->authorize('retrieve', Survey::class);
+        // check if token exists, if not redirect back
+        $token = $this->get_token();
 
-        if ($token == '')
-            return redirect('surveys/retrieve')->with('error', 'Please set up your Survey Monkey Api Key and Token in the settings page.');
-
-        $result = $this->get_surveys_request($token);
+        $result = $this->get_surveys_request($token->value);
         if ($result['status']) {
             session()->flash('success', 'Survey listing successful.');
-            return redirect('surveys/retrieve')->with(['content' => $result['content']]);
+            return back()->with(['content' => $result['content']]);
         } else {
-            return back()->with(['error' => $result['message']]);
+            session()->flash('error', $result['message']);
+            return back();
         }
     }
 
-    public function create_update_survey(UpdateSurveyRequest $request) {
-        $token = Setting::where('name', 'Survey Monkey Token')->first()->value;
+    public function save(RetrieveRequest $request, Survey $survey = null) {
+        $this->authorize('retrieve', Survey::class);
+        // check if token exists, if not redirect back
+        $token = $this->get_token();
 
-        if ($token == '')
-            return redirect('surveys/retrieve')->with('error', 'Please set up your Survey Monkey Api Key and Token in the settings page.');
+        $survey_id = $survey->id ?? $request->survey_id;
 
-        $result = $this->get_survey_detail_request($token, request('survey_id'), request('name'));
-
+        $result = $this->get_survey_detail_request($token->value, $survey_id);
         if ($result['status']) {
-            $request->save($result['content']);
+            // save survey
+            $this->surveyRepository->saveFromJson($request->all(), $result['content']);
+            // save questions
+            $this->questionRepository->saveFromJson($result['content']);
             session()->flash('success', 'Survey successfully updated.');
             return redirect('surveys');
         } else {
@@ -60,12 +78,27 @@ class SurveysController extends Controller {
         }
     }
 
-    public function show(Survey $survey) {
-        $questions = Question::where('survey_id', $survey->id)
-                        ->orderBy('page', 'asc')
-                        ->orderBy('sequence', 'asc')
-                        ->paginate(10);
+    // public function refresh(Request $request, Survey $survey) {
+    //     $this->authorize('retrieve', Survey::class);
+    //     // check if token exists, if not redirect back
+    //     $this->check_token();
+    //
+    //     $result = $this->get_survey_detail_request($token->value, $survey->id);
+    //     if ($result['status']) {
+    //         // save survey
+    //         $this->surveyRepository->saveFromJson($request->all(), $result['content']);
+    //         // save questions
+    //         $this->questionRepository->saveFromJson($result['content']);
+    //         session()->flash('success', 'Survey successfully updated.');
+    //         return redirect('surveys');
+    //     } else {
+    //         return back()->with(['error' => $result['message']]);
+    //     }
+    // }
 
+    public function show(Survey $survey) {
+        $this->authorize('view', Survey::class);
+        $questions = $this->questionRepository->findBySurveyId($survey->id, true);
         return view('surveys.show', [
             'survey' => $survey,
             'questions' => $questions
@@ -74,43 +107,40 @@ class SurveysController extends Controller {
 
     public function destroy(Survey $survey) {
         $this->authorize('delete', Survey::class);
-        $this->deleteAllLinked($survey);
+        $this->surveyRepository->delete($survey, true);
         session()->flash('success', 'Survey successfully deleted');
         return back();
     }
 
-    protected function deleteAllLinked(Survey $survey) {
-        DB::transaction(function() use ($survey) {
-            $ids = DB::table('questions')->where(['survey_id' => $survey->id])->pluck('id')->toArray();
-            DB::table('surveys')->where(['id' => $survey->id])->delete();
-            DB::table('questions')->where('survey_id', $survey->id)->delete();
-            DB::table('answers')->whereIn('question_id', $ids)->delete();
-            DB::table('options')->whereIn('question_id', $ids)->delete();
-            DB::table('submissions')->where('survey_id', $survey->id)->delete();
-        });
-    }
-
+    // external api calls
     protected function get_surveys_request($token) {
-        $url = 'https://api.surveymonkey.net/v3/surveys';
         $client = new Client();
         try {
-            $response = $client->get($url, [
+            $response = $client->get(Survey::API_URL, [
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'Authorization' => 'Bearer '.$token
                 ]
             ]);
-            $content = json_decode($response->getBody()->getContents());
-            return ['status' => true, 'content' => $content];
+            $contents = $response->getBody()->getContents();
+            $contents_obj = json_decode($contents);
+
+            // log result
+            $this->requestLogRepository->create(RequestLog::STATUS_SUCCESS, $contents);
+            return ['status' => true, 'content' => $contents_obj];
         } catch(ClientException $exception) {
-            $error = json_decode($exception->getResponse()->getBody()->getContents())->error;
-            $contents = json_decode($exception->getResponse()->getBody());
-            return ['status' => false, 'message' => 'Status Code ('.$error->http_status_code.'): '.$error->message, 'content' => $contents];
+            $body = $exception->getResponse()->getBody();
+            $status_code = $exception->getResponse()->getStatusCode();
+            $error = json_decode($body->getContents())->error;
+            $content = json_decode($body);
+            // log error result
+            $this->requestLogRepository->create(RequestLog::STATUS_ERROR, $body->getContents());
+            return ['status' => false, 'message' => 'Status Code ('.$status_code.'): '.$error->message, 'content' => $content];
         }
     }
 
-    protected function get_survey_detail_request($token, $id, $name) {
-        $url = 'https://api.surveymonkey.net/v3/surveys/'.$id.'/details';
+    protected function get_survey_detail_request($token, $id) {
+        $url = Survey::API_URL.$id.'/details';
         $client = new Client();
         try {
             $response = $client->get($url, [
@@ -119,13 +149,29 @@ class SurveysController extends Controller {
                     'Authorization' => 'Bearer '.$token
                 ]
             ]);
-            $content = json_decode($response->getBody()->getContents());
-            return ['status' => true, 'content' => $content];
+            $contents = $response->getBody()->getContents();
+            $contents_obj = json_decode($contents);
+            // log result
+            $this->requestLogRepository->create(RequestLog::STATUS_SUCCESS, $contents);
+            return ['status' => true, 'content' => $contents_obj];
         } catch(ClientException $exception) {
+            $body = $exception->getResponse()->getBody();
             $status_code = $exception->getResponse()->getStatusCode();
-            $error = json_decode($exception->getResponse()->getBody()->getContents())->error;
-            $contents = json_decode($exception->getResponse()->getBody());
-            return ['status' => false, 'message' => 'Status Code ('.$status_code.'): '.$error->message, 'content' => $contents];
+            $error = json_decode($body->getContents())->error;
+            $contents_obj = json_decode($body);
+
+            // log error result
+            $this->requestLogRepository->create(RequestLog::STATUS_ERROR, $body->getContents());
+            return ['status' => false, 'message' => 'Status Code ('.$status_code.'): '.$error->message, 'content' => $contents_obj];
         }
+    }
+
+    private function get_token() {
+        $token = $this->settingsRepository->get('token');
+
+        if (!$token || $token->value == '')
+            return redirect('surveys/retrieve')->with('error', 'Please set up your Survey Monkey Api Key and Token in the settings page.');
+        else
+            return $token;
     }
 }

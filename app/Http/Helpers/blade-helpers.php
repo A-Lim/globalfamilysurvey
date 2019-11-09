@@ -1,19 +1,15 @@
 <?php
 function edit_button($module, $id) {
     return
-    '<a class="link-btn" href="/'.$module.'/'.$id.'/edit" title="Edit">
-        <button type="button" class="btn btn-primary">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-        </button>
+    '<a class="btn btn-primary" href="/'.$module.'/'.$id.'/edit" data-toggle="tooltip" title="Edit">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
     </a>';
 }
 
 function view_button($module, $id) {
     return
-    '<a class="link-btn" href="/'.$module.'/'.$id.'" title="View">
-        <button type="button" class="btn btn-primary">
-            <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
-        </button>
+    '<a class="btn btn-primary" href="/'.$module.'/'.$id.'" data-toggle="tooltip" title="View">
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
     </a>';
 }
 
@@ -22,7 +18,7 @@ function delete_button($module, $id) {
     '<form id="delete-btn-'.$id.'" action="/'.$module.'/'.$id.'" method="post" class="form-btn">'.
         csrf_field().
         '<input type="hidden" name="_method" value="delete" />
-        <button type="submit" class="btn btn-danger" onclick="return confirm(\'Are you sure you want to delete this '.str_singular($module).'?\')">
+        <button type="submit" class="btn btn-danger" data-toggle="tooltip" title="Delete" onclick="return confirm(\'Are you sure you want to delete this '.str_singular($module).'?\')">
             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
         </button>
     </form>';

@@ -34,14 +34,10 @@ class AppServiceProvider extends ServiceProvider
     }
 
     protected function getRoles() {
-        $roles;
+        $roles = null;
         switch (auth()->user()->roles()->first()->name) {
             case 'super_admin':
                 $roles =  \App\Role::all();
-                break;
-
-            case 'registrar':
-                $roles =  \App\Role::where('name', 'normal')->get();
                 break;
 
             default:
@@ -51,44 +47,21 @@ class AppServiceProvider extends ServiceProvider
         return $roles;
     }
 
-    // protected function getLevels() {
-    //     switch (auth()->user()->roles()->first()->name) {
-    //         case 'super_admin':
-    //             // return \App\Level::all();
-    //             break;
-    //
-    //         case 'registrar':
-    //             // return \App\Level::where('name', 'church_pastor')->first();
-    //             break;
-    //
-    //         default:
-    //             // return \App\Level::whereNotIn('name', ['all'])->get();
-    //             break;
-    //     }
-    // }
-
     protected function registerViewComposers() {
         \View::composer('components.options.roles', function ($view) {
             // dont cache this cause query will change depending on user role
             $view->with('roles', $this->getRoles());
         });
 
-        // \View::composer('components.options.levels', function ($view) {
-        //     // dont cache this cause query will change depending on user role
-        //     $view->with('levels', $this->getLevels());
-        // });
-
         \View::composer('components.options.churches', function ($view) {
-            $churches = \Cache::rememberForEver('churches', function() {
-                return \App\Church::all();
-            });
+            $churchRepository = resolve(\App\Repositories\ChurchRepositoryInterface::class);
+            $churches = $churchRepository->all();
             $view->with('churches', $churches);
         });
 
         \View::composer('components.options.permissions', function ($view) {
-            $permissions = \Cache::rememberForEver('permissions', function() {
-                return \App\Permission::all();
-            });
+            $permissionRepository = resolve(\App\Repositories\PermissionRepositoryInterface::class);
+            $permissions = $permissionRepository->all();
             $view->with('permissions', $permissions);
         });
     }

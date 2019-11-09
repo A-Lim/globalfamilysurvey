@@ -44,12 +44,17 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
+                        <li class="{{ request()->is('settings/dashboard') ? 'active' : '' }}">
+                            <a href="/settings/dashboard">
+                                <i class="fas fa-cogs"></i> <span> Settings Dashboard</span>
+                            </a>
+                        </li>
                         <li class="{{ request()->is('roles*') ? 'active' : '' }}">
                             <a href="/roles">
                                 <i class="fa fa-user-astronaut"></i> <span> Roles and Permission</span>
                             </a>
                         </li>
-                        <li class="{{ request()->is('settings*') ? 'active' : '' }}">
+                        <li class="{{ request()->is('settings') ? 'active' : '' }}">
                             <a href="/settings">
                                 <i class="fa fa-wrench"></i> <span> Configurations</span>
                             </a>

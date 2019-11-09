@@ -66,7 +66,7 @@
                     </div>
                 </div>
 
-                @if(env('GOOGLE_RECAPTCHA_KEY'))
+                @if(env('ACTIVATE_RECAPTCHA') && env('GOOGLE_RECAPTCHA_KEY'))
                     <div class="col-md-12 text-center">
                         <div class="form-group has-feedback {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
                             <div class="g-recaptcha" data-sitekey="{{env('GOOGLE_RECAPTCHA_KEY')}}"></div>
@@ -83,7 +83,7 @@
             <a href="/register">Back to select registration type</a><br>
             <a href="/login">Back to login</a><br>
         @else
-            <p class="text-primary text-center">Global Family Survey Challenge is yet open up for registrations.</p>
+            <p class="text-primary text-center">Registration for Global Family Survey Challenge is closed.</p>
         @endif
     </div>
     <!-- /.login-box-body -->

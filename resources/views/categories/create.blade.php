@@ -33,14 +33,14 @@
                     </div>
 
                     <div class="row">
-                        <div class="form-group {{ $errors->has('questions') ? ' has-error' : '' }} col-md-6">
-                            <label for="questions">Questions</label>
-                            <select class="form-control select2" name="questions[]" multiple="multiple" data-placeholder="Select Questions" style="width: 100%;">
+                        <div class="form-group {{ $errors->has('question_ids') ? ' has-error' : '' }} col-md-6">
+                            <label for="question_ids">Questions</label>
+                            <select class="form-control select2" name="question_ids[]" multiple="multiple" data-placeholder="Select Questions" style="width: 100%;">
                                 @foreach ($questions as $question)
-                                    <option value="{{ $question->id }}" {{ in_array($question->id, old('questions') ?? []) ? 'selected' : '' }}>{{ $question->title }}</option>
+                                    <option value="{{ $question->id }}" {{ in_array($question->id, old('question_ids') ?? []) ? 'selected' : '' }}>{{ $question->title }}</option>
                                 @endforeach
                             </select>
-                            <span class="text-danger">{{ $errors->first('questions') }}</span>
+                            <span class="text-danger">{{ $errors->first('question_ids') }}</span>
                         </div>
                     </div>
                 </div>

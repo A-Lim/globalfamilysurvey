@@ -79,7 +79,10 @@
             {data: 'answers_count', searchable: false, sortable: false },
             {data: 'action', sortable: false},
         ],
-        "order": [[ 2, "desc" ]]
+        order: [[ 2, "desc" ]],
+        initComplete: function(settings, json) {
+            $('[data-toggle="tooltip"]').tooltip();
+        }
     });
     </script>
 @endpush

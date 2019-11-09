@@ -33,29 +33,19 @@
                                 <td>{{ $report->name }}</td>
                                 <td>
                                     @can('update', App\Report::class)
-                                        <a class="link-btn" href="/reports/{{ $report->id }}/edit" title="Edit">
-                                            <button type="button" class="btn btn-primary">
-                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                            </button>
-                                        </a>&nbsp;
+                                        {!! edit_button('reports', $report->id) !!}
                                     @endcan
                                     @can('delete', App\Report::class)
-                                        <form action="/reports/{{ $report->id }}" method="post" class="form-btn">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this report?')">
-                                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                            </button>
-                                        </form>
+                                        {!! delete_button('reports', $report->id) !!}
                                     @endcan
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                <div class="pull-right">
-                    {{-- {{ $users->links() }} --}}
-                </div>
+                {{-- <div class="pull-right">
+                    {{ $reports->links() }}
+                </div> --}}
             </div>
         </div>
     </section>

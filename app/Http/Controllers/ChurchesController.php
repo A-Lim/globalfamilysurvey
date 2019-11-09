@@ -1,116 +1,90 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use DataTables;
-use App\Country;
 use App\Church;
-use App\Http\Requests\ChurchRequest;
 use Illuminate\Http\Request;
+use App\Http\Requests\Church\CreateRequest;
+use App\Http\Requests\Church\UpdateRequest;
+
+use App\Repositories\SettingsRepositoryInterface;
+use App\Repositories\SurveyRepositoryInterface;
+use App\Repositories\CountryRepositoryInterface;
+use App\Repositories\ChurchRepositoryInterface;
 
 class ChurchesController extends Controller {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct() {
+    private $churchRepository;
+    private $countryRepository;
+    private $surveyRepository;
+    private $settingsRepository;
+
+    public function __construct(ChurchRepositoryInterface $churchRepositoryInterface,
+        CountryRepositoryInterface $countryRepositoryInterface,
+        SurveyRepositoryInterface $surveyRepositoryInterface,
+        SettingsRepositoryInterface $settingRepositoryInterface) {
         $this->middleware('auth');
+        $this->churchRepository = $churchRepositoryInterface;
+        $this->countryRepository = $countryRepositoryInterface;
+        $this->surveyRepository = $surveyRepositoryInterface;
+        $this->settingsRepository = $settingRepositoryInterface;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index() {
         $this->authorize('view', Church::class);
         return view('churches.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create() {
         $this->authorize('create', Church::class);
-        $countries = Country::select('id', 'name')->get();
+        $countries = $this->countryRepository->all_options();
         return view('churches.create', compact('countries'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\ChurchRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(ChurchRequest $request) {
+    public function store(CreateRequest $request) {
         $this->authorize('create', Church::class);
-        $request->save();
+        $this->churchRepository->create($request);
         session()->flash('success', 'Church successfully created');
         return redirect('churches');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Church  $church
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Church $church) {
         $this->authorize('update', Church::class);
-        $countries = Country::select('id', 'name')->get();
         return view('churches.edit', [
-            'countries' => $countries,
+            'countries' => $this->countryRepository->all_options(),
             'church' => $church,
-            'surveys' => \App\Survey::all(),
-            'survey_base_url' => \App\Setting::where('key', 'survey_base_url')->firstOrFail()
+            'surveys' => $this->surveyRepository->all(),
+            'survey_base_url' => $this->settingsRepository->get('survey_base_url')
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\ChurchRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(ChurchRequest $request, Church $church) {
+    public function update(UpdateRequest $request, Church $church) {
         $this->authorize('update', $church);
-        $request->save();
+        $this->churchRepository->update($church, $request);
         session()->flash('success', 'Church successfully updated');
         return redirect('/churches');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Church $church) {
         $this->authorize('delete', Church::class);
-        $church->delete();
+        $this->churchRepository->delete($church);
         session()->flash('success', 'Church successfully deleted');
         return back();
     }
 
     public function datatable() {
-        $query = Church::join('countries', 'churches.country_id', '=', 'countries.id')
-                    ->select('churches.*', 'countries.full_name as country_name');
-        return Datatables::of($query)
-        ->addIndexColumn()
-        ->addColumn('action', function($user) {
-            $html = '';
-            if (auth()->user()->can('update', Church::class)) {
-                $html .= edit_button('churches', $user->id).' ';
-            }
-            if (auth()->user()->can('delete', Church::class)) {
-                $html .= delete_button('churches', $user->id);
-            }
-            return $html;
-        })
-        ->rawColumns(['action'])
-        ->make(true);
+        return Datatables::of($this->churchRepository->datatable_query())
+            ->addIndexColumn()
+            ->addColumn('action', function($church) {
+                $html = '';
+                if (auth()->user()->can('update', Church::class)) {
+                    $html .= edit_button('churches', $church->id).' ';
+                }
+                if (auth()->user()->can('delete', Church::class)) {
+                    $html .= delete_button('churches', $church->id);
+                }
+                return $html;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 }

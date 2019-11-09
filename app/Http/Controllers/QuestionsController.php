@@ -7,95 +7,41 @@ use DataTables;
 use App\Question;
 use App\Answer;
 use App\Option;
+
 use Illuminate\Http\Request;
+use App\Repositories\QuestionRepositoryInterface;
 
 class QuestionsController extends Controller {
-    public function __construct() {
+    private $questionRepository;
+
+    public function __construct(QuestionRepositoryInterface $questionRepositoryInterface) {
         $this->middleware('auth');
+        $this->questionRepository = $questionRepositoryInterface;
     }
 
-    /**
-    * Display a listing of the resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
     public function index() {
         $this->authorize('view', Question::class);
         return view('questions.index');
     }
 
-    /**
-    * Display the specified resource.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
     public function show(Question $question) {
         $this->authorize('view', Question::class);
-        // $grouped_answers = $this->groupData($question);
         return view('questions.show', compact('question'));
     }
 
-
-
-    // private function groupData(Question $question) {
-    //     $options = \App\Option::where('question_id', $question->id)->get();
-    //     $answers = Answer::permitted()->where('answers.question_id', $question->id)
-    //                 ->join('options', 'options.id', 'answers.option_id')
-    //                 ->get();
-    //
-    //     $data = [];
-    //     foreach ($options as $option) {
-    //         $data[$option->text] = $answers->filter(function ($value, $key) use ($option) {
-    //             return $value->option_id == $option->id;
-    //         })->count();
-    //     }
-    //     // dd($options);
-    //     return $data;
-    // }
-
-    /**
-    * Remove the specified resource from storage.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
     public function destroy(Question $question) {
         $this->authorize('delete', Question::class);
-        $this->deleteAllLinked($question);
+        $this->questionRepository->delete($question, true);
         session()->flash('success', 'Question successfully deleted');
         return back();
     }
 
     public function data(Request $request, Question $question) {
-        $filter = null;
-        if ($request->has('filter') && $request->filter == 'church')
-            $filter = $request->filter;
-
-        $options = Option::where('question_id', $question->id)
-                    ->orderBy('position', 'asc')
-                    ->get();
-
-        $answers = Answer::permitted($filter)->where('answers.question_id', $question->id)
-                    ->join('options', 'options.id', 'answers.option_id')
-                    ->select('answers.option_id')
-                    ->get();
-
-        $data = [];
-
-        foreach ($options as $option) {
-            $data['type'] = $question->type;
-            // $data['keys'][] = splitWords($option->text, 3);
-            $data['keys'][] = $option->text;
-            $data['values'][] = $answers->filter(function ($value, $key) use ($option) {
-                return $value->option_id == $option->id;
-            })->count();
-        }
-        return $data;
+        return $this->questionRepository->chart_data($question, $request->filter);
     }
 
     public function datatable() {
-        return Datatables::of($this->datatable_query())
+        return Datatables::of($this->questionRepository->datatable_query())
             ->addIndexColumn()
             ->editColumn('title', function ($question) {
                 return str_limit(strip_tags($question->title), 40);
@@ -115,20 +61,5 @@ class QuestionsController extends Controller {
             })
             ->rawColumns(['action'])
             ->make(true);
-    }
-
-    protected function datatable_query() {
-        return Question::join('surveys', 'questions.survey_id', '=', 'surveys.id')
-            ->orderBy('surveys.id', 'asc')
-            ->orderBy('questions.sequence', 'asc')
-            ->select('questions.*', 'surveys.type as survey_type')
-            ->withCount('answers');
-    }
-
-    protected function deleteAllLinked(Question $question) {
-        DB::transaction(function() use ($question) {
-            DB::table('questions')->where(['id' => $question->id])->delete();
-            DB::table('answers')->where(['question_id' => $question->id])->delete();
-        });
     }
 }

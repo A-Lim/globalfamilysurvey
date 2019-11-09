@@ -7,9 +7,12 @@ use App\Survey;
 use Illuminate\Database\Eloquent\Model;
 
 class Survey extends Model {
-    protected $guarded = [];
+    protected $fillable = ['id', 'type', 'title', 'url', 'preview_url', 'language', 'analyze_url'];
     public $incrementing = false;
     public $timestamps = false;
+
+    const API_URL = 'https://api.surveymonkey.net/v3/surveys/';
+    const CACHE_KEY = 'survey';
 
     const TYPE_LEADER = 'leader';
     const TYPE_MEMBER = 'member';
@@ -32,27 +35,27 @@ class Survey extends Model {
     }
 
     // retrieve raw JSON and save it into database
-    public static function saveFromJson($name, $type, $url, $json) {
-        $submission = self::find($json->id);
-        if (!$submission) {
-            self::create([
-                'id'    => $json->id,
-                'title' => $name,
-                'type'  => $type,
-                'url' => $url,
-                'preview_url' => $json->preview,
-                'language' => $json->language,
-                'analyze_url' => $json->analyze_url,
-            ]);
-        } else {
-            $submission->update([
-                'title' => $name,
-                'type'  => $type,
-                'url' => $url,
-                'preview_url' => $json->preview,
-                'language' => $json->language,
-                'analyze_url' => $json->analyze_url,
-            ]);
-        };
-    }
+    // public static function saveFromJson($name, $type, $url, $json) {
+    //     $submission = self::find($json->id);
+    //     if (!$submission) {
+    //         self::create([
+    //             'id'    => $json->id,
+    //             'title' => $name,
+    //             'type'  => $type,
+    //             'url' => $url,
+    //             'preview_url' => $json->preview,
+    //             'language' => $json->language,
+    //             'analyze_url' => $json->analyze_url,
+    //         ]);
+    //     } else {
+    //         $submission->update([
+    //             'title' => $name,
+    //             'type'  => $type,
+    //             'url' => $url,
+    //             'preview_url' => $json->preview,
+    //             'language' => $json->language,
+    //             'analyze_url' => $json->analyze_url,
+    //         ]);
+    //     };
+    // }
 }

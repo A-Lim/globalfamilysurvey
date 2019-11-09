@@ -20,6 +20,7 @@ class CreateChurchesTable extends Migration
             $table->string('district');
             $table->string('state');
             $table->integer('country_id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
