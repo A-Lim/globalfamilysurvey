@@ -48,7 +48,8 @@ class SurveysController extends Controller {
         // check if token exists, if not redirect back
         $token = $this->settingsRepository->get('token');
         if (!$token || $token->value == '' || $token->value == null)
-            return redirect('surveys/retrieve')->with('error', 'Please set up your Survey Monkey Api Key and Token in the settings page.');
+            return back()->with('error', 'Please set up your Survey Monkey Api Key and Token in the settings page.');
+
 
         $result = $this->get_surveys_request($token->value);
         if ($result['status']) {
