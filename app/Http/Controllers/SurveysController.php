@@ -46,7 +46,9 @@ class SurveysController extends Controller {
     public function retrieve() {
         $this->authorize('retrieve', Survey::class);
         // check if token exists, if not redirect back
-        $token = $this->get_token();
+        $token = $this->settingsRepository->get('token');
+        if (!$token || $token->value == '' || $token->value == null)
+            return redirect('surveys/retrieve')->with('error', 'Please set up your Survey Monkey Api Key and Token in the settings page.');
 
         $result = $this->get_surveys_request($token->value);
         if ($result['status']) {
@@ -61,7 +63,9 @@ class SurveysController extends Controller {
     public function save(RetrieveRequest $request, Survey $survey = null) {
         $this->authorize('retrieve', Survey::class);
         // check if token exists, if not redirect back
-        $token = $this->get_token();
+        $token = $this->settingsRepository->get('token');
+        if (!$token || $token->value == '' || $token->value == null)
+            return redirect('surveys/retrieve')->with('error', 'Please set up your Survey Monkey Api Key and Token in the settings page.');
 
         $survey_id = $survey->id ?? $request->survey_id;
 
@@ -77,24 +81,6 @@ class SurveysController extends Controller {
             return back()->with(['error' => $result['message']]);
         }
     }
-
-    // public function refresh(Request $request, Survey $survey) {
-    //     $this->authorize('retrieve', Survey::class);
-    //     // check if token exists, if not redirect back
-    //     $this->check_token();
-    //
-    //     $result = $this->get_survey_detail_request($token->value, $survey->id);
-    //     if ($result['status']) {
-    //         // save survey
-    //         $this->surveyRepository->saveFromJson($request->all(), $result['content']);
-    //         // save questions
-    //         $this->questionRepository->saveFromJson($result['content']);
-    //         session()->flash('success', 'Survey successfully updated.');
-    //         return redirect('surveys');
-    //     } else {
-    //         return back()->with(['error' => $result['message']]);
-    //     }
-    // }
 
     public function show(Survey $survey) {
         $this->authorize('view', Survey::class);
@@ -164,14 +150,5 @@ class SurveysController extends Controller {
             $this->requestLogRepository->create(RequestLog::STATUS_ERROR, $body->getContents());
             return ['status' => false, 'message' => 'Status Code ('.$status_code.'): '.$error->message, 'content' => $contents_obj];
         }
-    }
-
-    private function get_token() {
-        $token = $this->settingsRepository->get('token');
-
-        if (!$token || $token->value == '')
-            return redirect('surveys/retrieve')->with('error', 'Please set up your Survey Monkey Api Key and Token in the settings page.');
-        else
-            return $token;
     }
 }
