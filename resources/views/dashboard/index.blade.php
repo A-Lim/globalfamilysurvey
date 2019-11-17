@@ -15,7 +15,7 @@
         @if (auth()->user()->hasRole('super_admin') && count($permission_role) == 0)
             <div class="callout callout-warning">
                 <h4>Site Setup</h4>
-                <p>The roles and permissions for this site required setup. Go to <a href="/settings">settings</a> to add roles and permissions.</p>
+                <p>The roles and permissions for this site required setup. Go to <a href="/roles">Roles and Permission</a> page to configure permissions.</p>
             </div>
         @endif
         @include('components.status')
