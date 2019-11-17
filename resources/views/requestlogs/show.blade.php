@@ -15,31 +15,56 @@
         @include('components.status')
         <div class="row">
             <div class="col-md-3">
-                <!-- Profile Image -->
-                <div class="box box-primary">
-                    <div id="requestlog-box-profile" class="box-body box-profile">
-                        <ul class="list-group list-group-unbordered">
-                            <li class="list-group-item">
-                                <b>ID</b> <span class="pull-right">{{ $requestLog->id }}</span>
-                            </li>
-                            <li class="list-group-item">
-                                <b>Status</b>
-                                @if ($requestLog->status == \App\RequestLog::STATUS_SUCCESS)
-                                    <span class="pull-right label label-success">{{ $requestLog->status }}</span>
-                                @endif
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Profile Image -->
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                              <h3 class="box-title">Info</h3>
+                            </div>
+                            <div id="requestlog-box-profile" class="box-body box-profile">
+                                <ul class="list-group list-group-unbordered">
+                                    <li class="list-group-item">
+                                        ID <span class="pull-right">{{ $requestLog->id }}</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        Status
+                                        @if ($requestLog->status == \App\RequestLog::STATUS_SUCCESS)
+                                            <span class="pull-right label label-success">{{ $requestLog->status }}</span>
+                                        @endif
 
-                                @if ($requestLog->status == \App\RequestLog::STATUS_ERROR)
-                                    <span class="pull-right label label-danger">{{ $requestLog->status }}</span>
-                                @endif
-                            </li>
-                            <li class="list-group-item">
-                                <b>Created At</b> <span class="pull-right label label-info">{{ $requestLog->created_at->format('y-m-d h:i:s') }}</span>
-                            </li>
-                        </ul>
+                                        @if ($requestLog->status == \App\RequestLog::STATUS_ERROR)
+                                            <span class="pull-right label label-danger">{{ $requestLog->status }}</span>
+                                        @endif
+                                    </li>
+                                    <li class="list-group-item">
+                                        Created At <span class="pull-right label label-info">{{ $requestLog->created_at->format('y-m-d h:i:s') }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
                     </div>
-                    <!-- /.box-body -->
+                    @if ($requestLog->params != null)
+                        <div class="col-md-12">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                              <h4 class="box-title">Query Params</h4>
+                            </div>
+                            <div id="requestlog-query-box" class="box-body box-profile">
+                                <ul class="list-group list-group-unbordered">
+                                    @foreach (json_decode($requestLog->params) as $key => $value)
+                                        <li class="list-group-item">
+                                            {{ $key }} <span class="pull-right">{{ $value }}</span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                 </div>
-                <!-- /.box -->
             </div>
             <div class="col-md-9">
                 <div class="box box-primary">
@@ -47,7 +72,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <label>Content</label>
-                                <textarea class="form-control" rows="20" disabled>{{ json_encode(json_decode($requestLog->content), JSON_PRETTY_PRINT) }}</textarea>
+                                <textarea id="requestlog-content" class="form-control" rows="20" disabled>{{ $requestLog->content }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -57,3 +82,15 @@
     </section>
     <!-- /.content -->
 @endsection
+
+@push('scripts')
+    <script>
+    $(document).ready(function() {
+        var ugly = $('#requestlog-content').val()
+        var obj = JSON.parse(ugly);
+        var pretty = JSON.stringify(obj, undefined, 2);
+
+        $('#requestlog-content').val(pretty);
+    });
+    </script>
+@endpush

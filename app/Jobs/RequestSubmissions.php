@@ -60,15 +60,7 @@ class RequestSubmissions implements ShouldQueue
     private function pull_submission() {
         $client = new Client();
         // build query params
-        $query = [
-            'per_page' => 100,
-            'status' => 'completed',
-        ];
-
-        if ($this->start_date != null && $this->end_date != null) {
-            $query['start_created_at'] = $this->start_date;
-            $query['end_created_at'] = $this->end_date;
-        }
+        $query = $this->build_query();
 
         try {
             $url = Submission::API_URL.$this->survey_id.'/responses/bulk';
@@ -84,19 +76,34 @@ class RequestSubmissions implements ShouldQueue
             $result = json_decode($contents);
             $this->submissionRepository->create_from_json($result, $this->churches);
             // log result
-            $this->requestLogRepository->create(RequestLog::STATUS_SUCCESS, $contents);
+            $this->requestLogRepository->create(RequestLog::STATUS_SUCCESS, $query, $contents);
 
             // calculate total pages
             $total_pages = ceil($result->total / $result->per_page);
             // add additional pages to queue
             if ($total_pages > 1) {
+                // $i starts at 2 because page 1 is already processed
                 for ($i = 2; $i <= $total_pages; $i++) {
                     PullSubmissions::dispatch($this->survey_id, Submission::STATUS_COMPLETED, $this->start_date, $this->end_date, $i, $this->token, $this->churches);
                 }
             }
         } catch (ClientException $exception) {
             // log error
-            $this->requestLogRepository->create(RequestLog::STATUS_ERROR, $exception->getResponse()->getBody()->getContents());
+            $this->requestLogRepository->create(RequestLog::STATUS_ERROR, $query, $exception->getResponse()->getBody()->getContents());
         }
+    }
+
+    private function build_query() {
+        $query = [
+            'per_page' => Submission::PER_PAGE,
+            'status' => 'completed',
+        ];
+
+        if ($this->start_date != null && $this->end_date != null) {
+            $query['start_created_at'] = $this->start_date;
+            $query['end_created_at'] = $this->end_date;
+        }
+
+        return $query;
     }
 }

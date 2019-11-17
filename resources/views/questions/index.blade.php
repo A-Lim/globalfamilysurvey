@@ -24,47 +24,13 @@
                             <th class="col-action">Actions</th>
                         </tr>
                     </thead>
-                    {{-- <tbody>
-                        @foreach ($questions as $question)
-                            <tr>
-                                <td> {{ str_limit(strip_tags($question->title), 40) }} </td>
-                                <td> {{ ucwords($question->survey->type) }}</td>
-                                <td> {{ $question->answers_count }} </td>
-                                <td>
-                                    @can('view', App\Question::class)
-                                        <a class="link-btn" href="/questions/{{ $question->id }}" title="View">
-                                            <button type="button" class="btn btn-primary">
-                                                <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
-                                            </button>
-                                        </a>
-                                    @endcan
-                                    @can('delete', App\Question::class)
-                                        <form action="/questions/{{ $question->id }}" method="post" class="form-btn">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete question? This will delete all results linked to this question.')">
-                                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                            </button>
-                                        </form>
-                                    @endcan
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody> --}}
                 </table>
-                {{-- <div class="pull-right">
-                    {{ $questions->links() }}
-                </div> --}}
             </div>
         </div>
     </section>
     <!-- /.content -->
 @endsection
 
-{{-- @prepend('scripts')
-    <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/plugins/datatables/dataTables.bootstrap.min.js"></script>
-@endprepend --}}
 @push('scripts')
     <script>
     $('#datatable').DataTable({

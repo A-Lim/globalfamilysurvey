@@ -59,6 +59,8 @@ class PullSubmissions implements ShouldQueue
 
     private function pull_submission() {
         $client = new Client();
+        $query = $this->build_query();
+
         try {
             $url = Submission::API_URL.$this->survey_id.'/responses/bulk';
             $request = $client->get($url, [
@@ -66,23 +68,32 @@ class PullSubmissions implements ShouldQueue
                     'Content-Type' => 'application/json',
                     'Authorization' => 'Bearer '.$this->token
                 ],
-                'query' => [
-                    'per_page' => 100,
-                    'status' => 'completed',
-                    'start_created_at' => $this->start_date,
-                    'end_created_at' => $this->end_date,
-                    'page' => $this->page,
-                ]
+                'query' => $query,
             ]);
 
             $contents = $request->getBody()->getContents();
             $result = json_decode($contents);
             $this->submissionRepository->create_from_json($result, $this->churches);
             // log result
-            $this->requestLogRepository->create(RequestLog::STATUS_SUCCESS, $contents);
+            $this->requestLogRepository->create(RequestLog::STATUS_SUCCESS, $query, $contents);
         } catch (ClientException $exception) {
             // log error
-            $this->requestLogRepository->create(RequestLog::STATUS_ERROR, $exception->getResponse()->getBody()->getContents());
+            $this->requestLogRepository->create(RequestLog::STATUS_ERROR, $query, $exception->getResponse()->getBody()->getContents());
         }
+    }
+
+    private function build_query() {
+        $query = [
+            'per_page' => Submission::PER_PAGE,
+            'status' => $this->status,
+            'page' => $this->page,
+        ];
+
+        if ($this->start_date != null && $this->end_date != null) {
+            $query['start_created_at'] = $this->start_date;
+            $query['end_created_at'] = $this->end_date;
+        }
+
+        return $query;
     }
 }

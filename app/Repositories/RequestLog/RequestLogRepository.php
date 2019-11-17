@@ -11,9 +11,10 @@ class RequestLogRepository implements RequestLogRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create($status, $content) {
+    public function create($status, $params = null, $content) {
         $data = [
             'status' => $status,
+            'params' => $params != null ? json_encode($params) : null,
             'content' => $content
         ];
         return RequestLog::create($data);

@@ -4,7 +4,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class RequestLog extends Model {
-    protected $fillable = ['status', 'content', 'created_at', 'updated_at'];
+    protected $fillable = ['status', 'params', 'content', 'created_at', 'updated_at'];
 
     const STATUS_SUCCESS = 'success';
     const STATUS_ERROR = 'error';

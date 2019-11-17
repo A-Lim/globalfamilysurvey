@@ -113,7 +113,7 @@ class SurveysController extends Controller {
             $contents_obj = json_decode($contents);
 
             // log result
-            $this->requestLogRepository->create(RequestLog::STATUS_SUCCESS, $contents);
+            $this->requestLogRepository->create(RequestLog::STATUS_SUCCESS, null, $contents);
             return ['status' => true, 'content' => $contents_obj];
         } catch(ClientException $exception) {
             $body = $exception->getResponse()->getBody();
@@ -121,7 +121,7 @@ class SurveysController extends Controller {
             $error = json_decode($body->getContents())->error;
             $content = json_decode($body);
             // log error result
-            $this->requestLogRepository->create(RequestLog::STATUS_ERROR, $body->getContents());
+            $this->requestLogRepository->create(RequestLog::STATUS_ERROR, null, $body->getContents());
             return ['status' => false, 'message' => 'Status Code ('.$status_code.'): '.$error->message, 'content' => $content];
         }
     }
@@ -139,7 +139,7 @@ class SurveysController extends Controller {
             $contents = $response->getBody()->getContents();
             $contents_obj = json_decode($contents);
             // log result
-            $this->requestLogRepository->create(RequestLog::STATUS_SUCCESS, $contents);
+            $this->requestLogRepository->create(RequestLog::STATUS_SUCCESS, null, $contents);
             return ['status' => true, 'content' => $contents_obj];
         } catch(ClientException $exception) {
             $body = $exception->getResponse()->getBody();
@@ -148,7 +148,7 @@ class SurveysController extends Controller {
             $contents_obj = json_decode($body);
 
             // log error result
-            $this->requestLogRepository->create(RequestLog::STATUS_ERROR, $body->getContents());
+            $this->requestLogRepository->create(RequestLog::STATUS_ERROR, null, $body->getContents());
             return ['status' => false, 'message' => 'Status Code ('.$status_code.'): '.$error->message, 'content' => $contents_obj];
         }
     }

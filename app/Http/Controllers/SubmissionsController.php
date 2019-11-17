@@ -45,7 +45,7 @@ class SubmissionsController extends Controller {
             $start_date = Carbon::today()->toDateString();
             $end_date = Carbon::tomorrow()->toDateString();
         }
-
+        
         foreach ($surveys as $survey) {
             RequestSubmissions::dispatch($survey->id, Submission::STATUS_COMPLETED, $start_date, $end_date, $token, $churches);
         }

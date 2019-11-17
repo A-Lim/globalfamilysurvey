@@ -38,4 +38,4 @@ table { font-size: inherit; }
 .info-box-icon > i { display: table-cell; vertical-align: middle; }
 
 /* request logs */
-/* #requestlog-box-profile .list-group-item { border: none; } */
+#requestlog-box-profile .list-group-item, #requestlog-query-box .list-group-item { border: none; }

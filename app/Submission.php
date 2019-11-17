@@ -20,6 +20,7 @@ class Submission extends Model
         self::REQ_TYPE_TODAY,
     ];
 
+    const PER_PAGE = 100;
     const STATUS_COMPLETED = 'completed';
 
     public function survey() {

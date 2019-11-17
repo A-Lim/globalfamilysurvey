@@ -16,7 +16,8 @@ class CreateRequestLogsTable extends Migration
         Schema::create('request_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->string('status', 15);
-            $table->text('content');
+            $table->text('params')->nullable();
+            $table->longText('content')->nullable();
             $table->timestamps();
         });
     }

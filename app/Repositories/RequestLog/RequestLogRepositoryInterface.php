@@ -10,10 +10,11 @@ interface RequestLogRepositoryInterface
      * Create request log
      *
      * @param $status - 'success' / 'error'
-     * @param $content - content of returned api
+     * @param $query - query parameters
+     * @param $content - content of returned api in json format
      * @return RequestLog
      */
-    public function create($status, $content);
+    public function create($status, $params, $content);
 
     /**
      * Return total requestlog count
