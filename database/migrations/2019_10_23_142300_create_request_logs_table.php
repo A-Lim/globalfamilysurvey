@@ -29,6 +29,6 @@ class CreateRequestLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('requestlogs');
+        Schema::dropIfExists('request_logs');
     }
 }
