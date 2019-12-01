@@ -1,6 +1,6 @@
 <?php
 // Homepage
-Route::get('/', function () { return view('welcome'); });
+Route::get('/', function () { return redirect('login'); });
 
 // Authentication Routes
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

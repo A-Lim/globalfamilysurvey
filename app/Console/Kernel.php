@@ -25,10 +25,10 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule) {
-        $settingsRepository = resolve(SettingsRepositoryInterface::class);
-
-        $request_interval = $settingsRepository->get('request_interval')->value;
-        $schedule->command('submissions:pull')->cron($request_interval);
+        // $settingsRepository = resolve(SettingsRepositoryInterface::class);
+        //
+        // $request_interval = $settingsRepository->get('request_interval')->value;
+        $schedule->command('submissions:pull')->cron('0 0 * * *');
     }
 
     /**
