@@ -73,7 +73,7 @@
                     @endif
 
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">Register Network</button>
+                        <button type="submit" class="btn btn-block btn-flat" style="background-color:#ff6508; color:white">Register Network</button>
                     </div>
                 </div>
             </form>

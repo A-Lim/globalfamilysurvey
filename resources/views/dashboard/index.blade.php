@@ -24,43 +24,40 @@
             <div class="row">
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
-                    <div class="small-box bg-aqua">
+                    <div class="small-box bg-yellow">
                         <div class="inner">
                             <h3>{{ $data['submissions_count'] }}</h3>
                             <p>Submitted Results</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-bag"></i>
+                            <i class="ion ion-android-contacts"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
-                    <div class="small-box bg-green">
+                    <div class="small-box bg-purple">
                         <div class="inner">
                             <h3>{{ $data['churches_count'] }}</h3>
                             <p>Churches Registered</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
+                            <i class="ion ion-merge"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
-                    <div class="small-box bg-yellow">
+                    <div class="small-box bg-teal">
                         <div class="inner">
                             <h3>{{ $data['countries_count'] }}</h3>
                             <p>Countries Participated</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-person-add"></i>
+                            <i class="ion ion-earth"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->

@@ -6,7 +6,7 @@
     <div class="login-box-body">
         <p class="login-box-msg">Select Registration Type</p>
         @include('components.status')
-        <a class="btn btn-primary btn-block btn-flat" href="/register/network">Register Network</a>
+        <a class="btn btn-block btn-flat" href="/register/network" style="background-color:#ff6508; color:white">Register Network</a>
         <a class="btn btn-default btn-block btn-flat" href="/register/church">Register Church</a>
 
         <div class="login-box-footer">

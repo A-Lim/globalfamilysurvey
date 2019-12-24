@@ -76,7 +76,7 @@
                 @endif
 
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
+                    <button type="submit" class="btn btn-block btn-flat" style="background-color:#ff6508; color:white">Register</button>
                 </div>
             </div>
         </form>

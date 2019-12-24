@@ -41,7 +41,7 @@
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            GLOBAL<b> FS</b>
+            GLOBAL<b style="color:#ff6508"> FS</b>
         </div>
         <!-- /.login-logo -->
         @yield('content')

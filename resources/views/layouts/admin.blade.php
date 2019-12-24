@@ -18,7 +18,7 @@
 
     <!-- AdminLTE Skins. Choose a skin from the css/skins
     folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="{{ asset('/adminlte/css/skins/skin-purple.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/adminlte/css/skins/skin-yellow.min.css') }}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -48,7 +48,7 @@
     {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
 
 </head>
-<body class="hold-transition skin-purple sidebar-mini {{ request()->is('dashboard*') ? 'sidebar-collapse' : '' }}">
+<body class="hold-transition skin-yellow sidebar-mini {{ request()->is('dashboard*') ? 'sidebar-collapse' : '' }}">
     <div class="wrapper">
         @include('components.header')
         @include('components.sidemenu')

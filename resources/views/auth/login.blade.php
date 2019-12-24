@@ -29,7 +29,7 @@
             </div>
 
             <div class="col-md-12">
-                <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                <button type="submit" class="btn btn-block btn-flat" style="background-color:#ff6508; color:white">Sign In</button>
             </div>
         </div>
     </form>
