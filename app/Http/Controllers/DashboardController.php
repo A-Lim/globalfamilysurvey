@@ -32,7 +32,7 @@ class DashboardController extends Controller {
         $data = [
             'submissions_count' => Submission::count(),
             'churches_count' => Church::count(),
-            'countries_count' => Church::distinct('country_id')->count(),
+            'countries_count' => Church::groupBy('country_id')->count(),
         ];
         return view('dashboard.index', compact('data', 'permission_role', 'reports'));
     }
@@ -44,21 +44,6 @@ class DashboardController extends Controller {
             $query->whereIn('category_id', $categories->pluck('id')->toArray());
         })->get()->pluck('id');
 
-        // dd($question_ids);
-
-
-        // // get all categories together with questions
-        // $categories = Category::with(['questions' => function ($query) {
-        //     // where questions has survey of type member
-        //     $query->whereHas('survey', function ($query) {
-        //         $query->where('type', 'member');
-        //     // retrieve questions together with answers
-        //     })->with(['answers' => function ($query) {
-        //         // where answers are filtered according to user level
-        //         // see answer model for more info
-        //         $query->permitted();
-        //     }])->orderBy('sequence');
-        // }])->get();
         return view('dashboard.members-report', compact('permission_role', 'categories', 'question_ids'));
     }
 }
