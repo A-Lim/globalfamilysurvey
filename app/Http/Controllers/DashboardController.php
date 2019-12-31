@@ -33,7 +33,9 @@ class DashboardController extends Controller {
             'submissions_count' => Submission::count(),
             'churches_count' => Church::count(),
             // count the number of unique countries
-            'countries_count' => Church::select('country_id', DB::raw('count(country_id)'))->groupBy('country_id')->count()
+            'countries_count' => Church::select('country_id', DB::raw('count(country_id)'))
+                ->groupBy('country_id')
+                ->get()->count()
         ];
         return view('dashboard.index', compact('data', 'permission_role', 'reports'));
     }
