@@ -28,11 +28,12 @@ class DashboardController extends Controller {
     public function index() {
         $permission_role = DB::table('permission_role')->get();
         $reports = Report::all();
-
+        
         $data = [
             'submissions_count' => Submission::count(),
             'churches_count' => Church::count(),
-            'countries_count' => Church::distinct('country_id')->count()
+            // count the number of unique countries
+            'countries_count' => Church::select('country_id', DB::raw('count(country_id)'))->groupBy('country_id')->get()
         ];
         return view('dashboard.index', compact('data', 'permission_role', 'reports'));
     }
