@@ -32,7 +32,7 @@ class DashboardController extends Controller {
         $data = [
             'submissions_count' => Submission::count(),
             'churches_count' => Church::count(),
-            'countries_count' => Church::groupBy('country_id')->count(),
+            'countries_count' => Church::distinct('country_id')->count()
         ];
         return view('dashboard.index', compact('data', 'permission_role', 'reports'));
     }
