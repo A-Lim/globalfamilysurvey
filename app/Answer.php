@@ -40,16 +40,13 @@ class Answer extends Model {
                 break;
 
             case $roles->contains('name', 'network_leader'):
-                // $church = auth()->user()->church;
                 if ($church == null || $church->network_uuid == null)
-                    return dd("No church or network");
+                    abort(400);
 
                 // only filter by user's church
                 if ($filter != null && $filter == 'church') {
                     $query->whereHas('submission', function ($query) use ($church) {
-                        $query->whereHas('church', function ($query) use ($church) {
-                            $query->where('id', $church->id);
-                        });
+                        $query->where('church_id', $church->uuid);
                     });
                 } else {
                     // if no filter
@@ -65,12 +62,10 @@ class Answer extends Model {
             case $roles->contains('name', 'church_pastor'):
                 $church = auth()->user()->church;
                 if ($church == null)
-                    return dd("No church");
+                    abort(400);
 
                 $query->whereHas('submission', function ($query) use ($church) {
-                    $query->whereHas('church', function ($query) use ($church) {
-                        $query->where('id', $church->id);
-                    });
+                    $query->where('church_id', $church->uuid);
                 });
                 break;
         }

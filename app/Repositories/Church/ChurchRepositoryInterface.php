@@ -21,7 +21,6 @@ interface ChurchRepositoryInterface
      */
     public function find($id);
 
-
     /**
      * Create church
      *

@@ -10,14 +10,19 @@ use App\Question;
 use App\Category;
 use Illuminate\Http\Request;
 
+use App\Repositories\ChurchRepositoryInterface;
+
 class DashboardController extends Controller {
+
+    private $churchRepository;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct(ChurchRepositoryInterface $churchRepositoryInterface) {
         $this->middleware('auth');
+        $this->churchRepository = $churchRepositoryInterface;
     }
 
     /**
@@ -27,7 +32,7 @@ class DashboardController extends Controller {
      */
     public function index() {
         $permission_role = DB::table('permission_role')->get();
-        $reports = Report::all();
+        $reports = Report::with('leader_question', 'member_question')->get();
         
         $data = [
             'submissions_count' => Submission::count(),

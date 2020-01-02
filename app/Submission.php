@@ -28,7 +28,7 @@ class Submission extends Model
     }
 
     public function church() {
-        return $this->belongsTo(Church::class);
+        return $this->belongsTo(Church::class, 'church_id', 'uuid');
     }
 
     public function answers() {
@@ -54,17 +54,15 @@ class Submission extends Model
             case $roles->contains('name', 'network_leader'):
                 $church = auth()->user()->church;
                 if ($church == null || $church->network_uuid == null)
-                    return dd("No church or network");
-
+                    abort(400);
+                
                 // only filter by church
                 if ($filter != null && $filter == 'church') {
-                    $query->whereHas('church', function ($query) use ($church) {
-                        $query->where('id', $church->id);
-                    });
+                    $query->where('church_id', $church->uuid);
                 } else {
                     // if no filter
                     // default filter by network_id
-                    $query->whereHas('church', function ($query) use ($church) {
+                    $query->whereHas('church', function($query) use ($church) {
                         $query->where('network_uuid', $church->network_uuid);
                     });
                 }
@@ -73,11 +71,9 @@ class Submission extends Model
             case $roles->contains('name', 'church_pastor'):
                 $church = auth()->user()->church;
                 if ($church == null)
-                    return dd("No church");
-
-                $query->whereHas('church', function ($query) use ($church) {
-                    $query->where('id', $church->id);
-                });
+                    abort(400);
+                
+                $query->where('church_id', $church->uuid);
                 break;
         }
     }

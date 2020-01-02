@@ -52,6 +52,9 @@
                             </div>
                             <div class="box-body">
                                 <canvas id="question-{{ $question->id }}" height="150"></canvas>
+                                <div class="text-center fa-3x" id="loading-canvas-{{ $question->id }}" style="display:none">
+                                    <i class="fa fa-sync fa-spin"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -89,6 +92,8 @@
                     params = "?filter="+filter;
 
                 for (var x = 0; x < question_ids.length; x++) {
+                    startLoading(question_ids[x]);
+
                     (function(question_id) {
                         $.ajax({
                             headers: {
@@ -109,6 +114,8 @@
                                 chart = generatePieChart(chart_id, 'pie', keys, values, other_color_palettes);
                             }
                             all_charts.push(chart);
+
+                            stopLoading(question_id);
                         });
                     })(question_ids[x]);
                 }
@@ -122,6 +129,20 @@
 
                 // empty array
                 all_charts = [];
+            }
+
+            function startLoading(id) {
+                // spinner
+                $('#loading-canvas-' +id).css('display', 'block');
+                // canvas
+                $('#question-' + id).css('display', 'none');
+            }
+
+            function stopLoading(id) {
+                // spinner
+                $('#loading-canvas-' +id).css('display', 'none');
+                // canvas
+                $('#question-' + id).css('display', 'block');
             }
         </script>
     @endpush

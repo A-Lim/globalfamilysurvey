@@ -16,8 +16,10 @@ class UserRepository implements UserRepositoryInterface
 
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
+        } else {
+            unset($data['password']);
         }
-
+        
         $user->fill($data);
         $user->update();
 

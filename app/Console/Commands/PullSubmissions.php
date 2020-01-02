@@ -50,10 +50,11 @@ class PullSubmissions extends Command
      * @return mixed
      */
     public function handle() {
-        $start_date = Carbon::today()->toDateString();
-        $end_date = Carbon::tomorrow()->toDateString();
+        $start_date = Carbon::yesterday()->toDateString();
+        $end_date = Carbon::today()->toDateString();
         $token = $this->settingsRepository->get('token')->value;
-        $request_interval = $this->settingsRepository->get('request_interval')->value;
+        // $request_interval = $this->settingsRepository->get('request_interval')->value;
+        $request_interval = '0 0 * * *';
 
         // if token does not exist dont proceed
         if ($token == '')

@@ -104,32 +104,33 @@
                 </div>
             </div>
 
-            @if ($user->verified)
+            @if ($user->church) 
             <div class="col-md-6">
                 <div class="box box-info">
                     <div class="box-body">
+                        @if ($user->church->network_uuid != null)
                         <div class="row">
                             <div class="form-group col-md-12">
-                                <label for="church">Church</label>
-                                <select class="form-control select2" name="church" disabled>
-                                    @include('components.options.churches')
-                                </select>
+                                <label for="church">Network UUID</label>
+                                <input type="text" class="form-control" value="{{ $user->church->network_uuid }}" disabled />
+                            </div>
+                        </div>
+                        @endif
+
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="church">Church UUID</label>
+                                <input type="text" class="form-control" value="{{ $user->church->uuid }}" disabled />
                             </div>
                         </div>
 
+                        
                         <label>Survey Links</label>
-                        {{-- <input id="foo" value="https://github.com/zenorocha/clipboard.js.git">
-
-                        <!-- Trigger -->
-                        <button class="copy-btn" data-clipboard-target="#foo">
-                            <img src="assets/clippy.svg" alt="Copy to clipboard">
-                        </button> --}}
-
                         @foreach ($surveys as $survey)
                             <div class="row">
                                 <div class="form-group col-md-12">
                                     @php
-                                    $url = $survey_base_url->value.$survey->id.'?church='.$church->uuid;
+                                        $url = $survey->url.'?ch='.$user->church->uuid;
                                     @endphp
                                     <div><i class="fa fa-link"></i>  <a target="_blank" href="{{ $url }}">{{ $survey->title }}</a></div>
                                     <div class="input-group">
@@ -144,6 +145,8 @@
                     </div>
                 </div>
             </div>
+            @else 
+                <p class="text-center help-block">*********** No Church ***********</p>
             @endif
         </div>
     </section>

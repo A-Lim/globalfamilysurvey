@@ -21,7 +21,7 @@
                 <!-- User Account: style can be found in dropdown.less -->
                 @if (Auth::check())
                     <li class="dropdown user user-menu">
-                        <a href="/users/{{ Auth::user()->id }}/edit">{{ Auth::user()->name }}</a>
+                        <a href="/users/{{ Auth::user()->id }}/edit">{{ auth()->user()->name ?: auth()->user()->email }}</a>
                     </li>
                 @endif
                 <li>

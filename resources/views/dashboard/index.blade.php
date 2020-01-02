@@ -60,21 +60,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- ./col -->
-                {{-- <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-red">
-                        <div class="inner">
-                            <h3>65</h3>
-                            <p></p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div> --}}
-                <!-- ./col -->
             </div>
         @endif
 
@@ -88,7 +73,7 @@
                                     <label>Filter By:</label>
                                     <select class="form-control" id="select-filter">
                                         <option value="network">Whole Network</option>
-                                        {{-- <option value="church">Own Church</option> --}}
+                                        <option value="church">My Own Church</option>
                                     </select>
                                 </div>
                             </div>
@@ -109,6 +94,10 @@
                       <div class="row">
                           <div class="col-md-6">
                               <canvas id="report-leader-{{ $report->id }}"></canvas>
+                              <div class="text-center fa-3x" id="loading-leader-canvas-{{ $report->id }}" style="display:none">
+                                <i class="fa fa-sync fa-spin"></i>
+                              </div>
+                              
                               <h4>{{ $report->leader_question->title }}</h4>
                               <table id="table-leader-{{ $report->id }}" class="table table-bordered" style="font-size: 14px;">
                                   <thead>
@@ -120,9 +109,15 @@
                                   <tbody>
                                   </tbody>
                               </table>
+                              <div class="text-center fa-3x" id="loading-leader-table-{{ $report->id }}" style="display:none">
+                                <i class="fa fa-sync fa-spin"></i>
+                              </div>
                           </div>
                           <div class="col-md-6">
                               <canvas id="report-member-{{ $report->id }}"></canvas>
+                              <div class="text-center fa-3x" id="loading-member-canvas-{{ $report->id }}" style="display:none">
+                                <i class="fa fa-sync fa-spin"></i>
+                              </div>
                               <h4>{{ $report->member_question->title }}</h4>
                               <table id="table-member-{{ $report->id }}" class="table table-bordered" style="font-size: 14px;">
                                   <thead>
@@ -134,6 +129,9 @@
                                   <tbody>
                                   </tbody>
                               </table>
+                              <div class="text-center fa-3x" id="loading-member-table-{{ $report->id }}" style="display:none">
+                                <i class="fa fa-sync fa-spin"></i>
+                              </div>
                           </div>
                       </div>
                   </div>
@@ -169,10 +167,14 @@
             function load_reports(filter) {
                 var report_ids = {!! json_encode($reports->pluck('id')->toArray()) !!};
                 var params = '';
-                if (filter != '')
+                if (filter != '' && filter != undefined)
                     params = "?filter="+filter;
 
                 for (var x = 0; x < report_ids.length; x++) {
+
+                    startLoading('leader', report_ids[x]);
+                    startLoading('member', report_ids[x]);
+
                     // https://stackoverflow.com/questions/750486/javascript-closure-inside-loops-simple-practical-example
                     // immediately invoked function expression
                     (function(report_id) {
@@ -188,6 +190,9 @@
                             // clear table for appending data
 
                             load_percentage_table(report_id, data);
+
+                            stopLoading('leader', report_id);
+                            stopLoading('member', report_id);
                         });
                     })(report_ids[x]);
                 }
@@ -245,6 +250,28 @@
                 // empty array
                 all_charts = [];
                 all_tables = [];
+            }
+
+            function startLoading(type, id) {
+                // spinner
+                $('#loading-' + type + '-canvas-' +id).css('display', 'block');
+                $('#loading-'+ type + '-table-' +id).css('display', 'block');
+
+                // canvas
+                $('#report-' + type + '-' + id).css('display', 'none');
+                // table
+                $('#table-' + type + '-' + id).css('display', 'none');
+            }
+
+            function stopLoading(type, id) {
+                // spinner
+                $('#loading-' + type + '-canvas-' +id).css('display', 'none');
+                $('#loading-'+ type + '-table-' +id).css('display', 'none');
+
+                // canvas
+                $('#report-' + type + '-' + id).css('display', 'block');
+                // table
+                $('#table-' + type + '-' + id).css('display', 'block');
             }
         </script>
     @endpush
