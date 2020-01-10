@@ -1,9 +1,4 @@
-Schema::create('permissions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('label')->nullable();
-            $table->timestamps();
-        });<?php
+<?php
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
