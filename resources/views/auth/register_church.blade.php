@@ -5,7 +5,7 @@
 @section('content')
     <div class="login-box-body">
         @if ($is_opened)
-            <p class="text-center">Fill in the fields for network registration.</p>
+            <p class="text-center">Complete this form for Local Church Survey</p>
             @include('components.status')
             <form method="post" action="/register/church">
             @csrf

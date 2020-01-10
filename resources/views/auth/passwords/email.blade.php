@@ -24,7 +24,7 @@
             </div>
 
             <div class="col-md-12">
-                <button type="submit" class="btn btn-primary btn-block btn-flat">Send Password Reset Link</button>
+                <button type="submit" class="btn btn-block btn-flat" style="background-color:#ff6508; color:white">Send Password Reset Link</button>
             </div>
         </div>
     </form>
