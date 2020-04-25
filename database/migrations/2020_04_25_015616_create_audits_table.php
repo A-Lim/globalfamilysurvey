@@ -18,11 +18,11 @@ class CreateAuditsTable extends Migration
             $table->integer('user_id')->nullable();
             $table->string('module');
             $table->string('action');
-            $table->json('request_header');
+            $table->longtext('request_header');
             $table->ipAddress('request_ip');
-            $table->json('input')->nullable();
-            $table->json('old')->nullable();
-            $table->json('new')->nullable();
+            $table->longtext('input')->nullable();
+            $table->longtext('old')->nullable();
+            $table->longtext('new')->nullable();
             $table->timestamps();
 
             $table->index('module');
