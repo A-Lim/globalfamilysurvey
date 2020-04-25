@@ -63,8 +63,10 @@ Route::get('churches/datatable', 'ChurchesController@datatable');
 Route::resource('churches', 'ChurchesController')->except(['show']);
 
 // Reports
+Route::get('reports/data', 'ReportsController@grouped_data');
 Route::get('reports/{report}/data', 'ReportsController@data');
 Route::resource('reports', 'ReportsController')->except(['show']);
+
 
 // Categories
 Route::resource('categories', 'CategoriesController')->except(['show']);
@@ -80,5 +82,7 @@ Route::get('requestlogs/stats', 'RequestLogsController@stats');
 Route::get('requestlogs/datatable', 'RequestLogsController@datatable');
 Route::get('requestlogs/{requestLog}', 'RequestLogsController@show');
 
-// Test
-// Route::get('test', 'TestController@index');
+// Audit
+Route::get('audits', 'AuditsController@index');
+Route::get('audits/datatable', 'AuditsController@datatable');
+Route::get('audits/{audit}', 'AuditsController@show');

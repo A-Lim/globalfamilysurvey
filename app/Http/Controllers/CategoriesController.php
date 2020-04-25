@@ -37,7 +37,8 @@ class CategoriesController extends Controller {
 
     public function store(CreateRequest $request) {
         $this->authorize('create', Category::class);
-        $this->categoryRepository->create($request->all());
+        $category = $this->categoryRepository->create($request->all());
+
         session()->flash('success', 'Category successfully created.');
         return redirect('categories');
     }
@@ -51,6 +52,7 @@ class CategoriesController extends Controller {
     public function update(UpdateRequest $request, Category $category) {
         $this->authorize('update', Category::class);
         $this->categoryRepository->update($category, $request->all());
+
         session()->flash('success', 'Category successfully updated.');
         return redirect('categories');
     }

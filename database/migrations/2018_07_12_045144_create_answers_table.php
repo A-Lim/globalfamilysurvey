@@ -21,6 +21,9 @@ class CreateAnswersTable extends Migration
             $table->string('option_id')->nullable();
             $table->string('row_id')->nullable();
             $table->string('text')->nullable();
+
+            $table->index('submission_id');
+            $table->index('question_id');
         });
     }
 

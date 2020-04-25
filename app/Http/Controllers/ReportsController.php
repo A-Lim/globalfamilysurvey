@@ -69,4 +69,9 @@ class ReportsController extends Controller
         $result = $this->reportRepository->data($report, $request->filter);
         return response()->json($result, 200);
     }
+
+    public function grouped_data(Request $request) {
+        $result = $this->reportRepository->grouped_report_details($request->filter);
+        return response()->json($result, 200);
+    }
 }

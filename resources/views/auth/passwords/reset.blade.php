@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">{{ __('Reset Password') }}</button>
+                    <button type="submit" class="btn btn-block btn-flat" style="background-color:#ff6508; color:white">{{ __('Reset Password') }}</button>
                 </div>
             </div>
         </form>

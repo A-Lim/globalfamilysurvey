@@ -50,7 +50,16 @@ interface ReportRepositoryInterface
      * Retrieve data for chart.js
      *
      * @param Report $report
+     * @param string $filter 
      * @return array
      */
     public function data(Report $report, $filter = null);
+
+    /**
+     * Retrieve all report data for chart.js
+     *
+     * @param string $filter 
+     * @return array
+     */
+    public function grouped_report_details($filter = null);
 }

@@ -118,26 +118,6 @@
                     <!-- /.box-header -->
                     <div class="box-body">
                         <ul class="products-list product-list-in-box">
-                            {{-- @if (count($jobs) > 0)
-                                @foreach ($jobs as $job)
-                                    @if($loop->iteration > 5)
-                                        @break
-                                    @endif
-                                    <li class="item">
-                                        <span class="product-title text-primary">{{ ucfirst($job->queue) }}</span>
-                                        <span class="label label-info pull-right">Attempts: {{ $job->attempts }}</span>
-                                        <span class="product-description">
-                                            <small>{{ json_decode($job->payload)->displayName }}</small>
-                                            <span class="label label-danger pull-right">{{ \Carbon\Carbon::createFromTimestamp($job->created_at)->toDateTimeString() }}</span>
-                                        </span>
-
-                                    </li>
-                                @endforeach
-                            @else
-                                <li class="item">
-                                    <span class="text-center help-block">Currently nothing in queue</span>
-                                </li>
-                            @endif --}}
                             <li class="item item-empty">
                                 <span class="text-center help-block">Currently nothing in queue</span>
                             </li>
@@ -157,18 +137,4 @@
 
 @push('scripts')
     <script type="text/javascript" src="{{ asset('js/settings-dashboard.js') }}"></script>
-    {{-- <script>
-    $('#datatable').DataTable({
-        processing: true,
-        serverSide: true,
-        bLengthChange: false,
-        ajax: '/requestlogs/datatable',
-        columns: [
-            {data: 'id', name: 'id'},
-            {data: 'status', name: 'status'},
-            {data: 'created_at', name: 'created_at'}
-        ],
-        order: [[ 2, 'desc' ]]
-    });
-    </script> --}}
 @endpush

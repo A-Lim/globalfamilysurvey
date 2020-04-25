@@ -154,15 +154,43 @@
             var all_tables = [];
 
             $(document).ready(function() {
-                load_reports();
+                load_all_reports();
             });
 
             @if (auth()->user()->hasRole('network_leader'))
                 $('#select-filter').on('change', function() {
                     reset();
-                    load_reports(this.value);
+                    load_all_reports(this.value);
                 });
             @endif
+
+            function load_all_reports(filter) {
+                // preload 
+                var report_ids = {!! json_encode($reports->pluck('id')->toArray()) !!};
+                for (var x = 0; x < report_ids.length; x++) {
+                    startLoading('leader', report_ids[x]);
+                    startLoading('member', report_ids[x]);
+                }
+
+                var params = '';
+                if (filter != '' && filter != undefined)
+                    params = "?filter="+filter;
+                
+                $.ajax({
+                    headers: { Accept: "application/json" },
+                    dataType: 'json',
+                    url: "/reports/data" + params,
+                }).done(function (data) {
+                    for (var x = 0; x < data.length; x++) {
+                        load_charts(data[x].report_id, data[x]);
+                        // clear table for appending data
+                        load_percentage_table(data[x].report_id, data[x]);
+
+                        stopLoading('leader', data[x].report_id);
+                        stopLoading('member', data[x].report_id);
+                    }
+                });
+            }
 
             function load_reports(filter) {
                 var report_ids = {!! json_encode($reports->pluck('id')->toArray()) !!};
@@ -202,7 +230,6 @@
                 var l_chart_id = "report-leader-" + id;
                 var m_chart_id = "report-member-" + id;
 
-
                 var l_chart = generateBarChart(l_chart_id, 'bar', data.leader_data.keys, data.leader_data.values,color_palettes);
                 var m_chart = generateBarChart(m_chart_id, 'bar', data.member_data.keys, data.member_data.values,other_color_palettes);
 
@@ -211,8 +238,6 @@
             }
 
             function load_percentage_table(report_id, data) {
-                var leader_question_type = data.leader_data.type;
-                var member_question_type = data.member_data.type;
                 var leader_html = '', member_html = '';
 
                 for (var x = 0; x < data.leader_data.values.length; x++) {

@@ -41,6 +41,7 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'create_webhooks', 'label' => 'Create Webhooks', 'created_at' => $now, 'updated_at' => $now],
             ['name' => 'update_webhooks', 'label' => 'Update Webhooks', 'created_at' => $now, 'updated_at' => $now],
             ['name' => 'delete_webhooks', 'label' => 'Delete Webhooks', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'view_audits', 'label' => 'View Audits', 'created_at' => $now, 'updated_at' => $now],
         ];
 
         Permission::insert($permissions);
