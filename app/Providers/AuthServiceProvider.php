@@ -25,6 +25,7 @@ class AuthServiceProvider extends ServiceProvider
         // share policy between report and category (cause they are basically linked to report)
         \App\Category::class => \App\Policies\ReportPolicy::class,
         \App\Setting::class => \App\Policies\SettingPolicy::class,
+        \App\Audit::class => \App\Policies\AuditPolicy::class,
     ];
 
     /**

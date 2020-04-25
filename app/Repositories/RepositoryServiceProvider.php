@@ -20,5 +20,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind('App\Repositories\CategoryRepositoryInterface', 'App\Repositories\CategoryRepository');
         $this->app->bind('App\Repositories\SubmissionRepositoryInterface', 'App\Repositories\SubmissionRepository');
         $this->app->bind('App\Repositories\RequestLogRepositoryInterface', 'App\Repositories\RequestLogRepository');
+        $this->app->bind('App\Repositories\AuditRepositoryInterface', 'App\Repositories\AuditRepository');
     }
 }

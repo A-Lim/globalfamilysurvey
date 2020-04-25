@@ -46,7 +46,7 @@
                     <ul class="treeview-menu">
                         <li class="{{ request()->is('settings/dashboard') ? 'active' : '' }}">
                             <a href="/settings/dashboard">
-                                <i class="fas fa-cogs"></i> <span> Settings Dashboard</span>
+                                <i class="fa fa-cogs"></i> <span> Settings Dashboard</span>
                             </a>
                         </li>
                         <li class="{{ request()->is('roles*') ? 'active' : '' }}">
@@ -62,6 +62,15 @@
                     </ul>
                 </li>
             @endcan
+
+            @can('view', App\Audit::class)
+                <li class="{{ request()->is('audits*') ? 'active' : '' }}">
+                    <a href="/audits">
+                        <i class="fa fa-history"></i></i> <span>Audits</span>
+                    </a>
+                </li>
+            @endcan
+            
 
             @can('view', App\User::class)
                 <li class="{{ request()->is('users*') ? 'active' : '' }}">

@@ -35,7 +35,7 @@ interface CategoryRepositoryInterface
      *
      * @param Category $category
      * @param array $data
-     * @return null
+     * @return Category $category
      */
     public function update(Category $category, $data);
 
