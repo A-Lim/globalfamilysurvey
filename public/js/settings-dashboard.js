@@ -1,5 +1,9 @@
+var start = moment().subtract(1, 'days');
+var end = moment();
 
 $(document).ready(function() {
+    showHideDateRangeContainer($('#request-type').val());
+    initDateRangePicker();
     initDatatable();
     retrieveStats();
     retrieveJobs();
@@ -11,6 +15,20 @@ $('#btn-refresh-queue').on('click', function(event) {
     retrieveJobs();
     $('#datatable').DataTable().ajax.reload();
 });
+
+$('#request-type').on('change', function() {
+    showHideDateRangeContainer(this.value);
+});
+
+function initDateRangePicker() {
+    $('#daterange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        locale: {
+            format: 'DD/MM/YYYY'
+        }
+    });
+}
 
 function initDatatable() {
     $('#datatable').DataTable({
@@ -25,6 +43,14 @@ function initDatatable() {
         ],
         order: [[ 2, 'desc' ]]
     });
+}
+
+function showHideDateRangeContainer(value) {
+    if (value == 'date') {
+        $('#daterange-container').show();
+    } else {
+        $('#daterange-container').hide();
+    }
 }
 
 function retrieveStats() {

@@ -14,10 +14,12 @@ class Submission extends Model
 
     const REQ_TYPE_EVERYTHING = 'everything';
     const REQ_TYPE_TODAY = 'today';
+    const REQ_TYPE_DATE = 'date';
 
     const REQ_TYPES = [
         self::REQ_TYPE_EVERYTHING,
         self::REQ_TYPE_TODAY,
+        self::REQ_TYPE_DATE,
     ];
 
     const PER_PAGE = 100;

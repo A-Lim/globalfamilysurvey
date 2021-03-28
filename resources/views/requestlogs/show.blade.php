@@ -56,7 +56,12 @@
                                 <ul class="list-group list-group-unbordered">
                                     @foreach (json_decode($requestLog->params) as $key => $value)
                                         <li class="list-group-item">
-                                            {{ $key }} <span class="pull-right">{{ $value }}</span>
+                                            {{ $key }} 
+                                            @if (is_object($value))
+                                                <pre>{{ json_encode($value) }}</pre>
+                                            @else 
+                                                <span class="pull-right">{{ $value }}</span>
+                                            @endif
                                         </li>
                                     @endforeach
                                 </ul>

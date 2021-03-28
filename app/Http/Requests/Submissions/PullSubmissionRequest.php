@@ -13,13 +13,13 @@ class PullSubmissionRequest extends FormRequest {
     public function rules() {
         return [
             'type' => 'required|in:'.implode(',', Submission::REQ_TYPES),
+            'daterange' => 'required_if:type,date'
         ];
     }
 
     public function messages() {
         return [
             'type.required' => 'Please select a submission pull type.',
-            'body.in'  => 'Submission pull type is invalid.',
         ];
     }
 }

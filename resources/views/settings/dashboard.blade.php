@@ -59,13 +59,19 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-12 form-group {{ $errors->has('type') ? ' has-error' : '' }} ">
-                            <select class="form-control" name="type" {{ $survey_count == 0 ? 'disabled' : '' }}>
+                            <select class="form-control" id="request-type" name="type" {{ $survey_count == 0 ? 'disabled' : '' }}>
                                 <option>-- Select Request Type --</option>
                                 @foreach(\App\Submission::REQ_TYPES as $request_type)
                                     <option value="{{ $request_type }}" {{ old('type') == $request_type ? 'selected' : '' }}>{{ ucfirst($request_type) }}</option>
                                 @endforeach
                             </select>
                             <span class="text-danger">{{ $errors->first('type') }}</span>
+                        </div>
+                        <div id="daterange-container" class="col-md-12 form-group {{ $errors->has('daterange') ? ' has-error' : '' }} ">
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                <input type="text" id="daterange" name="daterange" class="form-control pull-right" />
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <button class="btn btn-block btn-warning" onclick="return confirm('Are you sure you want to perform this action?')"
@@ -136,5 +142,9 @@
 @endsection
 
 @push('scripts')
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
     <script type="text/javascript" src="{{ asset('js/settings-dashboard.js') }}"></script>
 @endpush
