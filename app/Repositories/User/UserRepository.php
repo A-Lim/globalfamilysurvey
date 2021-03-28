@@ -42,7 +42,7 @@ class UserRepository implements UserRepositoryInterface
      * {@inheritdoc}
      */
     public function all() {
-        return User::all();
+        return User::orderBy('id', 'desc')->get();
     }
 
     /**
@@ -62,6 +62,7 @@ class UserRepository implements UserRepositoryInterface
              ->join('roles', 'roles.id', '=', 'role_user.role_id')
              ->where('users.deleted_at', null)
              ->whereNotIn('users.id', [auth()->user()->id])
+             ->orderBy('users.id', 'desc')
              ->select('users.id', 'users.name', 'users.email', 'roles.label as role', 'churches.uuid as church_uuid', 'churches.network_uuid as network_uuid');
      }
 }

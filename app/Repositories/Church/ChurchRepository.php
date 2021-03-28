@@ -11,7 +11,7 @@ class ChurchRepository implements ChurchRepositoryInterface
      * {@inheritdoc}
      */
     public function all() {
-        return Church::all();
+        return Church::orderBy('id', 'desc')->get();
     }
 
     /**
@@ -53,6 +53,7 @@ class ChurchRepository implements ChurchRepositoryInterface
     public function datatable_query() {
         return Church::join('countries', 'churches.country_id', '=', 'countries.id')
                 ->where('churches.deleted_at', null)
+                ->orderBy('churches.id', 'desc')
                 ->select('churches.*', 'countries.name as country_name');
     }
 }

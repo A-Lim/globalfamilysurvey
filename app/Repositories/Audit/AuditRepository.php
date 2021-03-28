@@ -10,7 +10,7 @@ class AuditRepository implements AuditRepositoryInterface
      * {@inheritdoc}
      */
     public function all() {
-        return Audit::orderBy('created_at')->get();
+        return Audit::orderBy('id')->get();
     }
 
     /**
@@ -55,6 +55,7 @@ class AuditRepository implements AuditRepositoryInterface
 
     public function datatable_query() {
         return Audit::leftjoin('users', 'audits.user_id', '=', 'users.id')
+                ->orderBy('id')
                 ->select('audits.id', 'audits.user_id', 'users.email', 'audits.module', 'audits.action', 'audits.request_ip', 'audits.created_at');
     }
 }

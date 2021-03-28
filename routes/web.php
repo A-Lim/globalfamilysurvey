@@ -76,7 +76,7 @@ Route::resource('webhooks', 'WebhooksController');
 
 // Submissions
 Route::post('submissions/pull', 'SubmissionsController@pull');
-Route::get('submissions/test', 'SubmissionsController@test');
+// Route::get('submissions/test', 'SubmissionsController@test');
 
 // Request Log
 Route::get('requestlogs/stats', 'RequestLogsController@stats');
