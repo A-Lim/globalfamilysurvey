@@ -11,9 +11,7 @@ class ChurchRepository implements ChurchRepositoryInterface
      * {@inheritdoc}
      */
     public function all() {
-        return \Cache::rememberForEver(Church::CACHE_KEY, function() {
-            return Church::all();
-        });
+        return Church::all();
     }
 
     /**
@@ -29,7 +27,6 @@ class ChurchRepository implements ChurchRepositoryInterface
     public function create(Request $request) {
         $data = $request->all();
         $data['uuid'] = (string) Uuid::generate(4);
-        \Cache::forget(Church::CACHE_KEY);
         return Church::create($data);
     }
 
@@ -37,7 +34,6 @@ class ChurchRepository implements ChurchRepositoryInterface
      * {@inheritdoc}
      */
     public function update(Church $church, Request $request) {
-        \Cache::forget(Church::CACHE_KEY);
         return $church->update($request->all());
     }
 
@@ -49,8 +45,6 @@ class ChurchRepository implements ChurchRepositoryInterface
             $church->forceDelete();
         else
             $church->delete();
-
-        \Cache::forget(Church::CACHE_KEY);
     }
 
     /**
