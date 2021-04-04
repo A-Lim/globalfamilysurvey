@@ -27,7 +27,8 @@
                             <th>Church Uuid</th>
                             <th>Network Uuid</th>
                             <th>Country</th>
-                            <th>Actions</th>
+                            <th>Submission Count</th>
+                            <th style="min-width:62px">Actions</th>
                         </tr>
                     </thead>
                 </table>
@@ -45,10 +46,11 @@
         bLengthChange: false,
         ajax: '/churches/datatable',
         columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
+            {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
             {data: 'uuid'},
             {data: 'network_uuid'},
             {data: 'country_name', name: 'countries.name'},
+            {data: 'submissions_count', orderable: false, searchable: false},
             {data: 'action', sortable: false},
         ],
         initComplete: function(settings, json) {

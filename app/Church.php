@@ -17,4 +17,8 @@ class Church extends Model
     public function network() {
         return $this->belongsTo(Network::class, 'network_uuid');
     }
+
+    public function submissions() {
+        return $this->hasMany(Submission::class, 'church_id', 'uuid');
+    }
 }

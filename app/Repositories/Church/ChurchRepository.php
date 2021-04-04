@@ -54,6 +54,7 @@ class ChurchRepository implements ChurchRepositoryInterface
         return Church::join('countries', 'churches.country_id', '=', 'countries.id')
                 ->where('churches.deleted_at', null)
                 ->orderBy('churches.id', 'desc')
-                ->select('churches.*', 'countries.name as country_name');
+                ->select('churches.*', 'countries.name as country_name')
+                ->withCount('submissions');
     }
 }
